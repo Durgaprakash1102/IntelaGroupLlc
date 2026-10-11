@@ -1,0 +1,1291 @@
+
+{% extends "includes/sidebar.html" %}
+{% load static %}
+
+{% block title %}Career Applicants | Intela Group LLC{% endblock %}
+
+{% block content %}
+
+<style>
+:root {
+    --navy: #293D63;
+    --navy-dark: #1D2D4A;
+    --orange: #FFA033;
+    --orange-dark: #E88B20;
+    --text: #26344B;
+    --muted: #788397;
+    --border: #E2E8F0;
+    --light: #F6F8FB;
+    --danger: #C0392B;
+    --success: #16865D;
+}
+
+.ca-page {
+    width: 100%;
+    max-width: 1450px;
+    margin: 0 auto;
+    padding: 28px 32px 48px;
+    box-sizing: border-box;
+    color: var(--text);
+}
+
+/* Notifications */
+.ca-toasts {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: min(360px, calc(100% - 32px));
+    pointer-events: none;
+}
+
+.ca-toast {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--success);
+    border-radius: 12px;
+    box-shadow: 0 12px 32px rgba(29, 45, 74, .14);
+    pointer-events: auto;
+    animation: caToastIn .3s ease;
+}
+
+.ca-toast.error {
+    border-left-color: var(--danger);
+}
+
+.ca-toast-body {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: var(--navy);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.ca-toast-body i {
+    margin-top: 2px;
+    color: var(--success);
+}
+
+.ca-toast.error .ca-toast-body i {
+    color: var(--danger);
+}
+
+.ca-toast-close {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font-size: 20px;
+    cursor: pointer;
+}
+
+@keyframes caToastIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes caToastOut {
+    to { opacity: 0; transform: translateX(20px); }
+}
+
+/* Header */
+.ca-header {
+    margin-bottom: 26px;
+}
+
+.ca-header h1 {
+    margin: 0 0 7px;
+    color: var(--navy);
+    font-size: clamp(24px, 3vw, 30px);
+    font-weight: 800;
+    letter-spacing: -.6px;
+}
+
+.ca-header p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.ca-header-accent {
+    width: 54px;
+    height: 4px;
+    margin-top: 15px;
+    border-radius: 6px;
+    background: linear-gradient(90deg, var(--navy), var(--orange));
+}
+
+/* Stats */
+.ca-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 27px;
+}
+
+.ca-stat {
+    position: relative;
+    overflow: hidden;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    box-shadow: 0 5px 18px rgba(29, 45, 74, .045);
+    transition: transform .2s, box-shadow .2s;
+}
+
+.ca-stat:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(29, 45, 74, .09);
+}
+
+.ca-stat::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--navy), var(--orange));
+}
+
+.ca-stat-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.ca-stat-label {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 750;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    line-height: 1.5;
+}
+
+.ca-stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 39px;
+    height: 39px;
+    border-radius: 11px;
+    background: #EEF2F8;
+    color: var(--navy);
+    font-size: 16px;
+}
+
+.ca-stat:nth-child(2) .ca-stat-icon,
+.ca-stat:nth-child(4) .ca-stat-icon {
+    background: #FFF1DF;
+    color: var(--orange-dark);
+}
+
+.ca-stat-value {
+    color: var(--navy);
+    font-size: 29px;
+    font-weight: 850;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+}
+
+.ca-stat-value.small {
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+/* Tabs */
+.ca-tabs {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border);
+}
+
+.ca-tab {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 11px 18px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    background: #fff;
+    color: var(--navy);
+    font-size: 13px;
+    font-weight: 750;
+    cursor: pointer;
+    transition: all .2s;
+}
+
+.ca-tab:hover {
+    border-color: var(--orange);
+    background: #FFFAF3;
+}
+
+.ca-tab.active {
+    border-color: var(--navy);
+    background: var(--navy);
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(41, 61, 99, .18);
+}
+
+.ca-tab.active i {
+    color: var(--orange);
+}
+
+.ca-tab-content {
+    display: none;
+}
+
+.ca-tab-content.active {
+    display: block;
+}
+
+/* Main cards */
+.ca-card {
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 8px 28px rgba(29, 45, 74, .055);
+}
+
+.ca-card-header {
+    padding: 20px 22px;
+    border-top: 4px solid var(--orange);
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(115deg, #F6F8FB 0%, #fff 80%);
+}
+
+.ca-card-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 6px;
+    color: var(--navy);
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.ca-card-header h2 i {
+    color: var(--orange-dark);
+}
+
+.ca-card-header p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* Job filter */
+.ca-filter {
+    margin-top: 18px;
+    padding: 17px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--light);
+}
+
+.ca-filter-label {
+    display: block;
+    margin-bottom: 9px;
+    color: var(--navy);
+    font-size: 12px;
+    font-weight: 750;
+}
+
+.ca-filter-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.ca-filter-row select {
+    flex: 1;
+    min-width: 200px;
+    padding: 11px 13px;
+    border: 1.5px solid var(--border);
+    border-radius: 9px;
+    background: #fff;
+    color: var(--text);
+    font-size: 13px;
+    outline: none;
+}
+
+.ca-filter-row select:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(41, 61, 99, .1);
+}
+
+.ca-btn-filter {
+    padding: 11px 18px;
+    border: 0;
+    border-radius: 9px;
+    background: var(--navy);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 750;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+.ca-btn-filter:hover {
+    background: var(--navy-dark);
+}
+
+.ca-btn-clear {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 15px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: #fff;
+    color: var(--navy);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 750;
+}
+
+.ca-btn-clear:hover {
+    border-color: var(--orange);
+    background: #FFFAF3;
+}
+
+.ca-filter-result {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.ca-filter-result strong {
+    color: var(--navy);
+}
+
+/* Search and list heading */
+.ca-list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 16px 22px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+}
+
+.ca-list-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--navy);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.ca-list-title i {
+    color: var(--orange-dark);
+}
+
+.ca-search-wrap {
+    position: relative;
+    width: 260px;
+}
+
+.ca-search-wrap i {
+    position: absolute;
+    top: 50%;
+    left: 13px;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 13px;
+    pointer-events: none;
+}
+
+.ca-search-wrap input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 13px 11px 38px;
+    border: 1.5px solid var(--border);
+    border-radius: 9px;
+    background: #fff;
+    color: var(--text);
+    font: inherit;
+    font-size: 13px;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+.ca-search-wrap input:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(41, 61, 99, .1);
+}
+
+/* Table */
+.ca-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.ca-table {
+    width: 100%;
+    min-width: 1000px;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.ca-table th,
+.ca-table td {
+    padding: 15px 16px;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+}
+
+.ca-table th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #F2F5FA;
+    color: var(--navy);
+    font-size: 10px;
+    font-weight: 850;
+    text-transform: uppercase;
+    letter-spacing: .55px;
+    white-space: nowrap;
+}
+
+.ca-table tbody tr {
+    transition: background .15s;
+}
+
+.ca-table tbody tr:hover {
+    background: #FAFBFD;
+}
+
+.ca-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.ca-name {
+    margin-bottom: 4px;
+    color: var(--navy);
+    font-size: 13px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+.ca-email {
+    color: var(--muted);
+    font-size: 11px;
+    overflow-wrap: anywhere;
+}
+
+.ca-verified,
+.ca-not-verified {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 7px;
+    font-size: 10px;
+    font-weight: 750;
+}
+
+.ca-verified {
+    color: var(--success);
+}
+
+.ca-not-verified {
+    color: var(--danger);
+}
+
+.ca-job-name {
+    color: var(--navy);
+    font-weight: 750;
+    line-height: 1.5;
+}
+
+.ca-subtext {
+    display: block;
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.ca-status-form {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.ca-status-select {
+    max-width: 170px;
+    padding: 8px 9px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--text);
+    font-size: 11px;
+    outline: none;
+}
+
+.ca-status-select:focus {
+    border-color: var(--navy);
+}
+
+.ca-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 11px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font: inherit;
+    font-size: 11px;
+    font-weight: 750;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background .2s, transform .15s;
+}
+
+.ca-btn:hover {
+    transform: translateY(-1px);
+}
+
+.ca-btn-primary {
+    background: var(--navy);
+    color: #fff;
+}
+
+.ca-btn-primary:hover {
+    background: var(--navy-dark);
+}
+
+.ca-btn-success {
+    background: #E8F8F0;
+    color: #0D7A4F;
+}
+
+.ca-btn-success:hover {
+    background: #D4F2E2;
+}
+
+.ca-btn-danger {
+    background: #FFF0F0;
+    color: var(--danger);
+}
+
+.ca-btn-danger:hover {
+    background: #FFE0E0;
+}
+
+/* Empty state */
+.ca-empty {
+    padding: 52px 20px;
+    text-align: center;
+    color: var(--muted);
+}
+
+.ca-empty i {
+    display: block;
+    margin-bottom: 14px;
+    color: #AAB6C7;
+    font-size: 40px;
+}
+
+.ca-empty h3 {
+    margin: 0 0 7px;
+    color: var(--navy);
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.ca-empty p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.ca-no-results {
+    display: none;
+    padding: 25px 18px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.ca-no-results i {
+    margin-right: 7px;
+    color: var(--orange-dark);
+}
+
+/* Responsive layout */
+@media (max-width: 1050px) {
+    .ca-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 650px) {
+    .ca-page {
+        padding: 20px 14px 32px;
+    }
+
+    .ca-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 11px;
+    }
+
+    .ca-stat {
+        padding: 15px;
+    }
+
+    .ca-stat-label {
+        font-size: 10px;
+    }
+
+    .ca-stat-value {
+        font-size: 24px;
+    }
+
+    .ca-stat-icon {
+        width: 33px;
+        height: 33px;
+        font-size: 14px;
+    }
+
+    .ca-tabs {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .ca-tab {
+        width: 100%;
+    }
+
+    .ca-card-header {
+        padding: 17px;
+    }
+
+    .ca-filter {
+        padding: 13px;
+    }
+
+    .ca-filter-row {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .ca-filter-row select {
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
+    .ca-filter-row button,
+    .ca-filter-row a {
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+    }
+
+    .ca-list-header {
+        align-items: stretch;
+        flex-direction: column;
+        padding: 15px 17px;
+    }
+
+    .ca-search-wrap {
+        width: 100%;
+    }
+
+    .ca-table {
+        min-width: 1000px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ca-toast,
+    .ca-stat,
+    .ca-btn {
+        animation: none;
+        transition: none;
+    }
+}
+</style>
+
+<!-- Notifications -->
+<div class="ca-toasts" id="caToasts" aria-live="polite">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="ca-toast {% if 'error' in message.tags %}error{% endif %}">
+                <div class="ca-toast-body">
+                    <i class="fa-solid {% if 'error' in message.tags %}fa-circle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+                    <span>{{ message }}</span>
+                </div>
+                <button type="button" class="ca-toast-close" aria-label="Dismiss notification">&times;</button>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<main class="ca-page">
+
+    <!-- Header -->
+    <header class="ca-header">
+        <h1>Career Applicants</h1>
+        <p>Manage job applications, review candidate profiles, and track recruitment progress.</p>
+        <div class="ca-header-accent"></div>
+    </header>
+
+    <!-- Statistics -->
+    <section class="ca-stats">
+
+        <div class="ca-stat">
+            <div class="ca-stat-top">
+                <div class="ca-stat-label">Job Applications</div>
+                <div class="ca-stat-icon">
+                    <i class="fa-solid fa-file-lines"></i>
+                </div>
+            </div>
+            <div class="ca-stat-value">
+                {% if selected_job %}
+                    {{ filtered_job_applications }}
+                {% else %}
+                    {{ total_job_applications }}
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="ca-stat">
+            <div class="ca-stat-top">
+                <div class="ca-stat-label">
+                    {% if selected_job %}Selected Job{% else %}New Applications{% endif %}
+                </div>
+                <div class="ca-stat-icon">
+                    <i class="fa-solid fa-briefcase"></i>
+                </div>
+            </div>
+            <div class="ca-stat-value {% if selected_job %}small{% endif %}">
+                {% if selected_job %}
+                    {{ selected_job.title }}
+                {% else %}
+                    {{ new_job_applications }}
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="ca-stat">
+            <div class="ca-stat-top">
+                <div class="ca-stat-label">General Candidates</div>
+                <div class="ca-stat-icon">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+            </div>
+            <div class="ca-stat-value">{{ total_general_candidates }}</div>
+        </div>
+
+        <div class="ca-stat">
+            <div class="ca-stat-top">
+                <div class="ca-stat-label">New Profiles</div>
+                <div class="ca-stat-icon">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+            </div>
+            <div class="ca-stat-value">{{ new_general_candidates }}</div>
+        </div>
+
+    </section>
+
+    <!-- Tabs -->
+    <div class="ca-tabs" role="tablist" aria-label="Candidate management">
+        <button
+            type="button"
+            class="ca-tab active"
+            id="jobApplicationsTab"
+            role="tab"
+            aria-controls="jobApplications"
+            aria-selected="true"
+            onclick="showTab('jobApplications', this)">
+            <i class="fa-solid fa-briefcase"></i>
+            Job Applications
+        </button>
+
+        <button
+            type="button"
+            class="ca-tab"
+            id="generalCandidatesTab"
+            role="tab"
+            aria-controls="generalCandidates"
+            aria-selected="false"
+            onclick="showTab('generalCandidates', this)">
+            <i class="fa-solid fa-users"></i>
+            General Candidates
+        </button>
+    </div>
+
+    <!-- Job applications -->
+    <section id="jobApplications" class="ca-tab-content active" role="tabpanel" aria-labelledby="jobApplicationsTab">
+        <div class="ca-card">
+
+            <div class="ca-card-header">
+                <h2>
+                    <i class="fa-solid fa-file-lines"></i>
+                    Job Applications
+                </h2>
+                <p>Review applicants for specific vacancies and update their recruitment status.</p>
+
+                <!-- Job filter -->
+                <form
+                    method="get"
+                    action="{% url 'website:manage_career_applicants' %}"
+                    class="ca-filter">
+
+                    <label for="jobFilter" class="ca-filter-label">Filter applications by job</label>
+
+                    <div class="ca-filter-row">
+                        <select id="jobFilter" name="job">
+                            <option value="">All Jobs</option>
+                            {% for job in jobs %}
+                                <option
+                                    value="{{ job.id }}"
+                                    {% if selected_job_id == job.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ job.title }}{% if job.location %} — {{ job.location }}{% endif %}
+                                </option>
+                            {% endfor %}
+                        </select>
+
+                        <button type="submit" class="ca-btn-filter">
+                            <i class="fa-solid fa-filter"></i>
+                            Apply Filter
+                        </button>
+
+                        {% if selected_job %}
+                            <a href="{% url 'website:manage_career_applicants' %}" class="ca-btn-clear">
+                                <i class="fa-solid fa-xmark"></i>
+                                Clear Filter
+                            </a>
+                        {% endif %}
+                    </div>
+
+                    <div class="ca-filter-result">
+                        {% if selected_job %}
+                            Showing <strong>{{ filtered_job_applications }}</strong>
+                            application{{ filtered_job_applications|pluralize }} for
+                            <strong>{{ selected_job.title }}</strong>
+                        {% else %}
+                            Showing applications for <strong>all jobs</strong>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+
+            <div class="ca-list-header">
+                <div class="ca-list-title">
+                    <i class="fa-solid fa-users"></i>
+                    Applicant Records
+                </div>
+
+                <div class="ca-search-wrap">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input
+                        type="text"
+                        id="appSearch"
+                        placeholder="Search applicants..."
+                        autocomplete="off"
+                        aria-label="Search job applicants">
+                </div>
+            </div>
+
+            {% if job_applications %}
+                <div class="ca-table-wrap">
+                    <table class="ca-table" id="appTable">
+                        <thead>
+                            <tr>
+                                <th>Applicant</th>
+                                <th>Job</th>
+                                <th>Phone</th>
+                                <th>Experience</th>
+                                <th>Status</th>
+                                <th>Resume</th>
+                                <th>Applied</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for application in job_applications %}
+                                <tr data-search="{{ application.name|lower }} {{ application.email|lower }} {{ application.job.title|lower }} {{ application.phone|lower }} {{ application.experience|default:''|lower }}">
+                                    <td>
+                                        <div class="ca-name">{{ application.name }}</div>
+                                        <div class="ca-email">{{ application.email }}</div>
+
+                                        {% if application.email_verified %}
+                                            <span class="ca-verified">
+                                                <i class="fa-solid fa-circle-check"></i>
+                                                Verified
+                                            </span>
+                                        {% else %}
+                                            <span class="ca-not-verified">
+                                                <i class="fa-solid fa-circle-exclamation"></i>
+                                                Not Verified
+                                            </span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        <div class="ca-job-name">{{ application.job.title }}</div>
+                                        {% if application.job.location %}
+                                            <span class="ca-subtext">
+                                                <i class="fa-solid fa-location-dot"></i>
+                                                {{ application.job.location }}
+                                            </span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>{{ application.phone|default:"—" }}</td>
+                                    <td>{{ application.experience|default:"—" }}</td>
+
+                                    <td>
+                                        <form method="post" class="ca-status-form">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action" value="update_job_application_status">
+                                            <input type="hidden" name="application_id" value="{{ application.id }}">
+                                            <input type="hidden" name="selected_job_id" value="{{ selected_job_id }}">
+
+                                            <select name="status" class="ca-status-select" aria-label="Application status">
+                                                {% for value, label in job_status_choices %}
+                                                    <option value="{{ value }}" {% if application.status == value %}selected{% endif %}>
+                                                        {{ label }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+
+                                            <button type="submit" class="ca-btn ca-btn-primary">
+                                                <i class="fa-solid fa-check"></i>
+                                                Update
+                                            </button>
+                                        </form>
+                                    </td>
+
+                                    <td>
+                                        {% if application.resume %}
+                                            <a
+                                                href="{{ application.resume.url }}"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                class="ca-btn ca-btn-success">
+                                                <i class="fa-solid fa-file-pdf"></i>
+                                                Resume
+                                            </a>
+                                        {% else %}
+                                            —
+                                        {% endif %}
+                                    </td>
+
+                                    <td>{{ application.applied_at|date:"d M Y" }}</td>
+
+                                    <td>
+                                        <form
+                                            method="post"
+                                            onsubmit="return confirm('Delete this application? This action cannot be undone.');">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action" value="delete_job_application">
+                                            <input type="hidden" name="application_id" value="{{ application.id }}">
+                                            <input type="hidden" name="selected_job_id" value="{{ selected_job_id }}">
+
+                                            <button type="submit" class="ca-btn ca-btn-danger">
+                                                <i class="fa-solid fa-trash"></i>
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="ca-no-results" id="appNoResults">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    No matching applicants found. Try another search term.
+                </div>
+
+            {% else %}
+                <div class="ca-empty">
+                    <i class="fa-solid fa-inbox"></i>
+                    <h3>No applications found</h3>
+                    <p>
+                        {% if selected_job %}
+                            No applications have been received for <strong>{{ selected_job.title }}</strong>.
+                        {% else %}
+                            No job applications have been received yet.
+                        {% endif %}
+                    </p>
+                </div>
+            {% endif %}
+
+        </div>
+    </section>
+
+    <!-- General candidates -->
+    <section id="generalCandidates" class="ca-tab-content" role="tabpanel" aria-labelledby="generalCandidatesTab">
+        <div class="ca-card">
+
+            <div class="ca-card-header">
+                <h2>
+                    <i class="fa-solid fa-users"></i>
+                    General Candidates
+                </h2>
+                <p>Manage candidates who submitted profiles without applying for a specific job.</p>
+            </div>
+
+            <div class="ca-list-header">
+                <div class="ca-list-title">
+                    <i class="fa-solid fa-address-card"></i>
+                    Candidate Profiles
+                </div>
+
+                <div class="ca-search-wrap">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input
+                        type="text"
+                        id="candSearch"
+                        placeholder="Search candidates..."
+                        autocomplete="off"
+                        aria-label="Search general candidates">
+                </div>
+            </div>
+
+            {% if general_candidates %}
+                <div class="ca-table-wrap">
+                    <table class="ca-table" id="candTable">
+                        <thead>
+                            <tr>
+                                <th>Candidate</th>
+                                <th>Phone</th>
+                                <th>Location</th>
+                                <th>Experience</th>
+                                <th>Skills</th>
+                                <th>Status</th>
+                                <th>Resume</th>
+                                <th>Submitted</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for candidate in general_candidates %}
+                                <tr data-search="{{ candidate.name|lower }} {{ candidate.email|lower }} {{ candidate.phone|default:''|lower }} {{ candidate.skills|default:''|lower }} {{ candidate.current_location|default:''|lower }} {{ candidate.experience|default:''|lower }}">
+                                    <td>
+                                        <div class="ca-name">{{ candidate.name }}</div>
+                                        <div class="ca-email">{{ candidate.email }}</div>
+
+                                        {% if candidate.email_verified %}
+                                            <span class="ca-verified">
+                                                <i class="fa-solid fa-circle-check"></i>
+                                                Verified
+                                            </span>
+                                        {% else %}
+                                            <span class="ca-not-verified">
+                                                <i class="fa-solid fa-circle-exclamation"></i>
+                                                Not Verified
+                                            </span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>{{ candidate.phone|default:"—" }}</td>
+                                    <td>{{ candidate.current_location|default:"—" }}</td>
+                                    <td>{{ candidate.experience|default:"—" }}</td>
+                                    <td>{{ candidate.skills|default:"—"|truncatechars:60 }}</td>
+
+                                    <td>
+                                        <form method="post" class="ca-status-form">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action" value="update_candidate_status">
+                                            <input type="hidden" name="candidate_id" value="{{ candidate.id }}">
+                                            <input type="hidden" name="selected_job_id" value="{{ selected_job_id }}">
+
+                                            <select name="status" class="ca-status-select" aria-label="Candidate status">
+                                                {% for value, label in candidate_status_choices %}
+                                                    <option value="{{ value }}" {% if candidate.status == value %}selected{% endif %}>
+                                                        {{ label }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+
+                                            <button type="submit" class="ca-btn ca-btn-primary">
+                                                <i class="fa-solid fa-check"></i>
+                                                Update
+                                            </button>
+                                        </form>
+                                    </td>
+
+                                    <td>
+                                        {% if candidate.resume %}
+                                            <a
+                                                href="{{ candidate.resume.url }}"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                class="ca-btn ca-btn-success">
+                                                <i class="fa-solid fa-file-pdf"></i>
+                                                Resume
+                                            </a>
+                                        {% else %}
+                                            —
+                                        {% endif %}
+                                    </td>
+
+                                    <td>{{ candidate.created_at|date:"d M Y" }}</td>
+
+                                    <td>
+                                        <form
+                                            method="post"
+                                            onsubmit="return confirm('Delete this candidate profile? This action cannot be undone.');">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action" value="delete_candidate">
+                                            <input type="hidden" name="candidate_id" value="{{ candidate.id }}">
+                                            <input type="hidden" name="selected_job_id" value="{{ selected_job_id }}">
+
+                                            <button type="submit" class="ca-btn ca-btn-danger">
+                                                <i class="fa-solid fa-trash"></i>
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="ca-no-results" id="candNoResults">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    No matching candidates found. Try another search term.
+                </div>
+
+            {% else %}
+                <div class="ca-empty">
+                    <i class="fa-solid fa-user-slash"></i>
+                    <h3>No candidates yet</h3>
+                    <p>No general candidate profiles have been submitted.</p>
+                </div>
+            {% endif %}
+
+        </div>
+    </section>
+
+</main>
+
+<script>
+(function () {
+    /* Dismissible notifications */
+    document.querySelectorAll('.ca-toast').forEach(function (toast) {
+        let dismissed = false;
+        const closeButton = toast.querySelector('.ca-toast-close');
+
+        function dismissToast() {
+            if (dismissed) return;
+            dismissed = true;
+
+            toast.style.animation = 'caToastOut .3s ease forwards';
+
+            setTimeout(function () {
+                if (toast.parentNode) {
+                    toast.remove();
+                }
+            }, 300);
+        }
+
+        if (closeButton) {
+            closeButton.addEventListener('click', dismissToast);
+        }
+
+        setTimeout(dismissToast, 3500);
+    });
+
+    /* Search within each table */
+    function bindSearch(inputId, tableId, emptyId) {
+        const input = document.getElementById(inputId);
+        const table = document.getElementById(tableId);
+        const noResults = document.getElementById(emptyId);
+
+        if (!input || !table) return;
+
+        input.addEventListener('input', function () {
+            const query = this.value.trim().toLowerCase();
+            const rows = table.querySelectorAll('tbody tr');
+            let visibleCount = 0;
+
+            rows.forEach(function (row) {
+                const searchableText = row.getAttribute('data-search') || '';
+                const matches = searchableText.includes(query);
+
+                row.style.display = matches ? '' : 'none';
+
+                if (matches) {
+                    visibleCount++;
+                }
+            });
+
+            if (noResults) {
+                noResults.style.display =
+                    query !== '' && visibleCount === 0 ? 'block' : 'none';
+            }
+        });
+    }
+
+    bindSearch('appSearch', 'appTable', 'appNoResults');
+    bindSearch('candSearch', 'candTable', 'candNoResults');
+
+    /* Tab switching */
+    window.showTab = function (tabId, button) {
+        document.querySelectorAll('.ca-tab-content').forEach(function (content) {
+            content.classList.remove('active');
+        });
+
+        document.querySelectorAll('.ca-tab').forEach(function (tab) {
+            tab.classList.remove('active');
+            tab.setAttribute('aria-selected', 'false');
+        });
+
+        const selectedContent = document.getElementById(tabId);
+
+        if (!selectedContent || !button) return;
+
+        selectedContent.classList.add('active');
+        button.classList.add('active');
+        button.setAttribute('aria-selected', 'true');
+    };
+})();
+</script>
+
+{% endblock %}

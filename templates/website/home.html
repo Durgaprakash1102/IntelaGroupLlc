@@ -1,0 +1,1972 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Intela Group LLC | Managed Services & Technology Solutions{% endblock %}
+
+{% block extra_css %}
+<style>
+:root {
+    --ih-navy: #192e52;
+    --ih-deep: #102747;
+    --ih-orange: #ff8500;
+    --ih-orange-light: #fff0e2;
+    --ih-muted: #62748e;
+    --ih-border: #dce5f0;
+    --ih-bg: #f5f8fc;
+}
+
+.intela-home {
+    overflow: hidden;
+    color: #243958;
+    background: #fff;
+    font-family: Inter, Arial, sans-serif;
+}
+
+.intela-home *,
+.intela-home *::before,
+.intela-home *::after {
+    box-sizing: border-box;
+}
+
+.intela-home img {
+    max-width: 100%;
+}
+
+.intela-home a {
+    text-decoration: none;
+}
+
+.ih-container {
+    width: min(1200px, calc(100% - 48px));
+    margin-inline: auto;
+}
+
+.intela-home .ih-section {
+    position: relative;
+    padding: 20px 0;
+}
+
+.ih-soft {
+    background: linear-gradient(135deg, #f4f8fd 0%, #fff 55%, #f1f7fd 100%);
+}
+
+.ih-eyebrow {
+    display: inline-block;
+    margin-bottom: 8px;
+    color: var(--ih-orange);
+    font-size: 11px;
+    font-weight: 850;
+    letter-spacing: 1.7px;
+    text-transform: uppercase;
+}
+
+.ih-heading {
+    max-width: 850px;
+    margin: 0 auto 20px;
+    text-align: center;
+}
+
+.ih-heading h2 {
+    margin: 0 0 8px;
+    color: var(--ih-navy);
+    font-size: clamp(26px, 2.8vw, 36px);
+    font-weight: 850;
+    line-height: 1.2;
+    letter-spacing: -.8px;
+}
+
+.ih-heading h2 span,
+.ih-highlight {
+    color: var(--ih-orange);
+}
+
+.ih-heading p {
+    max-width: 850px;
+    margin: 0 auto;
+    color: var(--ih-muted);
+    font-size: 13px;
+    line-height: 1.65;
+}
+
+.ih-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 11px 19px;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 750;
+    transition: transform .25s ease, background .25s ease, box-shadow .25s ease;
+}
+
+.ih-btn:hover {
+    transform: translateY(-2px);
+}
+
+.ih-btn-orange {
+    color: #fff !important;
+    background: var(--ih-orange);
+    box-shadow: 0 7px 20px rgba(255, 133, 0, .2);
+}
+
+.ih-btn-orange:hover {
+    background: #ed7600;
+}
+
+.ih-btn-white {
+    color: var(--ih-navy) !important;
+    background: #fff;
+}
+
+.ih-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--ih-orange);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.ih-link i {
+    transition: transform .2s ease;
+}
+
+.ih-link:hover i {
+    transform: translateX(4px);
+}
+
+/* =========================
+   HERO SECTION
+========================= */
+
+.ih-hero {
+    position: relative;
+    display: flex;
+    min-height: 480px;
+    align-items: flex-start;
+    justify-content: center;
+    overflow: hidden;
+    color: #fff;
+    background-color: #101d29;
+    background-image:
+        linear-gradient(
+            180deg,
+            rgba(5, 14, 21, .73),
+            rgba(5, 14, 21, .67) 75%,
+            rgba(5, 14, 21, .83)
+        ),
+        url("{% static 'intelaimages/homebanner.png' %}");
+    background-position: center 45%;
+    background-size: cover;
+}
+
+.ih-hero-content {
+    position: relative;
+    z-index: 1;
+    width: min(1000px, calc(100% - 40px));
+    margin: 0 auto;
+    padding: 52px 0 165px;
+    text-align: center;
+}
+
+.ih-hero h1 {
+    margin: 0 0 8px;
+    color: #fff;
+    font-size: clamp(34px, 4.2vw, 58px);
+    font-weight: 850;
+    line-height: 1.12;
+    letter-spacing: -1.5px;
+    text-shadow: 0 3px 20px rgba(0, 0, 0, .2);
+}
+
+.ih-hero-title-accent {
+    margin: 0 0 14px;
+    color: #ff9c2e;
+    font-size: clamp(32px, 3.8vw, 52px);
+    font-weight: 850;
+    line-height: 1.12;
+    letter-spacing: -1px;
+}
+
+.ih-hero-description {
+    max-width: 690px;
+    margin: 0 auto 22px;
+    color: #e0e7ef;
+    font-size: clamp(14px, 1.35vw, 17px);
+    line-height: 1.7;
+}
+
+.ih-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+}
+
+.ih-hero .ih-btn {
+    min-width: 150px;
+    min-height: 45px;
+    border-radius: 7px;
+    font-size: 13px;
+}
+
+.ih-hero-features {
+    position: absolute;
+    z-index: 2;
+    right: 0;
+    bottom: 12px;
+    left: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    width: min(1250px, calc(100% - 40px));
+    margin: auto;
+}
+
+.ih-hero-feature {
+    min-height: 112px;
+    padding: 13px 12px;
+    border: 1px solid rgba(255, 255, 255, .13);
+    border-radius: 12px;
+    background: rgba(15, 27, 40, .57);
+    text-align: center;
+    backdrop-filter: blur(8px);
+}
+
+.ih-hero-feature i {
+    margin-bottom: 7px;
+    color: #ff9c2e;
+    font-size: 25px;
+}
+
+.ih-hero-feature h3 {
+    margin: 0 0 5px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.ih-hero-feature p {
+    margin: 0;
+    color: #d5dbe2;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+/* =========================
+   SERVICES
+========================= */
+
+.ih-services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.ih-service-card {
+    position: relative;
+    min-height: 0;
+    padding: 18px;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    background:
+        linear-gradient(#fff, #fff) padding-box,
+        linear-gradient(135deg, #293d63, #ff8500 55%, #ff9e35) border-box;
+    box-shadow: 0 8px 25px rgba(25, 46, 82, .035);
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.ih-service-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(17, 43, 78, .09);
+}
+
+.ih-service-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.ih-service-icon {
+    display: grid;
+    width: 48px;
+    height: 48px;
+    place-items: center;
+    color: #fff;
+    background: var(--ih-navy);
+    border-radius: 13px;
+    font-size: 20px;
+}
+
+.ih-service-card:nth-child(3n+2) .ih-service-icon {
+    background: linear-gradient(135deg, #293d63, #ff8500);
+}
+
+.ih-service-open {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    place-items: center;
+    color: var(--ih-navy);
+    border: 1px solid var(--ih-border);
+    border-radius: 50%;
+}
+
+.ih-service-number {
+    position: absolute;
+    top: 15px;
+    right: 17px;
+    color: #e0e8f2;
+    font-size: 21px;
+    font-weight: 900;
+}
+
+.ih-service-card h3 {
+    margin: 0 0 8px;
+    color: var(--ih-navy);
+    font-size: 16px;
+    font-weight: 850;
+    line-height: 1.4;
+}
+
+.ih-service-card p {
+    margin: 0 0 12px;
+    color: var(--ih-muted);
+    font-size: 12px;
+    line-height: 1.65;
+}
+
+/* =========================
+   HOW WE WORK
+========================= */
+
+.ih-process-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.ih-process-card {
+    min-height: 195px;
+    padding: 18px;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    background:
+        linear-gradient(#fff, #fff) padding-box,
+        linear-gradient(135deg, #293d63, #ff8500) border-box;
+}
+
+.ih-process-number {
+    display: block;
+    margin-bottom: 10px;
+    color: #ffc99e;
+    font-size: 25px;
+    font-weight: 900;
+}
+
+.ih-process-icon {
+    display: grid;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 12px;
+    place-items: center;
+    color: var(--ih-orange);
+    background: var(--ih-orange-light);
+    border-radius: 12px;
+    font-size: 17px;
+}
+
+.ih-process-card h3 {
+    margin: 0 0 8px;
+    color: var(--ih-navy);
+    font-size: 14px;
+}
+
+.ih-process-card p {
+    margin: 0;
+    color: var(--ih-muted);
+    font-size: 12px;
+    line-height: 1.65;
+}
+
+/* =========================
+   TECHNOLOGY EXPERTISE
+========================= */
+
+.ih-tech-section {
+    color: #fff;
+    background: #0c2141;
+}
+
+.ih-tech-layout {
+    display: grid;
+    grid-template-columns: .9fr 1.1fr;
+    align-items: center;
+    gap: 32px;
+}
+
+.ih-tech-copy h2 {
+    margin: 0 0 16px;
+    color: #fff;
+    font-size: clamp(30px, 3.5vw, 43px);
+    font-weight: 900;
+    line-height: 1.2;
+    letter-spacing: -1px;
+}
+
+.ih-tech-copy p {
+    margin: 0 0 20px;
+    color: #c8d6e8;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.ih-tech-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.ih-tech-card {
+    min-height: 145px;
+    padding: 18px;
+    border: 1px solid rgba(255, 133, 0, .75);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, .045);
+}
+
+.ih-tech-card i {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    margin-bottom: 14px;
+    place-items: center;
+    color: var(--ih-orange);
+    background: rgba(255, 255, 255, .09);
+    border-radius: 12px;
+    font-size: 19px;
+}
+
+.ih-tech-card h3 {
+    margin: 0 0 8px;
+    color: #fff;
+    font-size: 15px;
+}
+
+.ih-tech-card p {
+    margin: 0;
+    color: #cfdbeb;
+    font-size: 12px;
+    line-height: 1.65;
+}
+
+/* =========================
+   WHY CHOOSE US
+========================= */
+
+.ih-why-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 35px;
+}
+
+.ih-why-image-wrap {
+    position: relative;
+}
+
+.ih-why-image-wrap::before {
+    position: absolute;
+    z-index: 0;
+    top: 35px;
+    bottom: -10px;
+    left: -10px;
+    width: 55px;
+    content: "";
+    border-radius: 20px 0 0 0;
+    background: var(--ih-orange);
+}
+
+.ih-why-image {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    height: 340px;
+    object-fit: cover;
+    border-radius: 18px;
+}
+
+.ih-why-copy h2 {
+    margin: 0 0 14px;
+    color: var(--ih-navy);
+    font-size: clamp(30px, 3.3vw, 43px);
+    font-weight: 900;
+    line-height: 1.18;
+    letter-spacing: -.8px;
+}
+
+.ih-why-copy > p {
+    margin: 0 0 12px;
+    color: var(--ih-muted);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.ih-why-points {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.ih-why-point {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-height: 54px;
+    padding: 9px;
+    border: 1px solid var(--ih-border);
+    border-radius: 10px;
+    background: #fff;
+}
+
+.ih-why-point i {
+    flex-shrink: 0;
+    color: var(--ih-orange);
+    font-size: 19px;
+}
+
+.ih-why-point strong {
+    color: var(--ih-navy);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+/* =========================
+   INDUSTRIES
+========================= */
+
+.ih-industries-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.ih-industry-card {
+    padding: 18px;
+    border: 1px solid var(--ih-border);
+    border-radius: 14px;
+    background: #fff;
+    transition: transform .25s ease, border-color .25s ease;
+}
+
+.ih-industry-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--ih-orange);
+}
+
+.ih-industry-icon {
+    display: grid;
+    width: 45px;
+    height: 45px;
+    margin-bottom: 13px;
+    place-items: center;
+    color: var(--ih-orange);
+    background: var(--ih-orange-light);
+    border-radius: 12px;
+    font-size: 19px;
+}
+
+.ih-industry-card h3 {
+    margin: 0 0 8px;
+    color: var(--ih-navy);
+    font-size: 15px;
+}
+
+.ih-industry-card p {
+    margin: 0 0 12px;
+    color: var(--ih-muted);
+    font-size: 12px;
+    line-height: 1.65;
+}
+
+/* =========================
+   ENGAGEMENT MODELS
+========================= */
+
+.ih-engagement-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.ih-engagement-card {
+    padding: 18px;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    background:
+        linear-gradient(#fff, #fff) padding-box,
+        linear-gradient(135deg, #293d63, #ff8500) border-box;
+}
+
+.ih-engagement-card > i {
+    display: grid;
+    width: 45px;
+    height: 45px;
+    margin-bottom: 13px;
+    place-items: center;
+    color: var(--ih-orange);
+    background: var(--ih-orange-light);
+    border-radius: 12px;
+    font-size: 19px;
+}
+
+.ih-engagement-card h3 {
+    margin: 0 0 8px;
+    color: var(--ih-navy);
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+.ih-engagement-card p {
+    margin: 0 0 12px;
+    color: var(--ih-muted);
+    font-size: 12px;
+    line-height: 1.65;
+}
+
+
+/* Clients marquee */
+.ih-client-section {
+    overflow: hidden;
+    background: #f6f8fb;
+    padding: 55px 0;
+}
+
+.ih-marquee {
+    width: 100%;
+    overflow: hidden;
+    padding: 10px 0 20px;
+}
+
+.ih-marquee-track {
+    display: flex;
+    align-items: stretch;
+    gap: 24px;
+    width: max-content;
+    animation: ih-client-scroll 35s linear infinite;
+}
+
+.ih-marquee:hover .ih-marquee-track {
+    animation-play-state: paused;
+}
+
+/* Individual client card */
+.ih-client-card {
+    flex: 0 0 220px;
+    width: 220px;
+    height: 145px;
+    box-sizing: border-box;
+    padding: 18px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+
+    background: #ffffff;
+    border: 1px solid #e5ebf4;
+    border-radius: 18px;
+    box-shadow: 0 8px 24px rgba(41, 61, 99, 0.06);
+
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.ih-client-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(41, 61, 99, 0.12);
+}
+
+/* Logo image */
+.ih-client-card img {
+    display: block;
+    width: 100%;
+    max-width: 155px;
+    height: 65px;
+    object-fit: contain;
+    object-position: center;
+    flex-shrink: 0;
+}
+
+/* Client name */
+.ih-client-card .ih-client-name {
+    display: block;
+    max-width: 100%;
+    margin: 0;
+    color: #ff9b26;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.3;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+/* Continuous scrolling */
+@keyframes ih-client-scroll {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .ih-marquee-track {
+        animation: none;
+    }
+}
+
+@media (max-width: 576px) {
+    .ih-client-card {
+        flex-basis: 180px;
+        width: 180px;
+        height: 130px;
+        padding: 14px;
+    }
+
+    .ih-client-card img {
+        max-width: 130px;
+        height: 55px;
+    }
+
+    .ih-client-card .ih-client-name {
+        font-size: 14px;
+    }
+}
+/* =========================
+   TESTIMONIALS
+========================= */
+
+.ih-testimonials-section {
+    background: #fff;
+}
+
+.ih-testimonial-scroller {
+    display: grid;
+    grid-auto-columns: calc((100% - 28px) / 3);
+    grid-auto-flow: column;
+    gap: 14px;
+    overflow-x: auto;
+    padding: 6px 3px 14px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: #ffb96c #edf1f7;
+}
+
+.ih-testimonial-card {
+    display: flex;
+    min-height: 215px;
+    flex-direction: column;
+    padding: 18px;
+    border: 1px solid var(--ih-border);
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 7px 22px rgba(25, 46, 82, .05);
+    scroll-snap-align: start;
+}
+
+.ih-quote-icon {
+    margin-bottom: 10px;
+    color: var(--ih-orange);
+    font-size: 25px;
+}
+
+.ih-testimonial-card blockquote {
+    flex: 1;
+    margin: 0 0 15px;
+    color: #243958;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.ih-testimonial-person {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding-top: 12px;
+    border-top: 1px solid #e8edf4;
+}
+
+.ih-avatar {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    overflow: hidden;
+    place-items: center;
+    color: var(--ih-orange);
+    background: var(--ih-orange-light);
+    border-radius: 50%;
+    font-size: 17px;
+}
+
+.ih-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ih-testimonial-person strong {
+    display: block;
+    color: var(--ih-navy);
+    font-size: 12px;
+}
+
+.ih-testimonial-person small {
+    display: block;
+    margin-top: 4px;
+    color: var(--ih-muted);
+    font-size: 10px;
+}
+
+.ih-scroll-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.ih-testimonial-rating{
+    color: #ff9b26;;
+}
+.ih-scroll-btn {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    place-items: center;
+    color: var(--ih-navy);
+    border: 1px solid var(--ih-border);
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.ih-scroll-btn:hover {
+    color: #fff;
+    border-color: var(--ih-orange);
+    background: var(--ih-orange);
+}
+
+/* =========================
+   OUR COMMITMENT
+========================= */
+
+.ih-commitment-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.ih-commitment-card {
+    padding: 20px 18px;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    background:
+        linear-gradient(#fff, #fff) padding-box,
+        linear-gradient(135deg, #293d63, #ff8500) border-box;
+    text-align: center;
+}
+
+.ih-commitment-icon {
+    display: grid;
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 13px;
+    place-items: center;
+    color: var(--ih-orange);
+    background: var(--ih-orange-light);
+    border-radius: 14px;
+    font-size: 21px;
+}
+
+.ih-commitment-card h3 {
+    margin: 0 0 8px;
+    color: var(--ih-navy);
+    font-size: 16px;
+}
+
+.ih-commitment-card p {
+    margin: 0;
+    color: var(--ih-muted);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+/* =========================
+   FINAL CTA
+========================= */
+
+.ih-final-cta {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: 27px 0;
+    color: #fff;
+    background: #102747;
+    border-top: 2px solid #ff8500;
+}
+
+.ih-final-cta::before {
+    position: absolute;
+    z-index: -1;
+    top: -130px;
+    right: 8%;
+    width: 320px;
+    height: 320px;
+    content: "";
+    border-radius: 50%;
+    background: rgba(255, 133, 0, .17);
+    filter: blur(65px);
+}
+
+.ih-final-cta::after {
+    position: absolute;
+    z-index: -1;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 1px;
+    content: "";
+    background: linear-gradient(90deg, transparent, rgba(255, 133, 0, .7), transparent);
+}
+
+.ih-final-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.ih-final-cta .ih-eyebrow {
+    margin-bottom: 7px;
+    color: #ffad51;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.ih-final-cta h2 {
+    margin: 0 0 7px;
+    color: #fff;
+    font-size: clamp(24px, 2.7vw, 34px);
+    line-height: 1.2;
+    letter-spacing: -.5px;
+}
+
+.ih-final-cta h2 span {
+    color: #ff9c2e;
+}
+
+.ih-final-cta p {
+    max-width: 650px;
+    margin: 0;
+    color: #cfdaea;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.ih-final-inner .ih-btn {
+    flex-shrink: 0;
+    min-height: 44px;
+    white-space: nowrap;
+}
+
+.ih-final-inner .ih-btn:hover {
+    background: #ff9b26;
+    box-shadow: 0 10px 24px rgba(255, 133, 0, .28);
+}
+
+/* =========================
+   TABLET RESPONSIVENESS
+========================= */
+
+@media (max-width: 1000px) {
+    .ih-container {
+        width: calc(100% - 36px);
+    }
+
+    .ih-hero-content {
+        width: calc(100% - 36px);
+    }
+
+    .ih-services-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .ih-process-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .ih-tech-layout,
+    .ih-why-layout {
+        gap: 25px;
+    }
+
+    .ih-industries-grid,
+    .ih-engagement-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .ih-testimonial-scroller {
+        grid-auto-columns: calc((100% - 14px) / 2);
+    }
+}
+
+/* =========================
+   MOBILE RESPONSIVENESS
+========================= */
+
+html,
+body {
+    max-width: 100%;
+    overflow-x: clip;
+}
+
+.intela-home {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+}
+
+.intela-home *,
+.intela-home *::before,
+.intela-home *::after {
+    box-sizing: border-box;
+}
+
+.intela-home img {
+    max-width: 100%;
+}
+
+.ih-container {
+    width: min(1200px, calc(100% - 40px));
+    max-width: 100%;
+    margin-inline: auto;
+}
+
+.ih-hero,
+.ih-hero-content,
+.ih-hero-actions,
+.ih-hero-features,
+.ih-final-inner {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.ih-hero h1,
+.ih-hero-title-accent,
+.ih-heading h2,
+.ih-why-copy h2,
+.ih-tech-copy h2,
+.ih-final-cta h2 {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.ih-hero-actions .ih-btn {
+    max-width: 100%;
+    min-width: 0;
+}
+
+@media (max-width: 700px) {
+    .ih-container {
+        width: calc(100% - 32px);
+    }
+
+    .intela-home .ih-section,
+    .intela-home .ih-client-section {
+        padding-top: 24px;
+        padding-bottom: 24px;
+    }
+
+    .ih-heading {
+        width: 100%;
+        margin-bottom: 18px;
+    }
+
+    .ih-heading h2 {
+        font-size: clamp(23px, 6vw, 29px);
+        line-height: 1.25;
+        letter-spacing: -.4px;
+    }
+
+    .ih-heading p {
+        font-size: 13px;
+        overflow-wrap: anywhere;
+    }
+
+    /* Hero text and buttons */
+    .ih-hero {
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        padding: 0 0 16px;
+        background-position: 62% center;
+        background-size: cover;
+    }
+
+    .ih-hero-content {
+        width: calc(100% - 32px);
+        max-width: 100%;
+        padding: 40px 0 24px;
+        margin-inline: auto;
+        text-align: center;
+    }
+
+    .ih-hero h1 {
+        font-size: clamp(25px, 7vw, 36px);
+        line-height: 1.2;
+        letter-spacing: -.5px;
+    }
+
+    .ih-hero-title-accent {
+        font-size: clamp(25px, 6.5vw, 34px);
+        line-height: 1.2;
+        letter-spacing: -.4px;
+    }
+
+    .ih-hero-description {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto 20px;
+        font-size: 13px;
+        line-height: 1.65;
+        overflow-wrap: anywhere;
+    }
+
+    .ih-hero-actions {
+        display: flex;
+        width: 100%;
+        max-width: 340px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        margin-inline: auto;
+    }
+
+    .ih-hero .ih-btn {
+        display: flex;
+        width: 100%;
+        min-width: 0;
+        min-height: 44px;
+        padding: 12px 14px;
+        white-space: normal;
+        text-align: center;
+    }
+
+    /* Stack hero feature cards instead of overlaying them */
+    .ih-hero-features {
+        position: relative;
+        inset: auto;
+        display: grid;
+        width: calc(100% - 32px);
+        max-width: 440px;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 8px;
+        margin: 0 auto;
+    }
+
+    .ih-hero-feature {
+        display: grid;
+        width: 100%;
+        min-width: 0;
+        min-height: 62px;
+        grid-template-columns: 34px minmax(0, 1fr);
+        align-items: center;
+        column-gap: 10px;
+        padding: 10px 12px;
+        text-align: left;
+    }
+
+    .ih-hero-feature i {
+        grid-column: 1;
+        grid-row: 1 / span 2;
+        margin: 0;
+        font-size: 20px;
+    }
+
+    .ih-hero-feature h3 {
+        min-width: 0;
+        margin: 0 0 3px;
+        font-size: 13px;
+        overflow-wrap: anywhere;
+    }
+
+    .ih-hero-feature p {
+        min-width: 0;
+        font-size: 11px;
+        overflow-wrap: anywhere;
+    }
+
+    /* Stack cards in a single column */
+    .ih-services-grid,
+    .ih-process-grid,
+    .ih-tech-layout,
+    .ih-why-layout,
+    .ih-commitment-grid,
+    .ih-industries-grid,
+    .ih-engagement-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .ih-service-card,
+    .ih-process-card,
+    .ih-tech-card,
+    .ih-why-copy,
+    .ih-industry-card,
+    .ih-engagement-card,
+    .ih-commitment-card {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .ih-tech-layout {
+        gap: 22px;
+    }
+
+    .ih-tech-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .ih-tech-card {
+        padding: 14px;
+    }
+
+    .ih-tech-card h3 {
+        overflow-wrap: anywhere;
+    }
+
+    .ih-why-image-wrap {
+        width: calc(100% - 5px);
+        min-width: 0;
+        margin-left: 5px;
+    }
+
+    .ih-why-image {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+    }
+
+    .ih-why-points {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    /* Keep horizontal carousels inside the viewport */
+    .ih-marquee {
+        max-width: 100%;
+    }
+
+    .ih-marquee-track {
+        width: max-content;
+    }
+
+    .ih-testimonial-scroller {
+        width: 100%;
+        max-width: 100%;
+        grid-auto-columns: 88%;
+        overflow-x: auto;
+    }
+
+    .ih-client-card {
+        width: 145px;
+        min-width: 145px;
+    }
+
+    /* CTA layout */
+    .ih-final-inner {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    .ih-final-inner > * {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .ih-final-cta h2 {
+        font-size: clamp(23px, 6vw, 29px);
+    }
+
+    .ih-final-inner .ih-btn {
+        width: 100%;
+        white-space: normal;
+    }
+}
+
+/* Small phones */
+@media (max-width: 380px) {
+    .ih-container {
+        width: calc(100% - 24px);
+    }
+
+    .ih-hero-content {
+        width: calc(100% - 24px);
+        padding-top: 32px;
+    }
+
+    .ih-hero h1,
+    .ih-hero-title-accent {
+        font-size: 25px;
+    }
+
+    .ih-hero-features {
+        width: calc(100% - 24px);
+    }
+
+    .ih-tech-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ih-marquee-track {
+        animation: none;
+    }
+
+    .ih-btn,
+    .ih-service-card,
+    .ih-industry-card,
+    .ih-link i {
+        transition: none;
+    }
+}
+.ih-client-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-width: 180px;
+    padding: 20px;
+    text-align: center;
+}
+
+.ih-client-card img {
+    width: 140px;
+    height: 65px;
+    object-fit: fill;
+}
+
+.ih-client-name {
+    color:#ff9b26;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<main class="intela-home">
+
+    <!-- HERO -->
+    <section class="ih-hero" id="home">
+        <div class="ih-hero-content">
+            <h1>INTELA GROUP LLC</h1>
+            <div class="ih-hero-title-accent">Managed Services</div>
+
+            <p class="ih-hero-description">
+                We are a fast-growing team of highly skilled, passionate IT
+                professionals delivering excellence in service delivery,
+                enabling faster innovation and higher productivity.
+            </p>
+
+            <div class="ih-hero-actions">
+                <a href="{% url 'website:services' %}" class="ih-btn ih-btn-orange">
+                    Explore Services <i class="fa-solid fa-arrow-right"></i>
+                </a>
+
+                <a href="{% url 'website:contact' %}" class="ih-btn ih-btn-white">
+                    Contact Us
+                </a>
+            </div>
+        </div>
+
+        <div class="ih-hero-features">
+            <article class="ih-hero-feature">
+                <i class="fa-solid fa-bolt"></i>
+                <h3>High Performance</h3>
+                <p>Optimized solutions for maximum efficiency</p>
+            </article>
+
+            <article class="ih-hero-feature">
+                <i class="fa-solid fa-earth-americas"></i>
+                <h3>Global Service</h3>
+                <p>Worldwide reach with local expertise</p>
+            </article>
+
+            <article class="ih-hero-feature">
+                <i class="fa-solid fa-user-group"></i>
+                <h3>Expert Team</h3>
+                <p>Skilled professionals at your service</p>
+            </article>
+        </div>
+    </section>
+
+    <!-- WHAT WE DO -->
+    <section class="ih-section ih-soft" id="what-we-do">
+        <div class="ih-container">
+            <div class="ih-heading">
+                <span class="ih-eyebrow">What we do</span>
+                <h2>Technology Services That <span>Move Your Business Forward</span></h2>
+                <p>
+                    We combine software engineering expertise, modern technology
+                    practices, and business-focused IT services to help organizations
+                    build better products, improve operations, and adapt to changing needs.
+                </p>
+            </div>
+
+            <div class="ih-services-grid">
+                {% for service in navigation_services|slice:":6" %}
+                <article class="ih-service-card">
+                    <span class="ih-service-number">{{ forloop.counter|stringformat:"02d" }}</span>
+
+                    <div class="ih-service-top">
+                        <div class="ih-service-icon">
+                            {% if forloop.counter == 1 %}
+                                <i class="fa-solid fa-code"></i>
+                            {% elif forloop.counter == 2 %}
+                                <i class="fa-solid fa-laptop-code"></i>
+                            {% elif forloop.counter == 3 %}
+                                <i class="fa-solid fa-cloud"></i>
+                            {% elif forloop.counter == 4 %}
+                                <i class="fa-solid fa-cloud"></i>
+                            {% elif forloop.counter == 5 %}
+                                <i class="fa-solid fa-cloud"></i>
+                            {% else %}
+                                <i class="fa-solid fa-gears"></i>
+                            {% endif %}
+                        </div>
+
+                        
+                    </div>
+
+                    <h3>{{ service.title }}</h3>
+                    <p>{{ service.short_description }}</p>
+
+                    <a href="{% url 'website:service_detail' service.pk %}" class="ih-link">
+                        Learn more <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </article>
+                {% empty %}
+                <article class="ih-service-card">
+                    <div class="ih-service-icon"><i class="fa-solid fa-code"></i></div>
+                    <h3>Technology Services</h3>
+                    <p>Discover technology services aligned with your business requirements.</p>
+                    <a href="{% url 'website:services' %}" class="ih-link">Explore services →</a>
+                </article>
+                {% endfor %}
+            </div>
+
+            <div style="text-align:center;margin-top:18px">
+                <a href="{% url 'website:services' %}" class="ih-btn ih-btn-orange">
+                    View All Services <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW WE WORK -->
+    <section class="ih-section" id="how-we-work">
+        <div class="ih-container">
+            <div class="ih-heading">
+                <span class="ih-eyebrow">How we work</span>
+                <h2>From Business Challenge <span>to Working Software</span></h2>
+                <p>Our delivery approach brings business goals, engineering, and quality together at every stage of a project.</p>
+            </div>
+
+            <div class="ih-process-grid">
+                <article class="ih-process-card">
+                    <span class="ih-process-number">01</span>
+                    <div class="ih-process-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+                    <h3>Discover &amp; Plan</h3>
+                    <p>Understand your business requirements, users, challenges, and project goals.</p>
+                </article>
+
+                <article class="ih-process-card">
+                    <span class="ih-process-number">02</span>
+                    <div class="ih-process-icon"><i class="fa-solid fa-compass-drafting"></i></div>
+                    <h3>Design the Solution</h3>
+                    <p>Define architecture, user experience, integrations, and an implementation plan.</p>
+                </article>
+
+                <article class="ih-process-card">
+                    <span class="ih-process-number">03</span>
+                    <div class="ih-process-icon"><i class="fa-solid fa-laptop-code"></i></div>
+                    <h3>Develop &amp; Integrate</h3>
+                    <p>Build features, connect systems, and implement the agreed solution.</p>
+                </article>
+
+                <article class="ih-process-card">
+                    <span class="ih-process-number">04</span>
+                    <div class="ih-process-icon"><i class="fa-solid fa-vial"></i></div>
+                    <h3>Test &amp; Validate</h3>
+                    <p>Validate functionality, performance, and quality against requirements.</p>
+                </article>
+
+                <article class="ih-process-card">
+                    <span class="ih-process-number">05</span>
+                    <div class="ih-process-icon"><i class="fa-solid fa-rocket"></i></div>
+                    <h3>Deploy &amp; Improve</h3>
+                    <p>Release the solution, monitor outcomes, and identify opportunities to improve.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- TECHNOLOGY EXPERTISE -->
+    <section class="ih-section ih-tech-section" id="technology-expertise">
+        <div class="ih-container ih-tech-layout">
+            <div class="ih-tech-copy">
+                <span class="ih-eyebrow">Our technology expertise</span>
+                <h2>The Right Tools for the <span class="ih-highlight">Right Business Need</span></h2>
+                <p>We select technologies based on project requirements, integration needs, maintainability, and long-term business goals.</p>
+                <a href="{% url 'website:services' %}" class="ih-btn ih-btn-orange">
+                    Explore Our Capabilities <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="ih-tech-grid">
+                <article class="ih-tech-card">
+                    <i class="fa-solid fa-laptop-code"></i>
+                    <h3>Frontend Development</h3>
+                    <p>React, Angular, HTML, CSS, and JavaScript</p>
+                </article>
+
+                <article class="ih-tech-card">
+                    <i class="fa-solid fa-code"></i>
+                    <h3>Backend Development</h3>
+                    <p>Java, Spring, Python, Django, and REST APIs</p>
+                </article>
+
+                <article class="ih-tech-card">
+                    <i class="fa-solid fa-database"></i>
+                    <h3>Data &amp; Integration</h3>
+                    <p>SQL databases, API integration, and connected systems</p>
+                </article>
+
+                <article class="ih-tech-card">
+                    <i class="fa-brands fa-git-alt"></i>
+                    <h3>Cloud &amp; Delivery</h3>
+                    <p>Git, CI/CD pipelines, Docker, and deployment automation</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY CHOOSE US -->
+    <section class="ih-section" id="why-choose-us">
+        <div class="ih-container ih-why-layout">
+            <div class="ih-why-image-wrap">
+                <img
+                    src="{% static 'intelaimages/whychoose.png' %}"
+                    alt="Modern technology and professional workspace"
+                    class="ih-why-image"
+                    loading="lazy"
+                >
+            </div>
+
+            <div class="ih-why-copy">
+                <span class="ih-eyebrow">Modern Technology</span>
+                <h2>Why Choose <span class="ih-highlight">Us?</span></h2>
+
+                <p>
+                    We are a fast-growing team of highly skilled, passionate IT
+                    professionals with excellence in service delivery, enabling faster
+                    innovation and higher productivity. Our services are dynamic,
+                    scalable, resilient and responsive.
+                </p>
+
+                <p>
+                    We take a highly collaborative approach to align our services
+                    with your business goals, ensuring that every solution we provide
+                    is tailored to your specific needs.
+                </p>
+
+                <div class="ih-why-points">
+                    <div class="ih-why-point">
+                        <i class="fa-solid fa-bullseye"></i>
+                        <strong>Excellence in service delivery</strong>
+                    </div>
+
+                    <div class="ih-why-point">
+                        <i class="fa-regular fa-lightbulb"></i>
+                        <strong>Faster innovation and productivity</strong>
+                    </div>
+
+                    <div class="ih-why-point">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <strong>Dynamic, scalable, and resilient</strong>
+                    </div>
+
+                    <div class="ih-why-point">
+                        <i class="fa-regular fa-circle-check"></i>
+                        <strong>Collaborative business alignment</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INDUSTRIES -->
+    <section class="ih-section ih-soft" id="industries">
+        <div class="ih-container">
+            <div class="ih-heading">
+                <span class="ih-eyebrow">Industries we serve</span>
+                <h2>Practical Solutions. <span>Real Business Challenges.</span></h2>
+                <p>Explore the types of challenges that software engineering, integration, and automation can help address.</p>
+            </div>
+
+            <div class="ih-industries-grid">
+                <article class="ih-industry-card">
+                    <div class="ih-industry-icon"><i class="fa-solid fa-car"></i></div>
+                    <h3>Automotive</h3>
+                    <p>Technology support aligned with automotive business needs and operations.</p>
+                    <a href="{% url 'website:industries' %}#automotive" class="ih-link">Explore industry →</a>
+                </article>
+
+                <article class="ih-industry-card">
+                    <div class="ih-industry-icon"><i class="fa-solid fa-building-columns"></i></div>
+                    <h3>Banking &amp; Financial</h3>
+                    <p>Technology and integration approaches shaped around business requirements.</p>
+                    <a href="{% url 'website:industries' %}#financial" class="ih-link">Explore industry →</a>
+                </article>
+
+                <article class="ih-industry-card">
+                    <div class="ih-industry-icon"><i class="fa-solid fa-bolt"></i></div>
+                    <h3>Energy</h3>
+                    <p>Professional and technology support for evolving energy-sector needs.</p>
+                    <a href="{% url 'website:industries' %}#energy" class="ih-link">Explore industry →</a>
+                </article>
+
+                <article class="ih-industry-card">
+                    <div class="ih-industry-icon"><i class="fa-solid fa-city"></i></div>
+                    <h3>Enterprise</h3>
+                    <p>Business-focused support for organizational technology requirements.</p>
+                    <a href="{% url 'website:industries' %}" class="ih-link">Explore industries →</a>
+                </article>
+            </div>
+
+            <div style="text-align:center;margin-top:18px">
+                <a href="{% url 'website:industries' %}" class="ih-btn ih-btn-orange">
+                    Explore All Industries <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FLEXIBLE ENGAGEMENT -->
+    <section class="ih-section" id="engagement">
+        <div class="ih-container">
+            <div class="ih-heading">
+                <span class="ih-eyebrow">Flexible engagement</span>
+                <h2>A Delivery Model That <span>Fits Your Business</span></h2>
+                <p>Choose an engagement approach aligned with your project scope, team requirements, and ongoing support needs.</p>
+            </div>
+
+            <div class="ih-engagement-grid">
+                <article class="ih-engagement-card">
+                    <i class="fa-solid fa-laptop-code"></i>
+                    <h3>Project-Based Development</h3>
+                    <p>Define project scope, milestones, deliverables, and an implementation plan.</p>
+                    <a href="{% url 'website:contact' %}" class="ih-link">Discuss your project →</a>
+                </article>
+
+                <article class="ih-engagement-card">
+                    <i class="fa-solid fa-people-group"></i>
+                    <h3>Dedicated Development Teams</h3>
+                    <p>Add engineering capacity for ongoing product development and technical initiatives.</p>
+                    <a href="{% url 'website:contact' %}" class="ih-link">Discuss your needs →</a>
+                </article>
+
+                <article class="ih-engagement-card">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                    <h3>Managed Support &amp; Maintenance</h3>
+                    <p>Discuss application support and maintenance based on your service requirements.</p>
+                    <a href="{% url 'website:contact' %}" class="ih-link">Discuss support →</a>
+                </article>
+
+                <article class="ih-engagement-card">
+                    <i class="fa-solid fa-briefcase"></i>
+                    <h3>IT Staffing &amp; Recruitment</h3>
+                    <p>Discuss technology professional requirements for contract or direct-hire roles.</p>
+                    <a href="{% url 'website:contact' %}" class="ih-link">Discuss staffing →</a>
+                </article>
+            </div>
+        </div>
+    </section>
+
+<!-- CLIENTS -->
+<section class="ih-section ih-client-section" id="clients">
+    <div class="ih-container">
+        <div class="ih-heading">
+            <span class="ih-eyebrow">Partners &amp; organizations</span>
+            <h2>Relationships matter. <span>Trust matters more.</span></h2>
+            <p>Explore the organizations listed in our company information.</p>
+        </div>
+    </div>
+
+    <div class="ih-marquee" aria-label="Scrolling client logos">
+        <div class="ih-marquee-track">
+
+            {% for client in home_clients %}
+            <div class="ih-client-card">
+                {% if client.logo %}
+                    <img src="{{ client.logo.url }}"
+                         alt="{{ client.name }}"
+                         loading="lazy">
+                {% elif client.image %}
+                    <img src="{{ client.image.url }}"
+                         alt="{{ client.name }}"
+                         loading="lazy">
+                {% endif %}
+
+                <span class="ih-client-name">{{ client.name }}</span>
+            </div>
+            {% empty %}
+            <div class="ih-client-card">
+                <span class="ih-client-name">No clients available</span>
+            </div>
+            {% endfor %}
+
+            <!-- Duplicate items for continuous scrolling -->
+            {% for client in home_clients %}
+            <div class="ih-client-card" aria-hidden="true">
+                {% if client.logo %}
+                    <img src="{{ client.logo.url }}" alt="" loading="lazy">
+                {% elif client.image %}
+                    <img src="{{ client.image.url }}" alt="" loading="lazy">
+                {% endif %}
+
+                <span class="ih-client-name">{{ client.name }}</span>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</section>
+
+
+<section class="ih-section ih-testimonials-section" id="testimonials">
+    <div class="ih-container">
+
+        <div class="ih-heading">
+            <span class="ih-eyebrow">Client testimonials</span>
+            <h2>Built on relationships. <span>Driven by collaboration.</span></h2>
+            <p>Feedback and perspectives shared through our company.</p>
+        </div>
+
+        <div class="ih-testimonial-scroller" id="ihTestimonialScroller">
+
+            {% for testimonial in testimonials %}
+            <article class="ih-testimonial-card">
+
+                <div class="ih-quote-icon">
+                    <i class="fa-solid fa-quote-left"></i>
+                </div>
+
+                <blockquote>
+                    {{ testimonial.testimonial }}
+                </blockquote>
+
+                <div class="ih-testimonial-person">
+                    <div class="ih-avatar">
+                        {% if testimonial.photo %}
+                            <img
+                                src="{{ testimonial.photo.url }}"
+                                alt="{{ testimonial.client_name }}"
+                                loading="lazy">
+                        {% else %}
+                            <i class="fa-solid fa-user"></i>
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <strong>{{ testimonial.client_name }}</strong>
+
+                        <small>
+                            {% if testimonial.designation %}
+                                {{ testimonial.designation }}
+                            {% elif testimonial.company_name %}
+                                {{ testimonial.company_name }}
+                            {% else %}
+                                Client
+                            {% endif %}
+                        </small>
+
+                        {% if testimonial.company_name and testimonial.designation %}
+                            <small>{{ testimonial.company_name }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if testimonial.rating %}
+                <div class="ih-testimonial-rating" aria-label="Rating: {{ testimonial.rating }} out of 5">
+                    {% for star in "12345" %}
+                        {% if forloop.counter <= testimonial.rating %}
+                            <i class="fa-solid fa-star"></i>
+                        {% else %}
+                            <i class="fa-regular fa-star"></i>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+            </article>
+
+            {% empty %}
+            <article class="ih-testimonial-card">
+                <div class="ih-quote-icon">
+                    <i class="fa-solid fa-quote-left"></i>
+                </div>
+
+                <blockquote>
+                    No client testimonials are available yet. Please check back soon.
+                </blockquote>
+
+                <div class="ih-testimonial-person">
+                    <div class="ih-avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div>
+                        <strong>Intela Group LLC</strong>
+                        <small>Client testimonials</small>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+
+        </div>
+
+        <div class="ih-scroll-controls">
+            <button
+                type="button"
+                class="ih-scroll-btn"
+                id="ihTestimonialPrev"
+                aria-label="Scroll testimonials left">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+
+            <button
+                type="button"
+                class="ih-scroll-btn"
+                id="ihTestimonialNext"
+                aria-label="Scroll testimonials right">
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+
+    </div>
+</section>
+
+
+    <!-- OUR COMMITMENT -->
+    <section class="ih-section ih-soft" id="commitment">
+        <div class="ih-container">
+            <div class="ih-heading">
+                <span class="ih-eyebrow">Our commitment</span>
+                <h2>Building Partnerships <span>That Last</span></h2>
+                <p>Successful technology delivery starts with clear communication, shared goals, thoughtful engineering, and continuous improvement.</p>
+            </div>
+
+            <div class="ih-commitment-grid">
+                <article class="ih-commitment-card">
+                    <div class="ih-commitment-icon"><i class="fa-solid fa-handshake"></i></div>
+                    <h3>Clear Communication</h3>
+                    <p>Keep stakeholders aligned through transparent communication and shared expectations.</p>
+                </article>
+
+                <article class="ih-commitment-card">
+                    <div class="ih-commitment-icon"><i class="fa-solid fa-circle-check"></i></div>
+                    <h3>Quality-Driven Delivery</h3>
+                    <p>Focus on maintainable solutions, thoughtful implementation, and appropriate testing.</p>
+                </article>
+
+                <article class="ih-commitment-card">
+                    <div class="ih-commitment-icon"><i class="fa-solid fa-arrows-rotate"></i></div>
+                    <h3>Continuous Improvement</h3>
+                    <p>Adapt solutions as technology, business needs, and priorities evolve.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="ih-final-cta">
+        <div class="ih-container ih-final-inner">
+            <div>
+                <span class="ih-eyebrow">Your next step starts here</span>
+                <h2>Have a goal in mind? <span>Let's talk.</span></h2>
+                <p>Share your requirement with us and start a conversation about your next opportunity.</p>
+            </div>
+
+            <a href="{% url 'website:contact' %}" class="ih-btn ih-btn-orange">
+                Get in touch <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+    </section>
+
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const scroller = document.getElementById("ihTestimonialScroller");
+    const previous = document.getElementById("ihTestimonialPrev");
+    const next = document.getElementById("ihTestimonialNext");
+
+    if (!scroller || !previous || !next) return;
+
+    function scrollTestimonials(direction) {
+        const card = scroller.querySelector(".ih-testimonial-card");
+        if (!card) return;
+
+        const style = window.getComputedStyle(scroller);
+        const gap = parseFloat(style.columnGap || style.gap) || 14;
+        const distance = card.getBoundingClientRect().width + gap;
+
+        scroller.scrollBy({
+            left: direction * distance,
+            behavior: "smooth"
+        });
+    }
+
+    previous.addEventListener("click", function () {
+        scrollTestimonials(-1);
+    });
+
+    next.addEventListener("click", function () {
+        scrollTestimonials(1);
+    });
+});
+</script>
+{% endblock %}

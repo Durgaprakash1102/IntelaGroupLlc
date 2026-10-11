@@ -1,0 +1,848 @@
+{% extends "includes/sidebar.html" %}
+{% load static %}
+
+{% block title %}Manage Services | Intela Group LLC{% endblock %}
+
+{% block content %}
+
+<style>
+:root {
+    --navy: #293D63;
+    --blue: #293D63;
+    --blue-dark: #1D2D4A;
+    --orange: #FFA033;
+    --text: #1D2D4A;
+    --muted: #788397;
+    --border: #E2E8F0;
+    --light: #F6F8FB;
+    --danger: #c0392b;
+    --success: #18a673;
+}
+
+.ms-page {
+    padding: 28px 32px 48px;
+    max-width: 1200px;
+}
+
+/* Toast notifications */
+.ms-toasts {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: min(360px, calc(100% - 32px));
+    pointer-events: none;
+}
+
+.ms-toast {
+    pointer-events: auto;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 12px 32px rgba(15, 45, 76, 0.14);
+    border-left: 4px solid var(--success);
+    animation: msToastIn 0.35s ease;
+}
+
+.ms-toast.error {
+    border-left-color: var(--danger);
+}
+
+.ms-toast-body {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.45;
+}
+
+.ms-toast-body i {
+    margin-top: 2px;
+    color: var(--success);
+}
+
+.ms-toast.error .ms-toast-body i {
+    color: var(--danger);
+}
+
+.ms-toast-close {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 18px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+}
+
+@keyframes msToastIn {
+    from {
+        opacity: 0;
+        transform: translateX(24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes msToastOut {
+    to {
+        opacity: 0;
+        transform: translateX(24px);
+    }
+}
+
+/* Page header */
+.ms-header {
+    margin-bottom: 24px;
+}
+
+.ms-header h1 {
+    margin: 0 0 4px;
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: -0.4px;
+}
+
+.ms-header p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+/* Create and edit form card */
+.ms-form-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 8px 28px rgba(15, 45, 76, 0.06);
+    margin-bottom: 32px;
+    overflow: hidden;
+}
+
+.ms-form-card .ms-card-header {
+    padding: 16px 22px;
+    border-bottom: 1px solid var(--border);
+    border-top: 3px solid var(--orange);
+    background: linear-gradient(180deg, #F6F8FB 0%, #FFFFFF 100%);
+}
+
+.ms-form-card .ms-card-header h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ms-form-card .ms-card-header h2 i {
+    color: var(--navy);
+}
+
+.ms-form-body {
+    padding: 22px;
+}
+
+.ms-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 20px;
+}
+
+.ms-field.full {
+    grid-column: 1 / -1;
+}
+
+.ms-field label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--navy);
+}
+
+.ms-field input[type="text"],
+.ms-field input[type="file"],
+.ms-field textarea {
+    width: 100%;
+    padding: 11px 13px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-size: 13px;
+    font-family: inherit;
+    color: var(--text);
+    background: #fff;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+}
+
+.ms-field input:focus,
+.ms-field textarea:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(41, 61, 99, 0.12);
+}
+
+.ms-field textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.ms-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: var(--light);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+}
+
+.ms-checkbox input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--navy);
+}
+
+.ms-checkbox label {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+}
+
+.ms-errors {
+    color: var(--danger);
+    font-size: 12px;
+    margin-top: 5px;
+    font-weight: 600;
+}
+
+.ms-form-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+}
+
+.ms-btn-primary {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--navy), var(--blue-dark));
+    color: #fff;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 6px 18px rgba(41, 61, 99, 0.22);
+    transition: transform 0.2s, background 0.2s;
+}
+
+.ms-btn-primary:hover {
+    transform: translateY(-1px);
+    background: var(--blue-dark);
+}
+
+.ms-cancel {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.ms-cancel:hover {
+    color: var(--navy);
+}
+
+/* Services section */
+.ms-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+
+.ms-section-header h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ms-section-header h2 i {
+    color: var(--orange);
+}
+
+.ms-section-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.ms-count {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    background: var(--light);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+/* Search */
+.ms-search-wrap {
+    position: relative;
+    width: 240px;
+}
+
+.ms-search-wrap i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 13px;
+    pointer-events: none;
+}
+
+.ms-search-wrap input {
+    width: 100%;
+    padding: 9px 12px 9px 36px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-size: 13px;
+    font-family: inherit;
+    color: var(--text);
+    background: #fff;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+}
+
+.ms-search-wrap input:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(41, 61, 99, 0.12);
+}
+
+/* Service cards */
+.ms-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+}
+
+.ms-service-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(15, 45, 76, 0.05);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.ms-service-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 32px rgba(15, 45, 76, 0.1);
+}
+
+.ms-service-card-media {
+    position: relative;
+    height: 140px;
+    background: linear-gradient(145deg, #EEF2F8, #DDE5F1);
+    overflow: hidden;
+}
+
+.ms-service-card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ms-service-card-media .placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--navy);
+    font-size: 36px;
+    opacity: 0.5;
+}
+
+.ms-service-card-body {
+    padding: 16px 16px 14px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.ms-service-card-body h3 {
+    margin: 0 0 6px;
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--navy);
+    line-height: 1.3;
+}
+
+.ms-service-card-body p {
+    margin: 0 0 12px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.45;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.ms-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    width: fit-content;
+}
+
+.ms-status.active {
+    background: #e8f8f0;
+    color: #0d7a4f;
+}
+
+.ms-status.inactive {
+    background: #f1f3f5;
+    color: #6c757d;
+}
+
+.ms-status.active::before,
+.ms-status.inactive::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.ms-card-actions {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+}
+
+.ms-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+}
+
+.ms-btn:hover {
+    transform: translateY(-1px);
+}
+
+.ms-btn.edit {
+    background: #EEF2F8;
+    color: var(--navy);
+}
+
+.ms-btn.edit:hover {
+    background: #E1E8F2;
+}
+
+.ms-btn.activate {
+    background: #e8f8f0;
+    color: #0d7a4f;
+}
+
+.ms-btn.deactivate {
+    background: #FFF4E5;
+    color: #9A5A00;
+}
+
+.ms-btn.delete {
+    background: #fff0f0;
+    color: var(--danger);
+}
+
+.ms-btn.delete:hover {
+    background: #ffe0e0;
+}
+
+/* Empty and search states */
+.ms-empty,
+.ms-no-results {
+    text-align: center;
+    padding: 48px 20px;
+    color: var(--muted);
+    grid-column: 1 / -1;
+}
+
+.ms-empty i,
+.ms-no-results i {
+    font-size: 40px;
+    color: #c5d0dc;
+    margin-bottom: 12px;
+}
+
+.ms-empty h3,
+.ms-no-results h3 {
+    margin: 0 0 6px;
+    color: var(--navy);
+    font-size: 16px;
+}
+
+.ms-empty p,
+.ms-no-results p {
+    margin: 0;
+    font-size: 13px;
+}
+
+.ms-no-results {
+    display: none;
+}
+
+/* Responsive design */
+@media (max-width: 700px) {
+    .ms-page {
+        padding: 20px 16px 36px;
+    }
+
+    .ms-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ms-section-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .ms-section-right {
+        width: 100%;
+    }
+
+    .ms-search-wrap {
+        width: 100%;
+        flex: 1;
+    }
+
+    .ms-cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ms-form-body {
+        padding: 16px;
+    }
+}
+</style>
+
+<!-- Toast notifications -->
+<div class="ms-toasts" id="msToasts" aria-live="polite">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="ms-toast {% if 'error' in message.tags %}error{% endif %}">
+                <div class="ms-toast-body">
+                    <i class="fa-solid {% if 'error' in message.tags %}fa-circle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+                    <span>{{ message }}</span>
+                </div>
+                <button type="button" class="ms-toast-close" aria-label="Dismiss">×</button>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<div class="ms-page">
+
+    <!-- Page heading -->
+    <div class="ms-header">
+        <h1>Manage Services</h1>
+        <p>Create, edit, activate, deactivate or delete services from one place.</p>
+    </div>
+
+    <!-- Create / edit service form -->
+    <section class="ms-form-card">
+        <div class="ms-card-header">
+            <h2>
+                <i class="fa-solid {% if editing_service %}fa-pen-to-square{% else %}fa-plus-circle{% endif %}"></i>
+                {% if editing_service %}Edit Service{% else %}Create Service{% endif %}
+            </h2>
+        </div>
+
+        <div class="ms-form-body">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {% if editing_service %}
+                    <input type="hidden" name="service_id" value="{{ editing_service.id }}">
+                {% endif %}
+
+                <div class="ms-form-grid">
+                    <div class="ms-field">
+                        <label for="{{ form.title.id_for_label }}">Service Title</label>
+                        {{ form.title }}
+                        {% for error in form.title.errors %}
+                            <div class="ms-errors">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="ms-field">
+                        <label for="{{ form.image.id_for_label }}">Service Image</label>
+                        {{ form.image }}
+                        {% for error in form.image.errors %}
+                            <div class="ms-errors">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="ms-field full">
+                        <label for="{{ form.short_description.id_for_label }}">Short Description</label>
+                        {{ form.short_description }}
+                        {% for error in form.short_description.errors %}
+                            <div class="ms-errors">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="ms-field full">
+                        <label for="{{ form.description.id_for_label }}">Description</label>
+                        {{ form.description }}
+                        {% for error in form.description.errors %}
+                            <div class="ms-errors">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="ms-field full">
+                        <div class="ms-checkbox">
+                            {{ form.is_active }}
+                            <label for="{{ form.is_active.id_for_label }}">Active Service</label>
+                        </div>
+                    </div>
+                </div>
+
+                {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                        <div class="ms-errors">{{ error }}</div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="ms-form-actions">
+                    <button type="submit" class="ms-btn-primary">
+                        {% if editing_service %}Update Service{% else %}Create Service{% endif %}
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+
+                    {% if editing_service %}
+                        <a class="ms-cancel" href="{% url 'website:manage_services' %}">
+                            Cancel Edit
+                        </a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Services list and search -->
+    <div class="ms-section-header">
+        <h2>
+            <i class="fa-solid fa-briefcase"></i>
+            All Services
+        </h2>
+
+        <div class="ms-section-right">
+            <span class="ms-count">
+                {{ services|length }} service{{ services|length|pluralize }}
+            </span>
+
+            <div class="ms-search-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input
+                    type="text"
+                    id="serviceSearch"
+                    placeholder="Search services..."
+                    autocomplete="off"
+                    aria-label="Search services">
+            </div>
+        </div>
+    </div>
+
+    <div class="ms-cards-grid" id="serviceList">
+        {% if services %}
+            {% for service in services %}
+                <article
+                    class="ms-service-card"
+                    data-title="{{ service.title|lower }}"
+                    data-desc="{{ service.short_description|lower }}">
+
+                    <div class="ms-service-card-media">
+                        {% if service.image %}
+                            <img src="{{ service.image.url }}" alt="{{ service.title }}">
+                        {% else %}
+                            <div class="placeholder">
+                                <i class="fa-solid fa-briefcase"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="ms-service-card-body">
+                        <h3>{{ service.title }}</h3>
+                        <p>{{ service.short_description }}</p>
+
+                        {% if service.is_active %}
+                            <span class="ms-status active">Active</span>
+                        {% else %}
+                            <span class="ms-status inactive">Inactive</span>
+                        {% endif %}
+
+                        <div class="ms-card-actions">
+                            <a href="?edit={{ service.id }}" class="ms-btn edit">
+                                <i class="fa-solid fa-pen"></i> Edit
+                            </a>
+
+                            <form
+                                method="POST"
+                                action="{% url 'website:toggle_service_status' service.id %}"
+                                style="display:inline;">
+                                {% csrf_token %}
+
+                                {% if service.is_active %}
+                                    <button type="submit" class="ms-btn deactivate">
+                                        <i class="fa-solid fa-pause"></i> Deactivate
+                                    </button>
+                                {% else %}
+                                    <button type="submit" class="ms-btn activate">
+                                        <i class="fa-solid fa-play"></i> Activate
+                                    </button>
+                                {% endif %}
+                            </form>
+
+                            <form
+                                method="POST"
+                                action="{% url 'website:delete_service' service.id %}"
+                                style="display:inline;"
+                                onsubmit="return confirm('Are you sure you want to permanently delete this service?');">
+                                {% csrf_token %}
+
+                                <button type="submit" class="ms-btn delete">
+                                    <i class="fa-solid fa-trash"></i> Delete
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </article>
+            {% endfor %}
+
+            <div class="ms-no-results" id="noResults">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <h3>No matching services</h3>
+                <p>Try a different search term.</p>
+            </div>
+        {% else %}
+            <div class="ms-empty">
+                <i class="fa-solid fa-folder-open"></i>
+                <h3>No services found</h3>
+                <p>Create your first service using the form above.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+(function () {
+    /* Toast notifications: close button and automatic dismissal */
+    document.querySelectorAll('.ms-toast').forEach(function (toast) {
+        const closeBtn = toast.querySelector('.ms-toast-close');
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function () {
+                toast.style.animation = 'msToastOut 0.3s ease forwards';
+
+                setTimeout(function () {
+                    toast.remove();
+                }, 300);
+            });
+        }
+
+        setTimeout(function () {
+            if (toast.parentNode) {
+                toast.style.animation = 'msToastOut 0.3s ease forwards';
+
+                setTimeout(function () {
+                    if (toast.parentNode) {
+                        toast.remove();
+                    }
+                }, 300);
+            }
+        }, 3000);
+    });
+
+    /* Live service search */
+    const searchInput = document.getElementById('serviceSearch');
+    const cards = document.querySelectorAll('.ms-service-card');
+    const noResults = document.getElementById('noResults');
+
+    if (!searchInput) {
+        return;
+    }
+
+    searchInput.addEventListener('input', function () {
+        const query = this.value.trim().toLowerCase();
+        let visible = 0;
+
+        cards.forEach(function (card) {
+            const title = card.getAttribute('data-title') || '';
+            const desc = card.getAttribute('data-desc') || '';
+            const matches = title.includes(query) || desc.includes(query);
+
+            card.style.display = matches ? '' : 'none';
+
+            if (matches) {
+                visible++;
+            }
+        });
+
+        if (noResults) {
+            noResults.style.display =
+                query && visible === 0 ? 'block' : 'none';
+        }
+    });
+})();
+</script>
+
+{% endblock %}

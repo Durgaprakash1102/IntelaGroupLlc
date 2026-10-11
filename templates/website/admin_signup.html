@@ -1,0 +1,797 @@
+
+{% extends layout_template %}
+{% load static %}
+
+{% block title %}Admin / HR Registration | Intela Group LLC{% endblock %}
+
+{% block content %}
+
+<style>
+:root {
+    --rg-navy: #293D63;
+    --rg-navy-dark: #1D2D4A;
+    --rg-orange: #FFA033;
+    --rg-orange-dark: #E58A18;
+    --rg-text: #172033;
+    --rg-muted: #788397;
+    --rg-border: #E2E8F0;
+    --rg-white: #FFFFFF;
+    --rg-bg: #F6F8FB;
+}
+
+/* Page layout */
+.rg-signup-page {
+    min-height: calc(100vh - 80px);
+    padding: 40px 24px 50px;
+    background:
+        radial-gradient(circle at 90% 10%, rgba(41,61,99,.09), transparent 28%),
+        linear-gradient(135deg, #F6F8FB 0%, #EEF2F7 100%);
+}
+
+.rg-signup-wrapper {
+    width: 100%;
+    max-width: 1140px;
+    min-height: 620px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 43% 57%;
+    overflow: hidden;
+    border-radius: 22px;
+    background: var(--rg-white);
+    box-shadow: 0 22px 60px rgba(29,45,74,.13);
+}
+
+/* Left branding panel */
+.rg-signup-left {
+    position: relative;
+    overflow: hidden;
+    padding: 48px 42px;
+    color: #FFFFFF;
+    background:
+        linear-gradient(
+            155deg,
+            rgba(29,45,74,.95) 0%,
+            rgba(41,61,99,.91) 55%,
+            rgba(41,61,99,.83) 100%
+        ),
+        url("{% static 'intelaimages/intela-login-banner.png' %}");
+    background-size: cover;
+    background-position: center;
+}
+
+.rg-signup-left::before,
+.rg-signup-left::after {
+    content: "";
+    position: absolute;
+    border: 1px solid rgba(255,255,255,.10);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.rg-signup-left::before {
+    width: 420px;
+    height: 420px;
+    right: -200px;
+    top: 30px;
+}
+
+.rg-signup-left::after {
+    width: 500px;
+    height: 500px;
+    left: -280px;
+    bottom: -280px;
+}
+
+.rg-left-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.rg-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    color: rgba(255,255,255,.9);
+    font-size: 11.5px;
+    font-weight: 800;
+    letter-spacing: 2.3px;
+    text-transform: uppercase;
+}
+
+.rg-eyebrow::before {
+    content: "";
+    width: 38px;
+    height: 3px;
+    border-radius: 4px;
+    background: var(--rg-orange);
+}
+
+.rg-left-title {
+    max-width: 410px;
+    margin: 0;
+    font-size: clamp(32px, 3.5vw, 44px);
+    line-height: 1.08;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.rg-left-title span {
+    color: var(--rg-orange);
+}
+
+.rg-left-description {
+    max-width: 390px;
+    margin: 18px 0 28px;
+    color: rgba(255,255,255,.82);
+    font-size: 14.5px;
+    line-height: 1.7;
+}
+
+.rg-benefits {
+    display: flex;
+    flex-direction: column;
+    gap: 17px;
+}
+
+.rg-benefit {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.rg-benefit-icon {
+    flex: 0 0 46px;
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: #FFFFFF;
+    color: var(--rg-navy);
+    font-size: 18px;
+    box-shadow: 0 6px 18px rgba(0,0,0,.14);
+}
+
+.rg-benefit:first-child .rg-benefit-icon {
+    color: var(--rg-orange-dark);
+}
+
+.rg-benefit-text h4 {
+    margin: 0 0 4px;
+    color: #FFFFFF;
+    font-size: 14.5px;
+    font-weight: 750;
+}
+
+.rg-benefit-text p {
+    margin: 0;
+    color: rgba(255,255,255,.72);
+    font-size: 12.5px;
+    line-height: 1.55;
+}
+
+.rg-left-bottom {
+    margin-top: auto;
+    padding-top: 30px;
+}
+
+.rg-tagline {
+    margin: 0;
+    color: #FFFFFF;
+    font-size: 24px;
+    line-height: 1.2;
+    font-style: italic;
+    font-weight: 500;
+}
+
+.rg-tagline-line {
+    width: 100px;
+    height: 3px;
+    margin: 12px 0 0 60px;
+    border-radius: 10px;
+    background: var(--rg-orange);
+    transform: rotate(-7deg);
+}
+
+/* Right panel */
+.rg-signup-right {
+    display: flex;
+    align-items: center;
+    padding: 32px 40px;
+    background: var(--rg-bg);
+}
+
+.rg-form-card {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 30px 32px;
+    border: 1px solid rgba(220,228,237,.9);
+    border-radius: 18px;
+    background: #FFFFFF;
+    box-shadow: 0 12px 36px rgba(29,45,74,.08);
+}
+
+.rg-form-eyebrow {
+    margin: 0 0 7px;
+    color: var(--rg-orange-dark);
+    font-size: 11.5px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.rg-form-title {
+    margin: 0;
+    color: var(--rg-navy);
+    font-size: 28px;
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: -.5px;
+}
+
+.rg-form-subtitle {
+    margin: 10px 0 22px;
+    color: var(--rg-muted);
+    font-size: 13.5px;
+    line-height: 1.65;
+}
+
+/* Errors */
+.rg-non-field-errors {
+    margin-bottom: 16px;
+    padding: 12px 14px;
+    border: 1px solid #FFD2D2;
+    border-radius: 9px;
+    background: #FFF1F1;
+    color: #C62828;
+    font-size: 12.5px;
+}
+
+.rg-field-error {
+    display: block;
+    margin-top: 6px;
+    color: #C62828;
+    font-size: 11.5px;
+    line-height: 1.5;
+}
+
+.rg-field-error ul {
+    margin: 0;
+    padding-left: 18px;
+}
+
+/* Form fields */
+.rg-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px 14px;
+}
+
+.rg-form-group {
+    min-width: 0;
+}
+
+.rg-form-group.full {
+    grid-column: 1 / -1;
+}
+
+.rg-form-group label {
+    display: block;
+    margin-bottom: 6px;
+    color: #26344B;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.rg-form-group label .required {
+    margin-left: 2px;
+    color: var(--rg-orange-dark);
+}
+
+.rg-input-wrap {
+    position: relative;
+}
+
+.rg-input-wrap .rg-icon {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 13px;
+    transform: translateY(-50%);
+    color: #8996AA;
+    font-size: 14px;
+    pointer-events: none;
+}
+
+.rg-input-wrap input,
+.rg-input-wrap select,
+.rg-input-wrap textarea {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 43px;
+    padding: 10px 12px 10px 39px;
+    border: 1.5px solid var(--rg-border);
+    border-radius: 9px;
+    outline: none;
+    background: #F8FAFC;
+    color: var(--rg-text);
+    font-family: inherit;
+    font-size: 13.5px;
+    transition: border-color .2s ease, box-shadow .2s ease,
+                background .2s ease;
+}
+
+.rg-input-wrap input {
+    height: 43px;
+}
+
+.rg-input-wrap input::placeholder,
+.rg-input-wrap textarea::placeholder {
+    color: #94A3B8;
+}
+
+.rg-input-wrap input:focus,
+.rg-input-wrap select:focus,
+.rg-input-wrap textarea:focus {
+    border-color: var(--rg-navy);
+    background: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(41,61,99,.12);
+}
+
+.rg-input-wrap input:disabled,
+.rg-input-wrap select:disabled {
+    cursor: not-allowed;
+    opacity: .7;
+}
+
+/* Password visibility */
+.rg-toggle-password {
+    position: absolute;
+    z-index: 3;
+    top: 50%;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    transform: translateY(-50%);
+    border: none;
+    border-radius: 5px;
+    background: transparent;
+    color: #8996AA;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.rg-toggle-password:hover {
+    color: var(--rg-navy);
+}
+
+.rg-toggle-password:focus-visible {
+    outline: 2px solid var(--rg-orange);
+    outline-offset: 2px;
+}
+
+/* Help text */
+.rg-help-text {
+    display: block;
+    margin-top: 5px;
+    color: var(--rg-muted);
+    font-size: 11.5px;
+    line-height: 1.55;
+}
+
+.rg-help-text ul {
+    margin: 5px 0 0;
+    padding-left: 18px;
+}
+
+/* Submit */
+.rg-submit-btn {
+    width: 100%;
+    min-height: 47px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    margin-top: 20px;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #FFA033, #F08B19);
+    color: #1D2D4A;
+    font-size: 14.5px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(255,160,51,.24);
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.rg-submit-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 24px rgba(255,160,51,.34);
+}
+
+.rg-submit-btn:active {
+    transform: translateY(0);
+}
+
+.rg-submit-btn:focus-visible {
+    outline: 3px solid rgba(41,61,99,.35);
+    outline-offset: 3px;
+}
+
+/* Login */
+.rg-login {
+    margin: 19px 0 0;
+    padding-top: 17px;
+    border-top: 1px solid #E8EEF5;
+    color: var(--rg-muted);
+    font-size: 13px;
+    text-align: center;
+}
+
+.rg-login a {
+    margin-left: 4px;
+    color: var(--rg-navy);
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.rg-login a:hover {
+    color: var(--rg-orange-dark);
+    text-decoration: underline;
+}
+
+/* Security note */
+.rg-security-note {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 7px;
+    margin-top: 13px;
+    color: var(--rg-muted);
+    font-size: 11.5px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.rg-security-note i {
+    margin-top: 2px;
+    color: var(--rg-navy);
+}
+
+/* Responsive */
+@media (max-width: 1050px) {
+    .rg-signup-wrapper {
+        grid-template-columns: 42% 58%;
+    }
+
+    .rg-signup-left,
+    .rg-signup-right {
+        padding: 32px 26px;
+    }
+
+    .rg-form-card {
+        padding: 27px 24px;
+    }
+}
+
+@media (max-width: 850px) {
+    .rg-signup-page {
+        padding: 24px 16px 40px;
+    }
+
+    .rg-signup-wrapper {
+        grid-template-columns: 1fr;
+        min-height: auto;
+    }
+
+    .rg-signup-left {
+        min-height: 420px;
+        padding: 36px 30px;
+    }
+
+    .rg-signup-right {
+        padding: 28px 20px;
+    }
+
+    .rg-form-card {
+        max-width: 600px;
+    }
+}
+
+@media (max-width: 600px) {
+    .rg-signup-page {
+        padding: 14px 10px 30px;
+    }
+
+    .rg-signup-wrapper {
+        border-radius: 16px;
+    }
+
+    .rg-signup-left {
+        min-height: auto;
+        padding: 30px 22px;
+    }
+
+    .rg-left-title {
+        font-size: 30px;
+    }
+
+    .rg-left-description {
+        margin-bottom: 23px;
+    }
+
+    .rg-benefits {
+        gap: 15px;
+    }
+
+    .rg-benefit-icon {
+        flex-basis: 42px;
+        width: 42px;
+        height: 42px;
+    }
+
+    .rg-signup-right {
+        padding: 20px 12px;
+    }
+
+    .rg-form-card {
+        padding: 24px 19px;
+        border-radius: 14px;
+    }
+
+    .rg-form-title {
+        font-size: 24px;
+    }
+
+    .rg-form-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .rg-form-group.full {
+        grid-column: auto;
+    }
+
+    .rg-tagline {
+        font-size: 22px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .rg-submit-btn,
+    .rg-input-wrap input,
+    .rg-input-wrap select,
+    .rg-input-wrap textarea {
+        transition: none;
+    }
+}
+</style>
+
+<section class="rg-signup-page">
+    <div class="rg-signup-wrapper">
+
+        <!-- LEFT BRANDING PANEL -->
+        <div class="rg-signup-left">
+            <div class="rg-left-content">
+
+                <div>
+                    <div class="rg-eyebrow">Intela Group LLC</div>
+
+                    <h1 class="rg-left-title">
+                        Create Your<br>
+                        <span>Admin Account</span>
+                    </h1>
+
+                    <p class="rg-left-description">
+                        Create your Intela Group LLC Admin / HR account
+                        and access the tools needed to manage recruitment,
+                        candidates, and workforce operations.
+                    </p>
+
+                    <div class="rg-benefits">
+
+                        <div class="rg-benefit">
+                            <div class="rg-benefit-icon">
+                                <i class="fa-solid fa-user-shield"></i>
+                            </div>
+                            <div class="rg-benefit-text">
+                                <h4>Secure Access</h4>
+                                <p>Protected access for authorized Admin and HR users.</p>
+                            </div>
+                        </div>
+
+                        <div class="rg-benefit">
+                            <div class="rg-benefit-icon">
+                                <i class="fa-solid fa-users-gear"></i>
+                            </div>
+                            <div class="rg-benefit-text">
+                                <h4>Manage Recruitment</h4>
+                                <p>Manage jobs, candidates, and recruitment activities.</p>
+                            </div>
+                        </div>
+
+                        <div class="rg-benefit">
+                            <div class="rg-benefit-icon">
+                                <i class="fa-solid fa-chart-line"></i>
+                            </div>
+                            <div class="rg-benefit-text">
+                                <h4>Stay in Control</h4>
+                                <p>Access the tools you need to manage your organization.</p>
+                            </div>
+                        </div>
+
+                        <div class="rg-benefit">
+                            <div class="rg-benefit-icon">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <div class="rg-benefit-text">
+                                <h4>Protected Information</h4>
+                                <p>Keep account information and credentials secure.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="rg-left-bottom">
+                    <p class="rg-tagline">
+                        Talent Without<br>Borders
+                    </p>
+                    <div class="rg-tagline-line"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- RIGHT REGISTRATION FORM -->
+        <div class="rg-signup-right">
+            <div class="rg-form-card">
+
+                <p class="rg-form-eyebrow">Create Account</p>
+
+                <h2 class="rg-form-title">Admin / HR Registration</h2>
+
+                <p class="rg-form-subtitle">
+                    Create your Intela Group LLC Admin / HR account
+                    to get started.
+                </p>
+
+                {% if form.non_field_errors %}
+                    <div class="rg-non-field-errors" role="alert">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+
+                    <div class="rg-form-grid">
+
+                        {% for field in form %}
+                            <div class="rg-form-group
+                                {% if field.name != 'password1' and field.name != 'password2' %}
+                                    full
+                                {% endif %}
+                            ">
+
+                                <label for="{{ field.id_for_label }}">
+                                    {{ field.label }}
+                                    {% if field.field.required %}
+                                        <span class="required">*</span>
+                                    {% endif %}
+                                </label>
+
+                                <div class="rg-input-wrap">
+
+                                    {% if 'first' in field.name or 'last' in field.name or field.name == 'username' %}
+                                        <i class="fa-solid fa-user rg-icon"></i>
+
+                                    {% elif 'email' in field.name %}
+                                        <i class="fa-solid fa-envelope rg-icon"></i>
+
+                                    {% elif 'phone' in field.name or 'mobile' in field.name %}
+                                        <i class="fa-solid fa-phone rg-icon"></i>
+
+                                    {% elif 'password' in field.name %}
+                                        <i class="fa-solid fa-lock rg-icon"></i>
+
+                                    {% elif 'role' in field.name or 'department' in field.name %}
+                                        <i class="fa-solid fa-briefcase rg-icon"></i>
+
+                                    {% else %}
+                                        <i class="fa-solid fa-pen rg-icon"></i>
+                                    {% endif %}
+
+                                    {{ field }}
+
+                                    {% if 'password' in field.name %}
+                                        <button
+                                            type="button"
+                                            class="rg-toggle-password"
+                                            onclick="togglePassword(this)"
+                                            aria-label="Show password"
+                                            aria-pressed="false"
+                                        >
+                                            <i class="fa-regular fa-eye"></i>
+                                        </button>
+                                    {% endif %}
+
+                                </div>
+
+                                {% if field.help_text %}
+                                    <div class="rg-help-text">
+                                        {{ field.help_text|safe }}
+                                    </div>
+                                {% endif %}
+
+                                {% if field.errors %}
+                                    <div class="rg-field-error" role="alert">
+                                        {{ field.errors }}
+                                    </div>
+                                {% endif %}
+
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+                    <button type="submit" class="rg-submit-btn">
+                        Create Account
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+
+                </form>
+
+                <div class="rg-login">
+                    Already have an account?
+                    <a href="{% url 'website:login' %}">Login</a>
+                </div>
+
+                <div class="rg-security-note">
+                    <i class="fa-solid fa-lock"></i>
+                    <span>
+                        Your registration information is securely protected.
+                    </span>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script>
+function togglePassword(btn) {
+    const input = btn.parentElement.querySelector('input');
+    const icon = btn.querySelector('i');
+
+    if (!input || !icon) {
+        return;
+    }
+
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+        btn.setAttribute('aria-label', 'Hide password');
+        btn.setAttribute('aria-pressed', 'true');
+    } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+        btn.setAttribute('aria-label', 'Show password');
+        btn.setAttribute('aria-pressed', 'false');
+    }
+}
+</script>
+
+{% endblock %}

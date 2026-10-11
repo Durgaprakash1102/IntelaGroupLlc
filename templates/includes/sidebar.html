@@ -1,0 +1,1258 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}Intela Group Dashboard{% endblock %}</title>
+
+    <link rel="icon" type="image/jpg"
+          href="{% static 'intelaimages/intelafavicon.jpg' %}">
+    <link rel="apple-touch-icon"
+          href="{% static 'intelaimages/intelafavicon.jpg'' %}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <style>
+        :root {
+            --intela-navy: #293D63;
+            --intela-deep: #1D2D4A;
+            --intela-orange: #FFA033;
+            --intela-orange-dark: #E88B20;
+
+            --sidebar-width: 270px;
+            --sidebar-collapsed-width: 82px;
+            --sidebar-brand-height: 86px;
+            --header-height: 72px;
+
+            --white: #FFFFFF;
+            --page-bg: #F6F8FB;
+            --border: #E5EAF2;
+            --text-dark: #1D2D4A;
+            --text-muted: #788397;
+            --hover-bg: #F1F4F9;
+            --danger: #B54747;
+
+            --sidebar-shadow: 8px 0 30px rgba(29,45,74,.045);
+            --transition: .25s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            background: var(--page-bg);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        body.sidebar-mobile-open {
+            overflow: hidden;
+        }
+
+        button, input, select, textarea {
+            font: inherit;
+        }
+
+        a {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* ======================================
+           SIDEBAR
+        ====================================== */
+
+        .rainsoft-sidebar {
+            position: fixed;
+            inset: 0 auto 0 0;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            width: var(--sidebar-width);
+            height: 100dvh;
+            background: var(--white);
+            border-right: 1px solid var(--border);
+            box-shadow: var(--sidebar-shadow);
+            transition:
+                width .3s ease,
+                transform .3s ease;
+        }
+
+        /* ======================================
+           BRAND / LOGO
+        ====================================== */
+
+        .sidebar-brand {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            height: var(--sidebar-brand-height);
+            padding: 12px 19px;
+            background: linear-gradient(135deg, #FFFFFF, #F8FAFD);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brand-link {
+            display: flex;
+            align-items: center;
+            min-width: 0;
+            flex: 1;
+            text-decoration: none;
+        }
+
+        .sidebar-logo {
+            display: block;
+            width: 190px;
+            max-width: 100%;
+            max-height: 58px;
+            object-fit: contain;
+            object-position: left center;
+            transition: width .3s ease;
+        }
+
+        .sidebar-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            width: 38px;
+            height: 38px;
+            border: none;
+            border-radius: 10px;
+            background: transparent;
+            color: var(--intela-navy);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .sidebar-toggle:hover {
+            color: var(--intela-orange-dark);
+            background: var(--hover-bg);
+        }
+
+        .sidebar-toggle-desktop {
+            position: absolute;
+            top: 50%;
+            right: -16px;
+            z-index: 20;
+            width: 32px;
+            height: 32px;
+            border: 1px solid #DDE4EF;
+            border-radius: 50%;
+            background: var(--white);
+            color: var(--intela-navy);
+            box-shadow: 0 4px 14px rgba(29,45,74,.12);
+            transform: translateY(-50%);
+        }
+
+        .sidebar-toggle-desktop:hover {
+            color: var(--white);
+            background: var(--intela-navy);
+            border-color: var(--intela-navy);
+            transform: translateY(-50%) scale(1.06);
+        }
+
+        .sidebar-close-btn {
+            display: none;
+        }
+
+        /* ======================================
+           NAVIGATION
+        ====================================== */
+
+        .sidebar-navigation {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 24px 15px;
+            scrollbar-width: thin;
+            scrollbar-color: #D5DDEA transparent;
+        }
+
+        .sidebar-navigation::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .sidebar-navigation::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar-navigation::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            background: #D5DDEA;
+        }
+
+        .sidebar-section {
+            margin-bottom: 30px;
+        }
+
+        .sidebar-section-title {
+            margin-bottom: 12px;
+            padding: 0 13px;
+            color: #929DB0;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.7px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .sidebar-link {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            width: 100%;
+            min-height: 47px;
+            margin-bottom: 5px;
+            padding: 11px 14px;
+            overflow: hidden;
+            border: 1px solid transparent;
+            border-radius: 11px;
+            color: #53627A;
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 1.45;
+            text-decoration: none;
+            transition:
+                background .22s ease,
+                color .22s ease,
+                border-color .22s ease,
+                transform .22s ease;
+        }
+
+        .sidebar-link:hover {
+            color: var(--intela-navy);
+            background: var(--hover-bg);
+            border-color: var(--border);
+            transform: translateX(3px);
+        }
+
+        .sidebar-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            width: 22px;
+            min-width: 22px;
+            color: #8793A7;
+            font-size: 16px;
+            transition: color .22s ease;
+        }
+
+        .sidebar-text {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .sidebar-link:hover .sidebar-icon {
+            color: var(--intela-orange-dark);
+        }
+
+        .sidebar-link.active {
+            color: var(--intela-navy);
+            font-weight: 700;
+            background: linear-gradient(
+                105deg,
+                rgba(41,61,99,.12),
+                rgba(41,61,99,.045)
+            );
+            border-color: rgba(41,61,99,.10);
+            box-shadow: 0 3px 10px rgba(29,45,74,.035);
+        }
+
+        .sidebar-link.active::before {
+            content: "";
+            position: absolute;
+            top: 8px;
+            bottom: 8px;
+            left: -1px;
+            width: 4px;
+            border-radius: 0 5px 5px 0;
+            background: var(--intela-orange);
+        }
+
+        .sidebar-link.active .sidebar-icon {
+            color: var(--intela-orange-dark);
+        }
+
+        /* ======================================
+           SIDEBAR PROFILE / LOGOUT
+        ====================================== */
+
+        .sidebar-bottom {
+            flex-shrink: 0;
+            padding: 16px 15px;
+            background: var(--white);
+            border-top: 1px solid var(--border);
+        }
+
+        .sidebar-user {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            min-width: 0;
+            margin-bottom: 9px;
+            padding: 12px 10px;
+            border: 1px solid #E9EDF4;
+            border-radius: 13px;
+            background: linear-gradient(135deg, #FFFFFF, #F7F9FC);
+            transition: var(--transition);
+        }
+
+        .sidebar-user:hover {
+            background: var(--hover-bg);
+        }
+
+        .user-avatar,
+        .header-avatar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            width: 42px;
+            height: 42px;
+            border-radius: 13px;
+            color: #FFFFFF;
+            background: linear-gradient(
+                135deg,
+                var(--intela-navy),
+                var(--intela-deep)
+            );
+            box-shadow: 0 4px 12px rgba(29,45,74,.16);
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .user-info {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .user-name {
+            overflow: hidden;
+            color: var(--intela-deep);
+            font-size: 12px;
+            font-weight: 700;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .user-role {
+            margin-top: 4px;
+            color: var(--text-muted);
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .sidebar-logout {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            min-height: 44px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            color: var(--danger);
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .sidebar-logout .sidebar-icon {
+            color: var(--danger);
+        }
+
+        .sidebar-logout:hover {
+            color: #A52F2F;
+            background: #FFF1F0;
+            transform: translateX(3px);
+        }
+
+        /* ======================================
+           MAIN CONTENT WRAPPER
+        ====================================== */
+
+        .dashboard-wrapper {
+            min-height: 100vh;
+            margin-left: var(--sidebar-width);
+            transition: margin-left .3s ease;
+        }
+
+        /* ======================================
+           TOP HEADER
+        ====================================== */
+
+        .dashboard-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            height: var(--header-height);
+            padding: 0 32px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(255,255,255,.96);
+            backdrop-filter: blur(12px);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            min-width: 0;
+        }
+
+        .header-left h1 {
+            color: var(--intela-deep);
+            font-size: 19px;
+            font-weight: 800;
+            letter-spacing: -.4px;
+        }
+
+        .header-left p {
+            margin-top: 4px;
+            color: var(--text-muted);
+            font-size: 11px;
+        }
+
+        .header-hamburger {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 10px;
+            background: transparent;
+            color: var(--intela-navy);
+            cursor: pointer;
+            font-size: 20px;
+            transition: var(--transition);
+        }
+
+        .header-hamburger:hover {
+            color: var(--intela-orange-dark);
+            background: var(--hover-bg);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .header-user-info {
+            text-align: right;
+        }
+
+        .header-user-name {
+            color: var(--intela-deep);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .header-user-role {
+            margin-top: 4px;
+            color: var(--text-muted);
+            font-size: 10px;
+        }
+
+        .header-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 14px;
+        }
+
+        /* ======================================
+           PAGE CONTENT
+        ====================================== */
+
+        .dashboard-content {
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 24px 28px;
+        }
+
+        /* ======================================
+           COLLAPSED DESKTOP SIDEBAR
+        ====================================== */
+
+        body.sidebar-collapsed .rainsoft-sidebar {
+            width: var(--sidebar-collapsed-width);
+        }
+
+        body.sidebar-collapsed .sidebar-brand {
+            justify-content: center;
+            padding: 12px 8px;
+        }
+
+        body.sidebar-collapsed .brand-link {
+            justify-content: center;
+            flex: initial;
+            width: 42px;
+        }
+
+        body.sidebar-collapsed .sidebar-logo {
+            width: 42px;
+            max-width: 42px;
+            max-height: 46px;
+            object-position: center;
+        }
+
+        body.sidebar-collapsed .sidebar-text,
+        body.sidebar-collapsed .sidebar-section-title,
+        body.sidebar-collapsed .user-info {
+            display: none;
+        }
+
+        body.sidebar-collapsed .sidebar-navigation {
+            padding: 22px 12px;
+        }
+
+        body.sidebar-collapsed .sidebar-section {
+            margin-bottom: 22px;
+        }
+
+        body.sidebar-collapsed .sidebar-link {
+            justify-content: center;
+            width: 48px;
+            min-height: 48px;
+            margin: 0 auto 7px;
+            padding: 0;
+            border-radius: 13px;
+        }
+
+        body.sidebar-collapsed .sidebar-link:hover {
+            transform: scale(1.04);
+        }
+
+        body.sidebar-collapsed .sidebar-link.active::before {
+            top: 10px;
+            bottom: 10px;
+        }
+
+        body.sidebar-collapsed .sidebar-icon {
+            font-size: 17px;
+        }
+
+        body.sidebar-collapsed .sidebar-user {
+            justify-content: center;
+            padding: 8px 0 14px;
+            border-color: transparent;
+            background: transparent;
+        }
+
+        body.sidebar-collapsed .sidebar-logout {
+            justify-content: center;
+            width: 48px;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        body.sidebar-collapsed .sidebar-logout:hover {
+            transform: scale(1.04);
+        }
+
+        body.sidebar-collapsed .dashboard-wrapper {
+            margin-left: var(--sidebar-collapsed-width);
+        }
+
+        body.sidebar-collapsed .sidebar-toggle-desktop {
+            transform: translateY(-50%) rotate(180deg);
+        }
+
+        body.sidebar-collapsed .sidebar-toggle-desktop:hover {
+            transform: translateY(-50%) rotate(180deg) scale(1.06);
+        }
+
+        /* ======================================
+           MOBILE OVERLAY
+        ====================================== */
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 998;
+            background: rgba(15,27,47,.48);
+            backdrop-filter: blur(3px);
+        }
+
+        /* ======================================
+           RESPONSIVE
+        ====================================== */
+
+        @media (max-width: 1024px) {
+            .dashboard-header {
+                padding: 0 24px;
+            }
+
+            .dashboard-content {
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .rainsoft-sidebar {
+                z-index: 1000;
+                width: var(--sidebar-width);
+                max-width: 88vw;
+                transform: translateX(-105%);
+                box-shadow: none;
+            }
+
+            body.sidebar-mobile-open .rainsoft-sidebar {
+                transform: translateX(0);
+                box-shadow: 12px 0 35px rgba(29,45,74,.20);
+            }
+
+            body.sidebar-mobile-open .sidebar-overlay {
+                display: block;
+            }
+
+            .sidebar-toggle-desktop {
+                display: none;
+            }
+
+            .sidebar-close-btn {
+                display: flex;
+                width: 36px;
+                height: 36px;
+                background: var(--hover-bg);
+                color: var(--intela-navy);
+                font-size: 18px;
+            }
+
+            .sidebar-close-btn:hover {
+                background: #FFF0DE;
+                color: var(--intela-orange-dark);
+            }
+
+            .header-hamburger {
+                display: flex;
+            }
+
+            .dashboard-wrapper,
+            body.sidebar-collapsed .dashboard-wrapper {
+                margin-left: 0;
+            }
+
+            /* Always show full labels on mobile */
+            body.sidebar-collapsed .rainsoft-sidebar {
+                width: var(--sidebar-width);
+                max-width: 88vw;
+            }
+
+            body.sidebar-collapsed .sidebar-brand {
+                justify-content: space-between;
+                padding: 10px 18px;
+            }
+
+            body.sidebar-collapsed .brand-link {
+                justify-content: flex-start;
+                flex: 1;
+                width: auto;
+            }
+
+            body.sidebar-collapsed .sidebar-logo {
+                width: 160px;
+                max-width: 100%;
+                max-height: 48px;
+                object-position: left center;
+            }
+
+            body.sidebar-collapsed .sidebar-text,
+            body.sidebar-collapsed .sidebar-section-title,
+            body.sidebar-collapsed .user-info {
+                display: block;
+            }
+
+            body.sidebar-collapsed .sidebar-navigation {
+                padding: 22px 15px;
+            }
+
+            body.sidebar-collapsed .sidebar-link {
+                justify-content: flex-start;
+                width: 100%;
+                min-height: 47px;
+                margin: 0 0 5px;
+                padding: 11px 14px;
+            }
+
+            body.sidebar-collapsed .sidebar-link:hover {
+                transform: translateX(3px);
+            }
+
+            body.sidebar-collapsed .sidebar-user {
+                justify-content: flex-start;
+                padding: 12px 10px;
+                border-color: #E9EDF4;
+                background: linear-gradient(135deg, #FFFFFF, #F7F9FC);
+            }
+
+            body.sidebar-collapsed .sidebar-logout {
+                justify-content: flex-start;
+                width: 100%;
+                margin: 0;
+                padding: 10px 14px;
+            }
+
+            body.sidebar-collapsed .sidebar-logout:hover {
+                transform: translateX(3px);
+            }
+
+            .dashboard-header {
+                height: 64px;
+                padding: 0 18px;
+            }
+
+            .header-left h1 {
+                font-size: 16px;
+            }
+
+            .header-left p {
+                display: none;
+            }
+
+            .header-user-name,
+            .header-user-role {
+                display: none;
+            }
+
+            .dashboard-content {
+                padding: 20px;
+            }
+
+            .sidebar-brand {
+                height: 70px;
+                padding: 10px 18px;
+            }
+
+            .sidebar-logo {
+                width: 160px;
+                max-height: 48px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-header {
+                height: 58px;
+                padding: 0 13px;
+                gap: 10px;
+            }
+
+            .header-left {
+                gap: 10px;
+            }
+
+            .header-left h1 {
+                font-size: 14px;
+            }
+
+            .header-hamburger {
+                width: 36px;
+                height: 36px;
+                font-size: 18px;
+            }
+
+            .header-avatar {
+                width: 34px;
+                height: 34px;
+                font-size: 12px;
+            }
+
+            .dashboard-content {
+                padding: 15px;
+            }
+
+            .sidebar-navigation {
+                padding: 18px 12px;
+            }
+
+            .sidebar-link {
+                min-height: 44px;
+                font-size: 12px;
+                padding: 10px 12px;
+            }
+
+            .sidebar-section {
+                margin-bottom: 23px;
+            }
+
+            .sidebar-section-title {
+                font-size: 9px;
+            }
+
+            .sidebar-bottom {
+                padding: 12px;
+            }
+
+            .user-avatar {
+                width: 36px;
+                height: 36px;
+                font-size: 13px;
+            }
+
+            .user-name {
+                font-size: 12px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition-duration: .01ms !important;
+                animation-duration: .01ms !important;
+            }
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="rainsoft-sidebar" id="rainsoftSidebar">
+
+        <!-- BRAND -->
+        <div class="sidebar-brand">
+
+            <a href="{% url 'website:home' %}" class="brand-link">
+                <img
+                    src="{% static 'intelaimages/intelalogo.png' %}"
+                    alt="Intela Group"
+                    class="sidebar-logo"
+                >
+            </a>
+
+            <!-- Mobile close -->
+            <button
+                type="button"
+                class="sidebar-toggle sidebar-close-btn"
+                id="sidebarCloseBtn"
+                aria-label="Close sidebar"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- Desktop collapse -->
+            <button
+                type="button"
+                class="sidebar-toggle sidebar-toggle-desktop"
+                id="sidebarToggleDesktop"
+                aria-label="Collapse sidebar"
+                title="Collapse or expand sidebar"
+            >
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+
+        </div>
+
+        <!-- NAVIGATION -->
+        <nav class="sidebar-navigation" aria-label="Dashboard navigation">
+
+            <!-- MAIN -->
+            <div class="sidebar-section">
+
+                <div class="sidebar-section-title">Main</div>
+
+                <a
+                    href="{% url 'website:dashboard' %}"
+                    class="sidebar-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"
+                    {% if request.resolver_match.url_name == 'dashboard' %}aria-current="page"{% endif %}
+                    title="Dashboard"
+                >
+                    <span class="sidebar-icon">
+                        <i class="fa-solid fa-chart-pie"></i>
+                    </span>
+                    <span class="sidebar-text">Dashboard</span>
+                </a>
+
+            </div>
+
+            <!-- MANAGEMENT -->
+            <div class="sidebar-section">
+
+                <div class="sidebar-section-title">Management</div>
+
+                <a
+                    href="{% url 'website:manage_services' %}"
+                    class="sidebar-link {% if request.resolver_match.url_name == 'manage_services' or request.resolver_match.url_name == 'delete_service' or request.resolver_match.url_name == 'toggle_service_status' %}active{% endif %}"
+                    title="Services"
+                >
+                    <span class="sidebar-icon">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </span>
+                    <span class="sidebar-text">Services</span>
+                </a>
+
+                <a
+                    href="{% url 'website:manage_jobs' %}"
+                    class="sidebar-link {% if request.resolver_match.url_name == 'manage_jobs' %}active{% endif %}"
+                    title="Jobs"
+                >
+                    <span class="sidebar-icon">
+                        <i class="fa-solid fa-briefcase"></i>
+                    </span>
+                    <span class="sidebar-text">Jobs</span>
+                </a>
+
+                <a
+                    href="{% url 'website:manage_career_applicants' %}"
+                    class="sidebar-link {% if request.resolver_match.url_name == 'manage_career_applicants' %}active{% endif %}"
+                    title="Career Applicants"
+                >
+                    <span class="sidebar-icon">
+                        <i class="fa-solid fa-user-tie"></i>
+                    </span>
+                    <span class="sidebar-text">Career Applicants</span>
+                </a>
+
+                <a
+                    href="{% url 'website:manage_company_contact' %}"
+                    class="sidebar-link {% if request.resolver_match.url_name == 'manage_company_contact' %}active{% endif %}"
+                    title="Company Contact"
+                >
+                    <span class="sidebar-icon">
+                        <i class="fa-solid fa-building"></i>
+                    </span>
+                    <span class="sidebar-text">Company Contact</span>
+                </a>
+
+                {% if request.user.is_superuser %}
+
+                    <a
+                        href="{% url 'website:users_list' %}"
+                        class="sidebar-link {% if request.resolver_match.url_name == 'users_list' or request.resolver_match.url_name == 'create_admin_hr' or request.resolver_match.url_name == 'toggle_user_status' %}active{% endif %}"
+                        title="Users"
+                    >
+                        <span class="sidebar-icon">
+                            <i class="fa-solid fa-users"></i>
+                        </span>
+                        <span class="sidebar-text">Users</span>
+                    </a>
+
+                    <a
+                        href="{% url 'website:superuser_signup' %}"
+                        class="sidebar-link {% if request.resolver_match.url_name == 'superuser_signup' %}active{% endif %}"
+                        title="Create Superuser"
+                    >
+                        <span class="sidebar-icon">
+                            <i class="fa-solid fa-user-shield"></i>
+                        </span>
+                        <span class="sidebar-text">Create Superuser</span>
+                    </a>
+
+                    <a
+                        href="{% url 'website:admin_signup' %}"
+                        class="sidebar-link {% if request.resolver_match.url_name == 'admin_signup' %}active{% endif %}"
+                        title="Create Admin or HR"
+                    >
+                        <span class="sidebar-icon">
+                            <i class="fa-solid fa-user-plus"></i>
+                        </span>
+                        <span class="sidebar-text">Create Admin/HR</span>
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+            <!-- ACCOUNT -->
+            <div class="sidebar-section">
+
+                <div class="sidebar-section-title">Account</div>
+
+                <a
+                    href="{% url 'website:change_password' %}"
+                    class="sidebar-link {% if request.resolver_match.url_name == 'change_password' %}active{% endif %}"
+                    title="Change Password"
+                >
+                    <span class="sidebar-icon">
+                        <i class="fa-solid fa-lock"></i>
+                    </span>
+                    <span class="sidebar-text">Change Password</span>
+                </a>
+
+            </div>
+
+        </nav>
+
+        <!-- PROFILE AND LOGOUT -->
+        <div class="sidebar-bottom">
+
+            <div class="sidebar-user">
+
+                <div class="user-avatar">
+                    {{ request.user.username|first|upper }}
+                </div>
+
+                <div class="user-info">
+                    <div class="user-name">
+                        {{ request.user.get_full_name|default:request.user.username }}
+                    </div>
+
+                    <div class="user-role">
+                        {% if request.user.is_superuser %}
+                            Superuser
+                        {% elif request.user.role == "ADMIN" %}
+                            Administrator
+                        {% elif request.user.role == "HR" %}
+                            Human Resources
+                        {% else %}
+                            Staff
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+
+            <a
+                href="{% url 'website:logout' %}"
+                class="sidebar-logout"
+                title="Logout"
+            >
+                <span class="sidebar-icon">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </span>
+                <span class="sidebar-text">Logout</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+    <!-- MOBILE OVERLAY -->
+    <div
+        class="sidebar-overlay"
+        id="sidebarOverlay"
+        aria-hidden="true"
+    ></div>
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-wrapper">
+
+        <!-- HEADER -->
+        <header class="dashboard-header">
+
+            <div class="header-left">
+
+                <button
+                    type="button"
+                    class="header-hamburger"
+                    id="headerHamburger"
+                    aria-label="Open navigation menu"
+                    aria-controls="rainsoftSidebar"
+                    aria-expanded="false"
+                >
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
+                <div>
+                    <h1>
+                        {% block page_heading %}
+                            Hi, Welcome
+                        {% endblock %}
+                    </h1>
+
+                    <p>
+                        {% block page_subtitle %}
+                            Intela Group Management Dashboard
+                        {% endblock %}
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="header-right">
+
+                <div class="header-user-info">
+                    <div class="header-user-name">
+                        {{ request.user.get_full_name|default:request.user.username }}
+                    </div>
+
+                    <div class="header-user-role">
+                        {% if request.user.is_superuser %}
+                            Superuser
+                        {% elif request.user.role == "ADMIN" %}
+                            Administrator
+                        {% elif request.user.role == "HR" %}
+                            Human Resources
+                        {% else %}
+                            Staff
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="header-avatar" title="{{ request.user.username }}">
+                    {{ request.user.username|first|upper }}
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- PAGE CONTENT -->
+        <div class="dashboard-content">
+            {% block content %}
+            <!-- Your dashboard page content goes here. -->
+            {% endblock %}
+        </div>
+
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const sidebar = document.getElementById("rainsoftSidebar");
+            const overlay = document.getElementById("sidebarOverlay");
+            const hamburger = document.getElementById("headerHamburger");
+            const closeBtn = document.getElementById("sidebarCloseBtn");
+            const desktopToggle = document.getElementById("sidebarToggleDesktop");
+
+            const STORAGE_KEY = "intelaSidebarCollapsed";
+            const mobileBreakpoint = 768;
+
+            function isMobile() {
+                return window.innerWidth <= mobileBreakpoint;
+            }
+
+            function openSidebar() {
+                document.body.classList.add("sidebar-mobile-open");
+
+                if (hamburger) {
+                    hamburger.setAttribute("aria-expanded", "true");
+                }
+            }
+
+            function closeSidebar() {
+                document.body.classList.remove("sidebar-mobile-open");
+
+                if (hamburger) {
+                    hamburger.setAttribute("aria-expanded", "false");
+                }
+            }
+
+            function toggleMobileSidebar() {
+                if (document.body.classList.contains("sidebar-mobile-open")) {
+                    closeSidebar();
+                } else {
+                    openSidebar();
+                }
+            }
+
+            function setCollapsed(collapsed) {
+                document.body.classList.toggle("sidebar-collapsed", collapsed);
+
+                try {
+                    localStorage.setItem(STORAGE_KEY, String(collapsed));
+                } catch (error) {
+                    // Sidebar still works when browser storage is unavailable.
+                }
+            }
+
+            /* Restore desktop sidebar preference */
+            try {
+                const savedState = localStorage.getItem(STORAGE_KEY);
+
+                if (savedState === "true" && !isMobile()) {
+                    document.body.classList.add("sidebar-collapsed");
+                }
+            } catch (error) {
+                // Continue with the expanded sidebar.
+            }
+
+            /* Mobile hamburger */
+            if (hamburger) {
+                hamburger.addEventListener("click", function () {
+                    toggleMobileSidebar();
+                });
+            }
+
+            /* Close button */
+            if (closeBtn) {
+                closeBtn.addEventListener("click", closeSidebar);
+            }
+
+            /* Overlay click */
+            if (overlay) {
+                overlay.addEventListener("click", closeSidebar);
+            }
+
+            /* Desktop collapse button */
+            if (desktopToggle) {
+                desktopToggle.addEventListener("click", function () {
+                    if (isMobile()) {
+                        toggleMobileSidebar();
+                        return;
+                    }
+
+                    const isCollapsed =
+                        document.body.classList.contains("sidebar-collapsed");
+
+                    setCollapsed(!isCollapsed);
+                });
+            }
+
+            /* Close the mobile menu after choosing a link */
+            sidebar.querySelectorAll(".sidebar-link, .sidebar-logout")
+                .forEach(function (link) {
+                    link.addEventListener("click", function () {
+                        if (isMobile()) {
+                            closeSidebar();
+                        }
+                    });
+                });
+
+            /* Escape key closes mobile navigation */
+            document.addEventListener("keydown", function (event) {
+                if (
+                    event.key === "Escape" &&
+                    document.body.classList.contains("sidebar-mobile-open")
+                ) {
+                    closeSidebar();
+                }
+            });
+
+            /* Reset mobile state when resizing to desktop */
+            window.addEventListener("resize", function () {
+                if (!isMobile()) {
+                    closeSidebar();
+                }
+            });
+        });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+
+</body>
+</html>

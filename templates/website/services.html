@@ -1,0 +1,1306 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Our Services | Intela Group LLC{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ==========================================
+   INTELA SERVICES PAGE
+========================================== */
+:root {
+    --intela-navy: #293D63;
+    --intela-deep: #1D2D4A;
+    --intela-blue: #3478B9;
+    --intela-blue-light: #EDF5FC;
+    --intela-orange: #FFA033;
+    --intela-orange-dark: #F28A16;
+    --intela-text: #263853;
+    --intela-muted: #788397;
+    --intela-border: #E2E9F2;
+    --intela-bg: #F6F8FB;
+    --intela-container: 1180px;
+}
+
+.rg-page,
+.rg-page *,
+.rg-page *::before,
+.rg-page *::after {
+    box-sizing: border-box;
+}
+
+.rg-page {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    color: var(--intela-text);
+    background: #fff;
+    font-family: Inter, -apple-system, BlinkMacSystemFont,
+                 "Segoe UI", sans-serif;
+}
+
+.rg-page img {
+    display: block;
+    max-width: 100%;
+}
+
+.rg-page button,
+.rg-page input {
+    font-family: inherit;
+}
+
+.rg-container {
+    width: min(var(--intela-container), calc(100% - 60px));
+    margin: 0 auto;
+    min-width: 0;
+}
+
+/* ==========================================
+   BUTTONS
+========================================== */
+.rg-btn {
+    min-height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 0 21px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 800;
+    text-decoration: none;
+    transition: transform .25s ease, background .25s ease,
+                box-shadow .25s ease;
+}
+
+.rg-btn-orange {
+    color: var(--intela-deep) !important;
+    background: var(--intela-orange);
+    border: 1px solid var(--intela-orange);
+    box-shadow: 0 9px 22px rgba(255, 160, 51, .22);
+}
+
+.rg-btn-orange:hover {
+    background: #ffb452;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(255, 160, 51, .3);
+}
+
+/* ==========================================
+   SECTION HEADINGS
+========================================== */
+.rg-kicker {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 12px;
+    color: var(--intela-orange-dark);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.rg-kicker::before {
+    content: "";
+    width: 27px;
+    height: 2px;
+    background: var(--intela-orange);
+}
+
+.rg-kicker.on-dark {
+    color: #fff;
+}
+
+.rg-kicker.centered {
+    justify-content: center;
+}
+
+.rg-kicker.centered::after {
+    content: "";
+    width: 27px;
+    height: 2px;
+    background: var(--intela-orange);
+}
+
+.rg-heading.centered {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.rg-heading.centered h2 {
+    margin: 0 0 12px;
+    color: var(--intela-deep);
+    font-size: clamp(26px, 3vw, 38px);
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.18;
+}
+
+.rg-heading.centered p {
+    max-width: 650px;
+    margin: 0 auto;
+    color: var(--intela-muted);
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+/* ==========================================
+   HERO
+========================================== */
+.sv-hero {
+    position: relative;
+    min-height: 340px;
+    height: clamp(340px, 48vh, 460px);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: var(--intela-deep);
+}
+
+.sv-hero-bg {
+    position: absolute;
+    inset: 0;
+}
+
+.sv-hero-bg img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.sv-hero-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        105deg,
+        rgba(18, 35, 62, .96) 0%,
+        rgba(29, 45, 74, .87) 43%,
+        rgba(29, 45, 74, .58) 74%,
+        rgba(29, 45, 74, .34) 100%
+    );
+}
+
+.sv-hero-container {
+    position: relative;
+    z-index: 2;
+    width: min(var(--intela-container), calc(100% - 60px));
+    margin: 0 auto;
+    padding: 48px 0;
+}
+
+.sv-hero-content {
+    max-width: 600px;
+}
+
+.sv-hero h1 {
+    margin: 0 0 15px;
+    color: #fff;
+    font-size: clamp(31px, 4vw, 47px);
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -1.4px;
+}
+
+.sv-hero h1 span {
+    color: var(--intela-orange);
+}
+
+.sv-hero-desc {
+    max-width: 490px;
+    margin: 0 0 20px;
+    color: rgba(255, 255, 255, .82);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.sv-hero-divider {
+    width: 52px;
+    height: 3px;
+    margin-bottom: 17px;
+    border-radius: 99px;
+    background: linear-gradient(
+        90deg,
+        var(--intela-orange),
+        var(--intela-blue)
+    );
+}
+
+.sv-hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 13px;
+    color: rgba(255, 255, 255, .82);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.sv-hero-tags .tag-dot {
+    color: var(--intela-orange);
+}
+
+/* ==========================================
+   SERVICES SECTION
+========================================== */
+.sv-services {
+    padding: 48px 0;
+    background: var(--intela-bg);
+}
+
+/* ==========================================
+   LIVE SERVICE SEARCH
+========================================== */
+.sv-search-wrap {
+    width: min(620px, 100%);
+    margin: 0 auto 28px;
+}
+
+.sv-search-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 58px;
+    padding: 7px 9px 7px 18px;
+    background: #fff;
+    border: 1px solid var(--intela-border);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(29, 45, 74, .07);
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.sv-search-box:focus-within {
+    border-color: var(--intela-blue);
+    box-shadow: 0 0 0 4px rgba(52, 120, 185, .10);
+}
+
+.sv-search-icon {
+    flex-shrink: 0;
+    color: var(--intela-blue);
+    font-size: 18px;
+}
+
+.sv-search-input {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    padding: 10px 0;
+    border: none;
+    outline: none;
+    color: var(--intela-deep);
+    background: transparent;
+    font-size: 13px;
+}
+
+.sv-search-input::placeholder {
+    color: var(--intela-muted);
+}
+
+.sv-search-clear {
+    display: none;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 8px;
+    color: var(--intela-muted);
+    background: var(--intela-bg);
+    cursor: pointer;
+}
+
+.sv-search-clear:hover {
+    color: var(--intela-navy);
+    background: var(--intela-blue-light);
+}
+
+.sv-search-clear.is-visible {
+    display: inline-flex;
+}
+
+.sv-search-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+    color: var(--intela-muted);
+    font-size: 11px;
+}
+
+.sv-search-meta strong {
+    color: var(--intela-navy);
+}
+
+/* Search result visibility */
+.sv-card[hidden],
+.sv-search-empty[hidden] {
+    display: none !important;
+}
+
+/* ==========================================
+   SERVICE GRID AND CARDS
+========================================== */
+.sv-services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    align-items: stretch;
+}
+
+.sv-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    height: 100%;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid var(--intela-border);
+    border-top: 3px solid var(--intela-orange);
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(29, 45, 74, .055);
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.sv-card:nth-child(even) {
+    border-top-color: var(--intela-blue);
+}
+
+.sv-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 36px rgba(29, 45, 74, .12);
+}
+
+/* Service image */
+.sv-card-photo {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: linear-gradient(
+        135deg,
+        var(--intela-blue-light),
+        #d9e7f5
+    );
+}
+
+.sv-card-photo > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform .45s ease;
+}
+
+.sv-card:hover .sv-card-photo > img {
+    transform: scale(1.045);
+}
+
+.sv-card-photo .no-image {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 15px;
+    color: #fff;
+    background: linear-gradient(
+        135deg,
+        var(--intela-deep),
+        var(--intela-blue)
+    );
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.sv-card-photo .no-image i {
+    color: var(--intela-orange);
+    font-size: 30px;
+}
+
+.sv-card-icon {
+    position: absolute;
+    left: 17px;
+    bottom: -18px;
+    z-index: 2;
+    width: 43px;
+    height: 43px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--intela-blue);
+    font-size: 16px;
+    border: 1px solid var(--intela-border);
+    box-shadow: 0 6px 16px rgba(29, 45, 74, .14);
+}
+
+.sv-card:nth-child(odd) .sv-card-icon {
+    color: var(--intela-orange-dark);
+}
+
+.sv-card-number {
+    position: absolute;
+    top: 12px;
+    right: 13px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    color: #fff;
+    background: rgba(29, 45, 74, .8);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .5px;
+}
+
+/* Card content */
+.sv-card-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    padding: 30px 19px 21px;
+}
+
+.sv-card-body h3 {
+    margin: 0 0 11px;
+    color: var(--intela-deep);
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.sv-card-body .short-description {
+    margin: 0 0 18px;
+    color: var(--intela-muted);
+    font-size: 12px;
+    line-height: 1.75;
+    overflow-wrap: anywhere;
+}
+
+.sv-card-body .short-description p {
+    margin: 0;
+}
+
+/* Learn more */
+.sv-learn-more {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 5px;
+    color: var(--intela-blue);
+    font-size: 12px;
+    font-weight: 800;
+    text-decoration: none;
+    transition: gap .2s ease, color .2s ease;
+}
+
+.sv-learn-more:hover {
+    gap: 12px;
+    color: var(--intela-orange-dark);
+}
+
+.sv-learn-more i {
+    width: 24px;
+    height: 24px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: rgba(255, 160, 51, .18);
+    font-size: 10px;
+}
+
+/* ==========================================
+   NO SEARCH RESULTS
+========================================== */
+.sv-search-empty {
+    grid-column: 1 / -1;
+    padding: 40px 24px;
+    text-align: center;
+    background: #fff;
+    border: 1px dashed #cbd6e5;
+    border-radius: 14px;
+}
+
+.sv-search-empty-icon {
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 15px;
+    border-radius: 50%;
+    background: var(--intela-blue-light);
+    color: var(--intela-blue);
+    font-size: 22px;
+}
+
+.sv-search-empty h3 {
+    margin: 0 0 8px;
+    color: var(--intela-deep);
+    font-size: 18px;
+}
+
+.sv-search-empty p {
+    margin: 0 0 16px;
+    color: var(--intela-muted);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.sv-search-reset {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 17px;
+    border: 0;
+    border-radius: 8px;
+    color: var(--intela-deep);
+    background: var(--intela-orange);
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.sv-search-reset:hover {
+    background: #ffb452;
+}
+
+/* Database empty state */
+.sv-empty {
+    grid-column: 1 / -1;
+    padding: 45px 24px;
+    text-align: center;
+    background: #fff;
+    border: 1px dashed #cbd6e5;
+    border-radius: 14px;
+}
+
+.sv-empty-icon {
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 15px;
+    border-radius: 50%;
+    background: var(--intela-blue-light);
+    color: var(--intela-blue);
+    font-size: 22px;
+}
+
+.sv-empty h3 {
+    margin: 0 0 8px;
+    color: var(--intela-deep);
+    font-size: 18px;
+}
+
+.sv-empty p {
+    margin: 0;
+    color: var(--intela-muted);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+/* ==========================================
+   OUR APPROACH
+========================================== */
+.sv-approach {
+    padding: 48px 0;
+    background: #fff;
+}
+
+.sv-approach-flow {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.sv-approach-item {
+    padding: 25px 16px;
+    text-align: center;
+    background: var(--intela-bg);
+    border: 1px solid var(--intela-border);
+    border-top: 3px solid var(--intela-blue);
+    border-radius: 13px;
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.sv-approach-item:nth-child(even) {
+    border-top-color: var(--intela-orange);
+}
+
+.sv-approach-item:hover {
+    transform: translateY(-4px);
+    background: #fff;
+    box-shadow: 0 12px 28px rgba(29, 45, 74, .09);
+}
+
+.sv-approach-number {
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 14px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid var(--intela-border);
+    color: var(--intela-blue);
+    font-size: 17px;
+    box-shadow: 0 6px 16px rgba(29, 45, 74, .06);
+}
+
+.sv-approach-item:nth-child(even) .sv-approach-number {
+    color: var(--intela-orange-dark);
+}
+
+.sv-approach-item h3 {
+    margin: 0 0 9px;
+    color: var(--intela-deep);
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.sv-approach-item p {
+    max-width: 200px;
+    margin: 0 auto;
+    color: var(--intela-muted);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+/* ==========================================
+   FINAL CONTACT CTA
+========================================== */
+.sv-final {
+    padding: 48px 0;
+    background: var(--intela-bg);
+}
+
+.sv-final-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 38px;
+    align-items: center;
+}
+
+.sv-final h2 {
+    margin: 0 0 14px;
+    color: var(--intela-deep);
+    font-size: clamp(27px, 3.2vw, 39px);
+    line-height: 1.15;
+    letter-spacing: -1px;
+    font-weight: 800;
+}
+
+.sv-final h2 span {
+    color: var(--intela-blue);
+}
+
+.sv-final p {
+    max-width: 470px;
+    margin: 0 0 21px;
+    color: var(--intela-muted);
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.sv-final-visual {
+    position: relative;
+    aspect-ratio: 16 / 11;
+    overflow: hidden;
+    border: 1px solid var(--intela-border);
+    border-radius: 14px;
+    background: linear-gradient(
+        145deg,
+        var(--intela-blue-light),
+        #d4e4f5
+    );
+    box-shadow: 0 14px 36px rgba(29, 45, 74, .09);
+}
+
+.sv-final-visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN
+========================================== */
+@media (max-width: 1100px) {
+    .rg-container,
+    .sv-hero-container {
+        width: calc(100% - 48px);
+    }
+
+    .sv-services-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 900px) {
+    .sv-approach-flow {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .sv-final-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    .sv-final-visual {
+        order: -1;
+        aspect-ratio: 16 / 9;
+    }
+}
+
+@media (max-width: 640px) {
+    .rg-container,
+    .sv-hero-container {
+        width: calc(100% - 32px);
+    }
+
+    .sv-hero {
+        height: auto;
+        min-height: 0;
+    }
+
+    .sv-hero-container {
+        padding: 47px 0 42px;
+    }
+
+    .sv-hero h1 {
+        font-size: clamp(27px, 8vw, 35px);
+        letter-spacing: -.7px;
+    }
+
+    .sv-hero-desc {
+        font-size: 13px;
+    }
+
+    .sv-services,
+    .sv-approach,
+    .sv-final {
+        padding: 34px 0;
+    }
+
+    .sv-services-grid,
+    .sv-approach-flow {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .sv-card-photo {
+        aspect-ratio: 16 / 10;
+    }
+
+    .rg-heading.centered {
+        margin-bottom: 24px;
+    }
+
+    .rg-heading.centered h2 {
+        font-size: 27px;
+    }
+
+    .sv-card-body {
+        padding-left: 17px;
+        padding-right: 17px;
+    }
+
+    .sv-search-wrap {
+        margin-bottom: 22px;
+    }
+
+    .sv-search-box {
+        min-height: 54px;
+        padding-left: 14px;
+    }
+
+    .sv-search-input {
+        font-size: 12px;
+    }
+
+    .sv-search-meta {
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 390px) {
+    .rg-container,
+    .sv-hero-container {
+        width: calc(100% - 24px);
+    }
+
+    .sv-search-meta {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 5px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .rg-page *,
+    .rg-page *::before,
+    .rg-page *::after {
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="rg-page">
+
+    <!-- ======================================
+         HERO
+    ======================================= -->
+    <section class="sv-hero">
+        <div class="sv-hero-bg">
+            <img
+                src="{% static 'images/servicesbanner.png' %}"
+                alt="Intela Group business and technology services"
+            >
+        </div>
+
+        <div class="sv-hero-container">
+            <div class="sv-hero-content">
+
+                <div class="rg-kicker on-dark">
+                    Our Services
+                </div>
+
+                <h1>
+                    People. Technology.<br>
+                    <span>Possibilities.</span>
+                </h1>
+
+                <p class="sv-hero-desc">
+                    Intela Group brings people, technology, and business
+                    expertise together to help organizations solve challenges,
+                    improve operations, and move forward with confidence.
+                </p>
+
+                <div class="sv-hero-divider"></div>
+
+                <div class="sv-hero-tags">
+                    <span>People</span>
+                    <span class="tag-dot">•</span>
+                    <span>Technology</span>
+                    <span class="tag-dot">•</span>
+                    <span>Business Solutions</span>
+                    <span class="tag-dot">•</span>
+                    <span>Growth</span>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================================
+         SERVICES
+    ======================================= -->
+    <section class="sv-services" id="services">
+        <div class="rg-container">
+
+            <div class="rg-heading centered">
+                <div class="rg-kicker centered">
+                    What We Do
+                </div>
+
+                <h2>
+                    A Wide Range of Capabilities.
+                    <br>One Trusted Partner.
+                </h2>
+
+                <p>
+                    Explore Intela Group's services and discover solutions
+                    designed to support your organization's evolving needs.
+                </p>
+            </div>
+
+            <!-- LIVE SEARCH BAR -->
+            <div class="sv-search-wrap">
+                <div class="sv-search-box">
+                    <i class="fa-solid fa-magnifying-glass sv-search-icon"></i>
+
+                    <input
+                        type="search"
+                        id="serviceSearchInput"
+                        class="sv-search-input"
+                        placeholder="Search services by name or keyword..."
+                        aria-label="Search services"
+                        aria-controls="serviceCardsGrid"
+                        autocomplete="off"
+                    >
+
+                    <button
+                        type="button"
+                        id="serviceSearchClear"
+                        class="sv-search-clear"
+                        aria-label="Clear service search"
+                        title="Clear search"
+                    >
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div class="sv-search-meta" aria-live="polite">
+                    <span id="serviceSearchCount">
+                        Browse our available services
+                    </span>
+
+                    <span>
+                        Find your solution
+                        <i class="fa-solid fa-arrow-down"></i>
+                    </span>
+                </div>
+            </div>
+
+            <!-- DYNAMIC SERVICE CARDS -->
+            <div class="sv-services-grid" id="serviceCardsGrid">
+
+                {% for service in services %}
+
+                <article
+                    class="sv-card"
+                    data-service-search="{{ service.title|striptags|lower }} {{ service.short_description|striptags|lower }}"
+                >
+
+                    <!-- SERVICE IMAGE -->
+                    <div class="sv-card-photo">
+
+                        {% if service.image %}
+                            <img
+                                src="{{ service.image.url }}"
+                                alt="{{ service.title }}"
+                                loading="lazy"
+                            >
+                        {% else %}
+                            <div class="no-image">
+                                <i class="fa-solid fa-layer-group"></i>
+                                <span>{{ service.title }}</span>
+                            </div>
+                        {% endif %}
+
+                        <div class="sv-card-icon">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>
+
+                        <div class="sv-card-number">
+                            {{ forloop.counter|stringformat:"02d" }}
+                        </div>
+
+                    </div>
+
+                    <!-- SERVICE CONTENT -->
+                    <div class="sv-card-body">
+
+                        <h3>{{ service.title }}</h3>
+
+                        {% if service.short_description %}
+                            <div class="short-description">
+                                {{ service.short_description|striptags|truncatewords:22 }}
+                            </div>
+                        {% else %}
+                            <p class="short-description">
+                                Discover how Intela Group can support
+                                your business needs.
+                            </p>
+                        {% endif %}
+
+                        <a
+                            href="{% url 'website:service_detail' service.pk %}"
+                            class="sv-learn-more"
+                            aria-label="Learn more about {{ service.title }}"
+                        >
+                            Learn More
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+
+                    </div>
+                </article>
+
+                {% empty %}
+
+                <div class="sv-empty">
+                    <div class="sv-empty-icon">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+
+                    <h3>Our Services Are Coming Soon</h3>
+
+                    <p>
+                        We're preparing our service information.
+                        Please contact Intela Group to discuss your
+                        business requirements.
+                    </p>
+                </div>
+
+                {% endfor %}
+
+                <!-- NO SEARCH RESULTS -->
+                <div
+                    class="sv-search-empty"
+                    id="serviceSearchEmpty"
+                    hidden
+                >
+                    <div class="sv-search-empty-icon">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+
+                    <h3>No matching services found</h3>
+
+                    <p>
+                        We couldn't find a service matching your search.
+                        Try another keyword or browse all available services.
+                    </p>
+
+                    <button
+                        type="button"
+                        class="sv-search-reset"
+                        id="serviceSearchReset"
+                    >
+                        <i class="fa-solid fa-rotate-left"></i>
+                        View All Services
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================================
+         OUR APPROACH
+    ======================================= -->
+    <section class="sv-approach">
+        <div class="rg-container">
+
+            <div class="rg-heading centered">
+                <div class="rg-kicker centered">
+                    Our Approach
+                </div>
+
+                <h2>A Simple Process. Meaningful Results.</h2>
+
+                <p>
+                    We work collaboratively to understand your goals,
+                    identify practical solutions, and deliver value
+                    throughout the engagement.
+                </p>
+            </div>
+
+            <div class="sv-approach-flow">
+
+                <div class="sv-approach-item">
+                    <div class="sv-approach-number">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+
+                    <h3>Understand</h3>
+
+                    <p>
+                        We listen to your needs and understand
+                        your business objectives.
+                    </p>
+                </div>
+
+                <div class="sv-approach-item">
+                    <div class="sv-approach-number">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+
+                    <h3>Plan</h3>
+
+                    <p>
+                        We identify suitable solutions aligned
+                        with your requirements.
+                    </p>
+                </div>
+
+                <div class="sv-approach-item">
+                    <div class="sv-approach-number">
+                        <i class="fa-solid fa-gears"></i>
+                    </div>
+
+                    <h3>Deliver</h3>
+
+                    <p>
+                        We focus on thoughtful execution,
+                        quality, and collaboration.
+                    </p>
+                </div>
+
+                <div class="sv-approach-item">
+                    <div class="sv-approach-number">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+
+                    <h3>Support</h3>
+
+                    <p>
+                        We aim to build lasting value through
+                        continued partnership.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================================
+         FINAL CONTACT CTA
+    ======================================= -->
+    <section class="sv-final">
+        <div class="rg-container">
+
+            <div class="sv-final-grid">
+
+                <div>
+                    <div class="rg-kicker">
+                        Let's Work Together
+                    </div>
+
+                    <h2>
+                        Your Goals.<br>
+                        <span>Our Commitment.</span>
+                    </h2>
+
+                    <p>
+                        Looking for a partner to support your business
+                        and technology needs? Connect with Intela Group
+                        to discuss your goals and explore the right approach.
+                    </p>
+
+                    <a
+                        href="{% url 'website:contact' %}"
+                        class="rg-btn rg-btn-orange"
+                    >
+                        Talk to Our Team
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="sv-final-visual">
+                    <img
+                        src="{% static 'intelaimages/worktogether.png' %}"
+                        alt="Working together with Intela Group"
+                        loading="lazy"
+                    >
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<!-- ==========================================
+     LIVE SERVICE SEARCH SCRIPT
+========================================== -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("serviceSearchInput");
+    const clearButton = document.getElementById("serviceSearchClear");
+    const resetButton = document.getElementById("serviceSearchReset");
+    const countElement = document.getElementById("serviceSearchCount");
+    const emptyMessage = document.getElementById("serviceSearchEmpty");
+    const cardsGrid = document.getElementById("serviceCardsGrid");
+
+    if (!searchInput || !cardsGrid) {
+        return;
+    }
+
+    const cards = Array.from(
+        cardsGrid.querySelectorAll(".sv-card")
+    );
+
+    function filterServices() {
+        const query = searchInput.value
+            .trim()
+            .toLocaleLowerCase();
+
+        let visibleCount = 0;
+
+        cards.forEach(function (card) {
+            const title = card.querySelector("h3");
+            const description = card.querySelector(".short-description");
+
+            const titleText = title ? title.textContent : "";
+            const descriptionText = description
+                ? description.textContent
+                : "";
+
+            const searchableText = (
+                titleText + " " + descriptionText
+            ).toLocaleLowerCase();
+
+            const matches = searchableText.includes(query);
+
+            card.hidden = !matches;
+
+            if (matches) {
+                visibleCount++;
+            }
+        });
+
+        if (emptyMessage) {
+            emptyMessage.hidden = (
+                query.length === 0 || visibleCount > 0
+            );
+        }
+
+        if (countElement) {
+            if (query === "") {
+                countElement.textContent =
+                    "Browse our available services";
+            } else {
+                countElement.textContent =
+                    visibleCount + " service" +
+                    (visibleCount === 1 ? "" : "s") +
+                    " found";
+            }
+        }
+
+        if (clearButton) {
+            clearButton.classList.toggle(
+                "is-visible",
+                searchInput.value.length > 0
+            );
+        }
+    }
+
+    function resetSearch() {
+        searchInput.value = "";
+        filterServices();
+        searchInput.focus();
+    }
+
+    searchInput.addEventListener("input", filterServices);
+
+    if (clearButton) {
+        clearButton.addEventListener("click", resetSearch);
+    }
+
+    if (resetButton) {
+        resetButton.addEventListener("click", resetSearch);
+    }
+
+    filterServices();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,581 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Industries We Serve | Intela Group LLC{% endblock %}
+
+{% block extra_css %}
+<style>
+.industries-page{
+    --ind-navy:#293D63;--ind-deep:#1D2D4A;--ind-blue:#3478B9;
+    --ind-blue-light:#EDF5FC;--ind-orange:#FFA033;--ind-orange-dark:#F28A16;
+    --ind-text:#263853;--ind-muted:#788397;--ind-border:#E2E9F2;--ind-bg:#F6F8FB;
+    width:100%;overflow:hidden;color:var(--ind-text);background:#fff;font-family:inherit
+}
+.industries-page *,.industries-page *:before,.industries-page *:after{box-sizing:border-box}
+.industries-page a{text-decoration:none}
+.industries-page img{display:block;max-width:100%}
+.ind-container{width:min(1180px,calc(100% - 48px));margin:0 auto}
+.ind-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:44px;padding:11px 20px;border:1px solid transparent;border-radius:8px;font-size:12px;font-weight:800;transition:transform .2s,background .2s}
+.ind-btn-orange{color:var(--ind-deep)!important;background:var(--ind-orange);border-color:var(--ind-orange)}
+.ind-btn-orange:hover{background:#FFB452;transform:translateY(-2px)}
+.ind-btn-outline{color:#fff!important;border-color:#ffffff80;background:#ffffff0f}
+.ind-btn-outline:hover{background:#ffffff20}
+.ind-kicker{display:flex;align-items:center;gap:9px;margin-bottom:12px;color:var(--ind-orange-dark);font-size:10px;font-weight:900;letter-spacing:2px;text-transform:uppercase}
+.ind-kicker:before{content:"";width:27px;height:2px;flex-shrink:0;background:var(--ind-orange)}
+.ind-kicker-light{color:#fff}
+.ind-kicker-center{justify-content:center}
+.ind-kicker-center:after{content:"";width:27px;height:2px;background:var(--ind-orange)}
+.ind-heading{margin-bottom:28px}
+.ind-heading-center{text-align:center}
+.ind-heading h2{margin:0 0 12px;color:var(--ind-deep);font-size:clamp(27px,3.2vw,38px);font-weight:800;line-height:1.2;letter-spacing:-1px}
+.ind-heading p{max-width:700px;margin:0;color:var(--ind-muted);font-size:13px;line-height:1.8}
+.ind-heading-center p{margin-inline:auto}
+
+/* Hero */
+.ind-hero{position:relative;display:flex;align-items:center;min-height:245px;padding:32px 0;overflow:hidden;background-color:var(--ind-deep);background-image:linear-gradient(100deg,rgba(22,37,63,.96),rgba(29,45,74,.87) 52%,rgba(29,45,74,.57)),url("{% static 'intelaimages/intelaindustriesbanner.png' %}");background-size:cover;background-position:center}
+.ind-hero-content{position:relative;z-index:1;width:100%;padding:0 24px}
+.ind-breadcrumb{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:16px;color:#ffffffc2;font-size:12px}
+.ind-breadcrumb a{color:#fff}
+.ind-breadcrumb a:hover{color:var(--ind-orange)}
+.ind-breadcrumb i{font-size:9px}
+.ind-hero h1{max-width:800px;margin:0 0 13px;color:#fff;font-size:clamp(32px,4vw,46px);font-weight:800;line-height:1.12;letter-spacing:-1.1px}
+.ind-hero h1 span{color:var(--ind-orange)}
+.ind-hero p{max-width:690px;margin:0;color:#ffffffd4;font-size:13px;line-height:1.8}
+.ind-hero-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:22px}
+.ind-hero-accent{width:60px;height:4px;margin-top:17px;border-radius:99px;background:var(--ind-orange)}
+
+/* Practical approach */
+.ind-approach{padding:28px 0;background:#fff}
+.ind-approach-inner{display:grid;grid-template-columns:210px minmax(0,1fr);align-items:center;gap:28px;padding:23px 26px;border:1px solid var(--ind-border);border-left:4px solid var(--ind-orange);border-radius:12px;background:var(--ind-bg)}
+.ind-approach-label{color:var(--ind-orange-dark);font-size:10px;font-weight:900;letter-spacing:1.6px;text-transform:uppercase}
+.ind-approach-inner h2{margin:7px 0 0;color:var(--ind-deep);font-size:22px;font-weight:800;line-height:1.35}
+.ind-approach-inner p{margin:0;color:var(--ind-muted);font-size:13px;line-height:1.9}
+
+/* Directory and search */
+.ind-directory{padding:42px 0 48px;background:var(--ind-bg)}
+.ind-directory-top{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:24px}
+.ind-directory-top .ind-heading{margin:0}
+.ind-total-badge{flex-shrink:0;padding:9px 13px;border:1px solid var(--ind-border);border-radius:8px;color:var(--ind-navy);background:#fff;font-size:11px;font-weight:800}
+.ind-total-badge span{color:var(--ind-orange-dark)}
+.ind-search-wrap{max-width:630px;margin:0 auto 19px}
+.ind-search-box{display:flex;align-items:center;gap:12px;min-height:56px;padding:7px 9px 7px 17px;border:1px solid var(--ind-border);border-radius:11px;background:#fff;box-shadow:0 7px 22px #1d2d4a0d;transition:border-color .2s,box-shadow .2s}
+.ind-search-box:focus-within{border-color:var(--ind-blue);box-shadow:0 0 0 4px #3478b91a}
+.ind-search-box>i{flex-shrink:0;color:var(--ind-blue);font-size:17px}
+.ind-search-input{flex:1;width:100%;min-width:0;padding:10px 0;border:0;outline:0;color:var(--ind-deep);background:transparent;font-size:13px}
+.ind-search-input::placeholder{color:#929cad}
+.ind-search-clear{display:none;flex-shrink:0;width:35px;height:35px;align-items:center;justify-content:center;border:0;border-radius:7px;color:var(--ind-muted);background:var(--ind-bg);cursor:pointer}
+.ind-search-clear.visible{display:inline-flex}
+.ind-filters{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;margin-bottom:25px}
+.ind-filter{min-height:36px;padding:9px 14px;border:1px solid var(--ind-border);border-radius:7px;color:var(--ind-muted);background:#fff;font-size:11px;font-weight:750;cursor:pointer;transition:color .2s,background .2s,border-color .2s}
+.ind-filter:hover{color:var(--ind-navy);border-color:var(--ind-blue)}
+.ind-filter.active{color:#fff;border-color:var(--ind-navy);background:var(--ind-navy)}
+.ind-results-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;color:var(--ind-muted);font-size:11px}
+.ind-results-bar strong{color:var(--ind-navy)}
+.ind-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;align-items:stretch}
+.ind-card[hidden],.ind-no-results[hidden]{display:none!important}
+.ind-card{display:flex;flex-direction:column;min-width:0;overflow:hidden;border:1px solid var(--ind-border);border-radius:12px;background:#fff;box-shadow:0 5px 17px #1d2d4a0b;transition:transform .25s,box-shadow .25s}
+.ind-card:hover{transform:translateY(-4px);box-shadow:0 13px 28px #1d2d4a1c}
+.ind-card-image{position:relative;aspect-ratio:16/10;overflow:hidden;background:linear-gradient(135deg,var(--ind-blue-light),#d9e6f5)}
+.ind-card-image img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.ind-card:hover .ind-card-image img{transform:scale(1.045)}
+.ind-card-number{position:absolute;top:11px;right:11px;padding:5px 9px;border-radius:6px;color:#fff;background:#1d2d4ad9;font-size:10px;font-weight:800}
+.ind-card-icon{position:absolute;left:15px;bottom:-17px;z-index:2;display:grid;place-items:center;width:40px;height:40px;border:1px solid var(--ind-border);border-radius:10px;color:var(--ind-blue);background:#fff;box-shadow:0 4px 14px #1d2d4a1a;font-size:15px}
+.ind-card:nth-child(3n) .ind-card-icon{color:var(--ind-orange-dark)}
+.ind-card-body{display:flex;flex-direction:column;flex:1;padding:27px 15px 16px}
+.ind-card-body h3{margin:0 0 8px;color:var(--ind-deep);font-size:15px;font-weight:800;line-height:1.4;overflow-wrap:anywhere}
+.ind-card-body p{flex:1;margin:0 0 17px;color:var(--ind-muted);font-size:11px;line-height:1.75}
+.ind-card-link{display:inline-flex;align-items:center;align-self:flex-start;gap:8px;margin-top:auto;color:var(--ind-blue);font-size:11px;font-weight:800;transition:gap .2s,color .2s}
+.ind-card-link:hover{gap:12px;color:var(--ind-orange-dark)}
+.ind-card-link i{font-size:10px}
+.ind-no-results{grid-column:1/-1;padding:38px 20px;border:1px dashed #cbd6e5;border-radius:12px;background:#fff;text-align:center}
+.ind-no-results>i{margin-bottom:13px;color:var(--ind-blue);font-size:28px}
+.ind-no-results h3{margin:0 0 8px;color:var(--ind-deep);font-size:18px}
+.ind-no-results p{margin:0 0 16px;color:var(--ind-muted);font-size:12px;line-height:1.7}
+.ind-reset{padding:10px 16px;border:0;border-radius:7px;color:var(--ind-deep);background:var(--ind-orange);font-size:11px;font-weight:800;cursor:pointer}
+
+/* Capabilities */
+.ind-capabilities{padding:48px 0;background:#fff}
+.ind-capabilities-intro{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:27px}
+.ind-capabilities-intro .ind-heading{margin:0}
+.ind-capabilities-note{max-width:270px;padding:13px 15px;border-left:3px solid var(--ind-orange);border-radius:0 8px 8px 0;color:var(--ind-muted);background:var(--ind-bg);font-size:11px;line-height:1.7}
+.ind-capability-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:17px}
+.ind-capability-card{padding:22px 18px;border:1px solid var(--ind-border);border-radius:11px;background:#fff;transition:transform .2s,box-shadow .2s}
+.ind-capability-card:hover{transform:translateY(-3px);box-shadow:0 10px 24px #1d2d4a14}
+.ind-capability-icon{display:grid;place-items:center;width:43px;height:43px;margin-bottom:15px;border-radius:10px;color:var(--ind-blue);background:var(--ind-blue-light);font-size:17px}
+.ind-capability-card:nth-child(even) .ind-capability-icon{color:var(--ind-orange-dark);background:#fff4e7}
+.ind-capability-card h3{margin:0 0 9px;color:var(--ind-deep);font-size:14px;font-weight:800;line-height:1.4}
+.ind-capability-card p{margin:0;color:var(--ind-muted);font-size:11px;line-height:1.8}
+
+/* Contact CTA */
+.ind-cta{position:relative;overflow:hidden;padding:38px 0;color:#fff;background:linear-gradient(115deg,var(--ind-deep),var(--ind-navy))}
+.ind-cta:after{content:"";position:absolute;top:-120px;right:-80px;width:330px;height:330px;border:38px solid #ffffff09;border-radius:50%;pointer-events:none}
+.ind-cta-inner{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:28px}
+.ind-cta h2{margin:0 0 10px;color:#fff;font-size:clamp(25px,3vw,34px);font-weight:800;line-height:1.2}
+.ind-cta p{max-width:630px;margin:0;color:#ffffffcc;font-size:13px;line-height:1.8}
+.ind-cta-actions{display:flex;flex-shrink:0;flex-wrap:wrap;gap:10px}
+
+@media(max-width:1050px){.ind-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.ind-capability-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){
+ .ind-container{width:calc(100% - 32px)}
+ .ind-hero{min-height:220px;padding:26px 0}
+ .ind-hero-content{padding:0 12px}
+ .ind-approach-inner{grid-template-columns:1fr;gap:12px;padding:20px}
+ .ind-directory-top{align-items:flex-start;flex-direction:column}
+ .ind-total-badge{align-self:flex-start}
+ .ind-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+ .ind-capabilities-intro{align-items:flex-start;flex-direction:column;gap:14px}
+ .ind-capabilities-note{max-width:none}
+ .ind-cta-inner{align-items:flex-start;flex-direction:column}
+}
+@media(max-width:480px){
+ .ind-container{width:calc(100% - 24px)}
+ .ind-hero{min-height:210px}
+ .ind-hero-content{padding:0 6px}
+ .ind-hero h1{font-size:31px}
+ .ind-hero p{font-size:12px}
+ .ind-approach,.ind-directory,.ind-capabilities{padding:30px 0}
+ .ind-grid,.ind-capability-grid{grid-template-columns:1fr;gap:15px}
+ .ind-card-image{aspect-ratio:16/9}
+ .ind-card-body{padding:27px 16px 17px}
+ .ind-search-box{min-height:52px;padding-left:13px}
+ .ind-search-input{font-size:12px}
+ .ind-filters{justify-content:flex-start;gap:7px}
+ .ind-filter{padding:8px 11px;font-size:10px}
+ .ind-results-bar{align-items:flex-start;flex-direction:column;gap:5px}
+ .ind-cta{padding:31px 0}
+ .ind-cta-actions{width:100%}
+ .ind-cta-actions .ind-btn{flex:1}
+}
+@media(prefers-reduced-motion:reduce){.industries-page *,.industries-page *:before,.industries-page *:after{transition-duration:.01ms!important}}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="industries-page">
+
+    <section class="ind-hero">
+        <div class="ind-container ind-hero-content">
+            <nav class="ind-breadcrumb" aria-label="Breadcrumb">
+                <a href="{% url 'website:home' %}">Home</a>
+                <i class="fa-solid fa-chevron-right"></i>
+                <span>Industries</span>
+            </nav>
+            <div class="ind-kicker ind-kicker-light">Industries We Serve</div>
+            <h1>Industry knowledge.<br><span>Technology that works.</span></h1>
+            <p>Explore industry-focused applications, AI and automation, cloud technologies, and workforce solutions designed around different business needs.</p>
+            <div class="ind-hero-actions">
+                <a href="#industry-directory" class="ind-btn ind-btn-orange">Explore Industries <i class="fa-solid fa-arrow-down"></i></a>
+                <a href="{% url 'website:contact' %}" class="ind-btn ind-btn-outline">Talk to Our Team <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div class="ind-hero-accent"></div>
+        </div>
+    </section>
+
+    <section class="ind-approach">
+        <div class="ind-container">
+            <div class="ind-approach-inner">
+                <div>
+                    <div class="ind-approach-label">A Practical Approach</div>
+                    <h2>Different industries.<br>Different challenges.</h2>
+                </div>
+                <p>Each industry has its own technology landscape, operational challenges, and workforce requirements. Explore the industries below to discover relevant challenges and potential solutions.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="ind-directory" id="industry-directory">
+        <div class="ind-container">
+            <div class="ind-directory-top">
+                <div class="ind-heading">
+                    <div class="ind-kicker">Our Industry Portfolio</div>
+                    <h2>Explore industries</h2>
+                    <p>Select an industry to explore potential technology, application, automation, cloud, and staffing solutions.</p>
+                </div>
+                <div class="ind-total-badge">Showing <span id="indVisibleCount">19</span> industries</div>
+            </div>
+
+            <div class="ind-search-wrap">
+                <div class="ind-search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="search" id="indSearch" class="ind-search-input" placeholder="Search industries or solutions..." aria-label="Search industries" aria-controls="indGrid" autocomplete="off">
+                    <button type="button" class="ind-search-clear" id="indSearchClear" aria-label="Clear search"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+
+            <div class="ind-filters" aria-label="Filter industries">
+                <button type="button" class="ind-filter active" data-filter="all" aria-pressed="true">All Industries</button>
+                <button type="button" class="ind-filter" data-filter="finance" aria-pressed="false">Finance &amp; Insurance</button>
+                <button type="button" class="ind-filter" data-filter="public" aria-pressed="false">Government</button>
+                <button type="button" class="ind-filter" data-filter="health" aria-pressed="false">Healthcare</button>
+                <button type="button" class="ind-filter" data-filter="technology" aria-pressed="false">Technology</button>
+                <button type="button" class="ind-filter" data-filter="industrial" aria-pressed="false">Industrial</button>
+                <button type="button" class="ind-filter" data-filter="business" aria-pressed="false">Business &amp; Consumer</button>
+            </div>
+
+            <div class="ind-results-bar" aria-live="polite">
+                <span id="indResultText">Showing all 19 industries</span>
+                <span><i class="fa-solid fa-filter"></i> Search or select a category</span>
+            </div>
+
+            <div class="ind-grid" id="indGrid">
+
+                <article class="ind-card" data-category="finance" data-search="banking financial services fintech payments risk compliance accounting investment lending digital banking">
+                    <div class="ind-card-image">
+                        <img src="{% static 'intelaimages/industries/banking.png' %}" alt="Banking and financial services" loading="lazy">
+                        <span class="ind-card-number">01</span><span class="ind-card-icon"><i class="fa-solid fa-building-columns"></i></span>
+                    </div>
+                    <div class="ind-card-body">
+                        <h3>Banking &amp; Financial Services</h3>
+                        <p>Support financial operations, reporting, workflow automation, and secure digital experiences.</p>
+                        <a href="{% url 'website:contact' %}?industry=Banking%20and%20Financial%20Services" class="ind-card-link">Know More <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </article>
+
+                <article class="ind-card" data-category="public" data-search="government public sector administration civic municipal citizen services records compliance">
+                    <div class="ind-card-image">
+                        <img src="{% static 'intelaimages/industries/government.png' %}" alt="Government and public sector" loading="lazy">
+                        <span class="ind-card-number">02</span><span class="ind-card-icon"><i class="fa-solid fa-landmark"></i></span>
+                    </div>
+                    <div class="ind-card-body">
+                        <h3>Government &amp; Public Sector</h3>
+                        <p>Modernize internal systems, records, public-service workflows, and citizen-facing digital services.</p>
+                        <a href="{% url 'website:contact' %}?industry=Government%20and%20Public%20Sector" class="ind-card-link">Know More <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </article>
+
+                <article class="ind-card" data-category="health" data-search="healthcare medical hospitals clinics life sciences patient administration clinical systems compliance">
+                    <div class="ind-card-image">
+                        <img src="{% static 'intelaimages/industries/healthcare.png' %}" alt="Healthcare and life sciences" loading="lazy">
+                        <span class="ind-card-number">03</span><span class="ind-card-icon"><i class="fa-solid fa-heart-pulse"></i></span>
+                    </div>
+                    <div class="ind-card-body">
+                        <h3>Healthcare &amp; Life Sciences</h3>
+                        <p>Improve healthcare administration, connected applications, operational reporting, and workflows.</p>
+                        <a href="{% url 'website:contact' %}?industry=Healthcare%20and%20Life%20Sciences" class="ind-card-link">Know More <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </article>
+
+                <article class="ind-card" data-category="industrial" data-search="manufacturing production factory supply chain quality control inventory plant engineering">
+                    <div class="ind-card-image">
+                        <img src="{% static 'intelaimages/industries/manufacturing.png' %}" alt="Manufacturing industry" loading="lazy">
+                        <span class="ind-card-number">04</span><span class="ind-card-icon"><i class="fa-solid fa-industry"></i></span>
+                    </div>
+                    <div class="ind-card-body">
+                        <h3>Manufacturing</h3>
+                        <p>Improve visibility across production, inventory, quality processes, and manufacturing operations.</p>
+                        <a href="{% url 'website:contact' %}?industry=Manufacturing" class="ind-card-link">Know More <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </article>
+
+                <article class="ind-card" data-category="technology" data-search="IT information technology software development consulting integration testing infrastructure">
+                    <div class="ind-card-image">
+                        <img src="{% static 'intelaimages/industries/information-technology.png' %}" alt="Information technology" loading="lazy">
+                        <span class="ind-card-number">05</span><span class="ind-card-icon"><i class="fa-solid fa-laptop-code"></i></span>
+                    </div>
+                    <div class="ind-card-body">
+                        <h3>Information Technology</h3>
+                        <p>Build, integrate, maintain, and scale digital applications, platforms, and business systems.</p>
+                        <a href="{% url 'website:contact' %}?industry=Information%20Technology" class="ind-card-link">Know More <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </article>
+
+                <article class="ind-card" data-category="technology" data-search="telecommunications telecom wireless networking 5G broadband connectivity communications">
+                    <div class="ind-card-image">
+                        <img src="{% static 'intelaimages/industries/telecommunications.png' %}" alt="Telecommunications" loading="lazy">
+                        <span class="ind-card-number">06</span><span class="ind-card-icon"><i class="fa-solid fa-tower-broadcast"></i></span>
+                    </div>
+                    <div class="ind-card-body">
+                        <h3>Telecommunications</h3>
+                        <p>Support connected systems, service workflows, network operations, and digital infrastructure.</p>
+                        <a href="{% url 'website:contact' %}?industry=Telecommunications" class="ind-card-link">Know More <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </article>
+
+                <article class="ind-card" data-category="business" data-search="retail ecommerce consumer goods shopping customer experience inventory orders point of sale">
+                    <div class="ind-card-image">
+                        <img src="{% static 'intelaimages/industries/retail.png' %}" alt="Retail and ecommerce" loading="lazy">
+                        <span class="ind-card-number">07</span><span class="ind-card-icon"><i class="fa-solid fa-cart-shopping"></i></span>
+                    </div>
+                    <div class="ind-card-body">
+                        <h3>Retail &amp; E-commerce</h3>
+                        <p>Enhance digital shopping, inventory management, customer workflows, and online operations.</p>
+                        <a href="{% url 'website:contact' %}?industry=Retail%20and%20E-commerce" class="ind-card-link">Know More <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </article>
+
+                <article class="ind-card" data-category="business" data-search="education edtech universities colleges schools learning student administration campus">
+                    <div class="ind-card-image">
+                        <img src="{% static 'intelaimages/industries/education.png' %}" alt="Education and EdTech" loading="lazy">
+                        <span class="ind-card-number">08</span><span class="ind-card-icon"><i class="fa-solid fa-graduation-cap"></i></span>
+                    </div>
+                    <div class="ind-card-body">
+                        <h3>Education &amp; EdTech</h3>
+                        <p>Support learning platforms, student administration, digital services, and institutional workflows.</p>
+                        <a href="{% url 'website:contact' %}?industry=Education%20and%20EdTech" class="ind-card-link">Know More <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </article>
+
+                <article class="ind-card" data-category="business" data-search="real estate property management construction facilities buildings tenant maintenance">
+                    <div class="ind-card-image">
+                        <img src="{% static 'intelaimages/industries/real-estate.png' %}" alt="Real estate and construction" loading="lazy">
+                        <span class="ind-card-number">09</span><span class="ind-card-icon"><i class="fa-solid fa-building"></i></span>
+                    </div>
+                    <div class="ind-card-body">
+                        <h3>Real Estate &amp; Construction</h3>
+                        <p>Streamline property management, project reporting, maintenance, and document workflows.</p>
+                        <a href="{% url 'website:contact' %}?industry=Real%20Estate%20and%20Construction" class="ind-card-link">Know More <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </article>
+
+                <article class="ind-card" data-category="business" data-search="professional services consulting legal accounting client management productivity">
+                    <div class="ind-card-image">
+                        <img src="{% static 'intelaimages/industries/professional-services.png' %}" alt="Professional services" loading="lazy">
+                        <span class="ind-card-number">10</span><span class="ind-card-icon"><i class="fa-solid fa-briefcase"></i></span>
+                    </div>
+                    <div class="ind-card-body">
+                        <h3>Professional Services</h3>
+                        <p>Support consulting, client management, document processes, and business productivity applications.</p>
+                        <a href="{% url 'website:contact' %}?industry=Professional%20Services" class="ind-card-link">Know More <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </article>
+
+                <article class="ind-card" data-category="business" data-search="travel hospitality hotels tourism restaurants bookings guest experience operations">
+                    <div class="ind-card-image">
+                        <img src="{% static 'intelaimages/industries/hospitality.png' %}" alt="Travel and hospitality" loading="lazy">
+                        <span class="ind-card-number">11</span><span class="ind-card-icon"><i class="fa-solid fa-hotel"></i></span>
+                    </div>
+                    <div class="ind-card-body">
+                        <h3>Travel &amp; Hospitality</h3>
+                        <p>Improve guest experiences, bookings, customer support, and day-to-day operational processes.</p>
+                        <a href="{% url 'website:contact' %}?industry=Travel%20and%20Hospitality" class="ind-card-link">Know More <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </article>
+
+                <article class="ind-card" data-category="business" data-search="media entertainment publishing digital content streaming advertising creative analytics">
+                    <div class="ind-card-image">
+                        <img src="{% static 'intelaimages/industries/media-entertainment.png' %}" alt="Media and entertainment" loading="lazy">
+                        <span class="ind-card-number">12</span><span class="ind-card-icon"><i class="fa-solid fa-photo-film"></i></span>
+                    </div>
+                    <div class="ind-card-body">
+                        <h3>Media &amp; Entertainment</h3>
+                        <p>Enable digital content workflows, application integration, reporting, and audience-focused operations.</p>
+                        <a href="{% url 'website:contact' %}?industry=Media%20and%20Entertainment" class="ind-card-link">Know More <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </article>
+
+                <article class="ind-card" data-category="business" data-search="HR human resources staffing recruitment talent payroll workforce onboarding">
+                    <div class="ind-card-image">
+                        <img src="{% static 'intelaimages/industries/hr-staffing.png' %}" alt="HR staffing and recruitment" loading="lazy">
+                        <span class="ind-card-number">13</span><span class="ind-card-icon"><i class="fa-solid fa-people-group"></i></span>
+                    </div>
+                    <div class="ind-card-body">
+                        <h3>HR, Staffing &amp; Recruitment</h3>
+                        <p>Support recruitment workflows, workforce coordination, onboarding, and HR business processes.</p>
+                        <a href="{% url 'website:contact' %}?industry=HR%2C%20Staffing%20and%20Recruitment" class="ind-card-link">Know More <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </article>
+
+                <article class="ind-card" data-category="finance" data-search="insurance claims policies underwriting risk compliance customer service">
+                    <div class="ind-card-image">
+                        <img src="{% static 'intelaimages/industries/insurance.png' %}" alt="Insurance" loading="lazy">
+                        <span class="ind-card-number">14</span><span class="ind-card-icon"><i class="fa-solid fa-shield-halved"></i></span>
+                    </div>
+                    <div class="ind-card-body">
+                        <h3>Insurance</h3>
+                        <p>Streamline claims handling, policy administration, customer communications, and reporting.</p>
+                        <a href="{% url 'website:contact' %}?industry=Insurance" class="ind-card-link">Know More <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </article>
+
+                <article class="ind-card" data-category="health" data-search="pharmaceuticals biotechnology pharma biotech research laboratory drug discovery quality regulatory">
+                    <div class="ind-card-image">
+                        <img src="{% static 'intelaimages/industries/pharmaceuticals.png' %}" alt="Pharmaceuticals and biotechnology" loading="lazy">
+                        <span class="ind-card-number">15</span><span class="ind-card-icon"><i class="fa-solid fa-flask"></i></span>
+                    </div>
+                    <div class="ind-card-body">
+                        <h3>Pharmaceuticals &amp; Biotechnology</h3>
+                        <p>Support research operations, documentation, data workflows, quality processes, and regulated business systems.</p>
+                        <a href="{% url 'website:contact' %}?industry=Pharmaceuticals%20and%20Biotechnology" class="ind-card-link">Know More <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </article>
+
+                <article class="ind-card" data-category="industrial" data-search="aerospace defense aviation aircraft engineering manufacturing maintenance logistics">
+                    <div class="ind-card-image">
+                        <img src="{% static 'intelaimages/industries/aerospace-defense.png' %}" alt="Aerospace and defense" loading="lazy">
+                        <span class="ind-card-number">16</span><span class="ind-card-icon"><i class="fa-solid fa-plane"></i></span>
+                    </div>
+                    <div class="ind-card-body">
+                        <h3>Aerospace &amp; Defense</h3>
+                        <p>Explore engineering support systems, asset tracking, maintenance records, and operational reporting.</p>
+                        <a href="{% url 'website:contact' %}?industry=Aerospace%20and%20Defense" class="ind-card-link">Know More <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </article>
+
+                <article class="ind-card" data-category="industrial" data-search="agriculture agritech farming crop management irrigation agricultural technology supply chain">
+                    <div class="ind-card-image">
+                        <img src="{% static 'intelaimages/industries/agriculture.png' %}" alt="Agriculture and agritech" loading="lazy">
+                        <span class="ind-card-number">17</span><span class="ind-card-icon"><i class="fa-solid fa-seedling"></i></span>
+                    </div>
+                    <div class="ind-card-body">
+                        <h3>Agriculture &amp; Agritech</h3>
+                        <p>Support farm operations, agricultural data, inventory coordination, and supply workflows.</p>
+                        <a href="{% url 'website:contact' %}?industry=Agriculture%20and%20Agritech" class="ind-card-link">Know More <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </article>
+
+                <article class="ind-card" data-category="business" data-search="nonprofit NGO charity foundation donations volunteers community programs grants impact reporting">
+                    <div class="ind-card-image">
+                        <img src="{% static 'intelaimages/industries/nonprofit.png' %}" alt="Nonprofit and NGOs" loading="lazy">
+                        <span class="ind-card-number">18</span><span class="ind-card-icon"><i class="fa-solid fa-hand-holding-heart"></i></span>
+                    </div>
+                    <div class="ind-card-body">
+                        <h3>Nonprofit &amp; NGOs</h3>
+                        <p>Organize donor records, volunteer coordination, program tracking, reporting, and administrative workflows.</p>
+                        <a href="{% url 'website:contact' %}?industry=Nonprofit%20and%20NGOs" class="ind-card-link">Know More <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </article>
+
+                <article class="ind-card" data-category="business" data-search="food beverage food production restaurants distribution food safety inventory orders consumer goods">
+                    <div class="ind-card-image">
+                        <img src="{% static 'intelaimages/industries/food-beverage.png' %}" alt="Food and beverage" loading="lazy">
+                        <span class="ind-card-number">19</span><span class="ind-card-icon"><i class="fa-solid fa-utensils"></i></span>
+                    </div>
+                    <div class="ind-card-body">
+                        <h3>Food &amp; Beverage</h3>
+                        <p>Improve order management, inventory visibility, production reporting, distribution, and operational workflows.</p>
+                        <a href="{% url 'website:contact' %}?industry=Food%20and%20Beverage" class="ind-card-link">Know More <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </article>
+
+                <div class="ind-no-results" id="indNoResults" hidden>
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <h3>No matching industries found</h3>
+                    <p>Try another keyword or reset the industry filters.</p>
+                    <button type="button" class="ind-reset" id="indReset">Reset Filters</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ind-capabilities">
+        <div class="ind-container">
+            <div class="ind-capabilities-intro">
+                <div class="ind-heading">
+                    <div class="ind-kicker">What We Bring</div>
+                    <h2>Capabilities across industries</h2>
+                    <p>Technology and workforce capabilities tailored to organizational requirements.</p>
+                </div>
+                <div class="ind-capabilities-note">We work with organizations to understand their needs and discuss appropriate solutions.</div>
+            </div>
+
+            <div class="ind-capability-grid">
+                <article class="ind-capability-card">
+                    <div class="ind-capability-icon"><i class="fa-solid fa-code"></i></div>
+                    <h3>Software &amp; Applications</h3>
+                    <p>Application development, integrations, modernization, and digital business tools.</p>
+                </article>
+                <article class="ind-capability-card">
+                    <div class="ind-capability-icon"><i class="fa-solid fa-robot"></i></div>
+                    <h3>AI &amp; Automation</h3>
+                    <p>Workflow automation and practical AI-enabled solutions for repetitive processes.</p>
+                </article>
+                <article class="ind-capability-card">
+                    <div class="ind-capability-icon"><i class="fa-solid fa-cloud"></i></div>
+                    <h3>Cloud &amp; DevOps</h3>
+                    <p>Cloud adoption, deployment workflows, infrastructure support, and delivery improvements.</p>
+                </article>
+                <article class="ind-capability-card">
+                    <div class="ind-capability-icon"><i class="fa-solid fa-users"></i></div>
+                    <h3>Staffing &amp; Recruitment</h3>
+                    <p>Workforce support and talent solutions aligned with project and business requirements.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="ind-cta">
+        <div class="ind-container ind-cta-inner">
+            <div>
+                <div class="ind-kicker ind-kicker-light">Let's Work Together</div>
+                <h2>Have a challenge to solve?</h2>
+                <p>Tell us about your goals. Our team can discuss technology and workforce options that align with your business needs.</p>
+            </div>
+            <div class="ind-cta-actions">
+                <a href="{% url 'website:contact' %}" class="ind-btn ind-btn-orange">Contact Us <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="{% url 'website:services' %}" class="ind-btn ind-btn-outline">Our Services</a>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("indSearch");
+    const clearButton = document.getElementById("indSearchClear");
+    const filterButtons = Array.from(document.querySelectorAll(".ind-filter"));
+    const cards = Array.from(document.querySelectorAll("#indGrid .ind-card"));
+    const noResults = document.getElementById("indNoResults");
+    const visibleCount = document.getElementById("indVisibleCount");
+    const resultText = document.getElementById("indResultText");
+    const resetButton = document.getElementById("indReset");
+    let activeFilter = "all";
+
+    function applyFilters() {
+        const query = searchInput.value.trim().toLowerCase();
+        let visible = 0;
+
+        cards.forEach(function (card) {
+            const category = card.dataset.category || "";
+            const text = (card.dataset.search + " " + card.innerText).toLowerCase();
+            const matchesCategory = activeFilter === "all" || category === activeFilter;
+            const matchesSearch = !query || text.includes(query);
+            const show = matchesCategory && matchesSearch;
+            card.hidden = !show;
+            if (show) visible++;
+        });
+
+        visibleCount.textContent = visible;
+        resultText.innerHTML = "Showing <strong>" + visible + "</strong> of <strong>" + cards.length + "</strong> industries";
+        noResults.hidden = visible !== 0;
+        clearButton.classList.toggle("visible", searchInput.value.length > 0);
+    }
+
+    filterButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+            activeFilter = button.dataset.filter;
+            filterButtons.forEach(function (item) {
+                const active = item === button;
+                item.classList.toggle("active", active);
+                item.setAttribute("aria-pressed", active ? "true" : "false");
+            });
+            applyFilters();
+        });
+    });
+
+    searchInput.addEventListener("input", applyFilters);
+
+    clearButton.addEventListener("click", function () {
+        searchInput.value = "";
+        applyFilters();
+        searchInput.focus();
+    });
+
+    function resetFilters() {
+        searchInput.value = "";
+        activeFilter = "all";
+        filterButtons.forEach(function (button) {
+            const active = button.dataset.filter === "all";
+            button.classList.toggle("active", active);
+            button.setAttribute("aria-pressed", active ? "true" : "false");
+        });
+        applyFilters();
+    }
+
+    resetButton.addEventListener("click", resetFilters);
+    applyFilters();
+});
+</script>
+{% endblock %}

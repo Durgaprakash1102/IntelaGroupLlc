@@ -1,0 +1,209 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>{% block title %}Intela Group LLC | Information Technology Labs{% endblock %}</title>
+
+    <meta
+        name="description"
+        content="Intela Group LLC - Information Technology Labs. Software development, IT solutions, cloud and infrastructure services, technology consulting, and staffing solutions."
+    >
+
+    <meta name="theme-color" content="#293D63">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <!-- Intela Group LLC Favicon -->
+    <link
+        rel="icon"
+        type="image/jpg"
+        href="{% static 'intelaimages/intelafavicon.jpg' %}"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        href="{% static 'intelaimages/intelagrouplogo.jpg' %}"
+    >
+
+    <style>
+        :root {
+            /* Intela Group LLC Brand Colors */
+            --intela-blue: #293D63;
+            --intela-blue-dark: #1D2D4A;
+            --intela-blue-light: #40577F;
+
+            --intela-orange: #FFA033;
+            --intela-orange-dark: #E88B20;
+            --intela-orange-light: #FFF1DE;
+
+            /* Layout Colors */
+            --sidebar-bg: #ffffff;
+            --sidebar-border: #E2E7EF;
+
+            --text-dark: #293D63;
+            --text-muted: #788397;
+
+            --hover-bg: #FFF5E8;
+            --page-bg: #F6F8FB;
+
+            --white: #ffffff;
+            --border-color: #E1E6EF;
+
+            /* Layout */
+            --container-width: 1200px;
+            --header-height: 76px;
+
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+
+            /* Shadows */
+            --shadow-sm:
+                0 2px 10px rgba(41, 61, 99, 0.06);
+
+            --shadow-md:
+                0 8px 28px rgba(41, 61, 99, 0.10);
+
+            --shadow-orange:
+                0 6px 18px rgba(255, 160, 51, 0.20);
+
+            /* Transitions */
+            --transition: 0.2s ease;
+        }
+
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: var(--header-height);
+        }
+
+        body {
+            margin: 0;
+
+            font-family: "Inter", sans-serif;
+
+            background: var(--page-bg);
+            color: var(--text-dark);
+
+            line-height: 1.6;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+
+            transition:
+                color var(--transition),
+                background-color var(--transition),
+                border-color var(--transition);
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .site-main {
+            min-height: calc(100vh - var(--header-height));
+        }
+
+        /* Brand Selection */
+        ::selection {
+            background: var(--intela-orange);
+            color: var(--intela-blue-dark);
+        }
+
+        /* Accessible Keyboard Focus */
+        :focus-visible {
+            outline: 3px solid var(--intela-orange);
+            outline-offset: 3px;
+        }
+
+        /* Brand Utility Classes */
+        .text-primary {
+            color: var(--intela-blue);
+        }
+
+        .text-accent {
+            color: var(--intela-orange-dark);
+        }
+
+        .bg-primary {
+            background-color: var(--intela-blue);
+            color: var(--white);
+        }
+
+        .bg-accent {
+            background-color: var(--intela-orange);
+            color: var(--intela-blue-dark);
+        }
+
+        /* Responsive behavior remains unchanged */
+    </style>
+
+    {% block extra_css %}{% endblock %}
+
+</head>
+
+<body>
+
+    {% include "includes/header.html" %}
+
+    <main class="site-main">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    {% include "includes/footer.html" %}
+
+    {% block extra_js %}{% endblock %}
+
+</body>
+
+</html>

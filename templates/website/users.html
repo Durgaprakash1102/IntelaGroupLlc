@@ -1,0 +1,816 @@
+
+{% extends "includes/sidebar.html" %}
+{% load static %}
+
+{% block title %}User Management | Intela Group LLC{% endblock %}
+
+{% block content %}
+<style>
+:root {
+    --navy: #293D63;
+    --blue: #293D63;
+    --blue-dark: #1D2D4A;
+    --orange: #FFA033;
+    --text: #172033;
+    --muted: #788397;
+    --border: #E2E8F0;
+    --light: #F6F8FB;
+    --danger: #C0392B;
+    --success: #18A673;
+}
+
+.um-page {
+    padding: 28px 28px 48px;
+    max-width: 1400px;
+    margin: 0 auto;
+    overflow-x: hidden;
+}
+
+/* Toast notifications */
+.um-toasts {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: min(360px, calc(100% - 32px));
+    pointer-events: none;
+}
+
+.um-toast {
+    pointer-events: auto;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 12px 32px rgba(15, 45, 76, .14);
+    border-left: 4px solid var(--success);
+    animation: umIn .35s ease, umOut .4s ease 2.6s forwards;
+}
+
+.um-toast.error {
+    border-left-color: var(--danger);
+}
+
+.um-toast-body {
+    flex: 1;
+    display: flex;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.45;
+}
+
+.um-toast-body i {
+    margin-top: 2px;
+    color: var(--success);
+}
+
+.um-toast.error .um-toast-body i {
+    color: var(--danger);
+}
+
+.um-toast-close {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 18px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+}
+
+@keyframes umIn {
+    from { opacity: 0; transform: translateX(24px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes umOut {
+    to { opacity: 0; transform: translateX(24px); }
+}
+
+/* Header */
+.um-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.um-header-left h1 {
+    margin: 0 0 6px;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: -.5px;
+}
+
+.um-header-left p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.um-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: #8A5A15;
+    background: #FFF4E3;
+    border: 1px solid #FFE0B0;
+    border-radius: 30px;
+    padding: 6px 11px;
+    margin-bottom: 10px;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+}
+
+.um-btn-create {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 12px 19px;
+    border: none;
+    border-radius: 11px;
+    background: linear-gradient(135deg, var(--navy), #405985);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 800;
+    text-decoration: none;
+    box-shadow: 0 6px 18px rgba(41, 61, 99, .22);
+    transition: transform .2s, box-shadow .2s;
+    white-space: nowrap;
+}
+
+.um-btn-create:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(41, 61, 99, .3);
+    color: #fff;
+}
+
+/* Main card */
+.um-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 17px;
+    box-shadow: 0 8px 28px rgba(15, 45, 76, .055);
+    overflow: hidden;
+}
+
+.um-card-header {
+    padding: 19px 22px;
+    border-bottom: 1px solid var(--border);
+    border-top: 3px solid var(--orange);
+    background: linear-gradient(180deg, #FBFCFE 0%, #fff 100%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.um-card-header h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.um-card-header h2 i {
+    color: var(--orange);
+}
+
+.um-card-header p {
+    margin: 5px 0 0;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+/* Search */
+.um-search {
+    position: relative;
+    width: 280px;
+    max-width: 100%;
+}
+
+.um-search i {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 13px;
+    pointer-events: none;
+}
+
+.um-search input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 13px 11px 37px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-size: 13px;
+    font-family: inherit;
+    color: var(--text);
+    background: #fff;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+.um-search input:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(41, 61, 99, .11);
+}
+
+/* Table */
+.um-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.um-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+    min-width: 760px;
+}
+
+.um-table th,
+.um-table td {
+    padding: 15px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+.um-table th {
+    background: #F7F9FC;
+    color: #66748A;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .65px;
+    white-space: nowrap;
+}
+
+.um-table tbody tr {
+    transition: background .15s;
+}
+
+.um-table tbody tr:hover {
+    background: #FAFBFE;
+}
+
+.um-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.um-name {
+    font-weight: 800;
+    color: var(--navy);
+}
+
+.um-email {
+    color: #52627A;
+    word-break: break-word;
+}
+
+.um-username {
+    color: #52627A;
+    font-size: 12px;
+}
+
+/* Role badges */
+.um-role {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 6px 10px;
+    border-radius: 30px;
+    white-space: nowrap;
+}
+
+.um-role.super {
+    background: #F0EBFF;
+    color: #6546A5;
+    border: 1px solid #DDD2FF;
+}
+
+.um-role.admin {
+    background: #EAF0FA;
+    color: var(--navy);
+    border: 1px solid #D6E1F2;
+}
+
+.um-verified,
+.um-not-verified {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.um-verified {
+    color: #13835C;
+}
+
+.um-not-verified {
+    color: var(--danger);
+}
+
+/* Account status */
+.um-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 6px 10px;
+    border-radius: 30px;
+    white-space: nowrap;
+}
+
+.um-status.active {
+    background: #E8F8F0;
+    color: #0D7A4F;
+}
+
+.um-status.inactive {
+    background: #FFF0F0;
+    color: var(--danger);
+}
+
+.um-status::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+/* Action buttons */
+.um-btn {
+    border: none;
+    border-radius: 9px;
+    padding: 9px 12px;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s;
+    font-family: inherit;
+}
+
+.um-btn:hover {
+    transform: translateY(-1px);
+}
+
+.um-btn-sm {
+    padding: 8px 11px;
+    font-size: 11px;
+}
+
+.um-btn-activate {
+    background: #E8F8F0;
+    color: #0D7A4F;
+    border: 1px solid #C9EEDC;
+}
+
+.um-btn-activate:hover {
+    box-shadow: 0 4px 10px rgba(24, 166, 115, .12);
+}
+
+.um-btn-deactivate {
+    background: #FFF0F0;
+    color: var(--danger);
+    border: 1px solid #F6D5D5;
+}
+
+.um-btn-deactivate:hover {
+    box-shadow: 0 4px 10px rgba(192, 57, 43, .1);
+}
+
+.um-super-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    color: var(--navy);
+    background: var(--light);
+    padding: 8px 10px;
+    border-radius: 9px;
+    border: 1px solid var(--border);
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.um-super-label i {
+    color: #6546A5;
+}
+
+/* Empty states */
+.um-empty {
+    text-align: center;
+    padding: 58px 20px;
+    color: var(--muted);
+}
+
+.um-empty-icon {
+    width: 68px;
+    height: 68px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 17px;
+    background: #F0F3F8;
+    color: #7D8BA2;
+    font-size: 27px;
+}
+
+.um-empty h3 {
+    margin: 0 0 7px;
+    color: var(--navy);
+    font-size: 17px;
+}
+
+.um-empty p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.um-no-results {
+    display: none;
+    text-align: center;
+    padding: 28px;
+    color: var(--muted);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+}
+
+.um-table-footer {
+    padding: 13px 20px;
+    border-top: 1px solid var(--border);
+    background: #FBFCFE;
+    color: var(--muted);
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.um-footer-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.um-footer-brand i {
+    color: var(--orange);
+}
+
+@media (max-width: 700px) {
+    .um-page {
+        padding: 18px 14px 36px;
+    }
+
+    .um-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .um-header-left h1 {
+        font-size: 24px;
+    }
+
+    .um-btn-create {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .um-card-header {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 16px;
+    }
+
+    .um-search {
+        width: 100%;
+    }
+
+    .um-table th,
+    .um-table td {
+        padding: 12px;
+    }
+
+    .um-table-footer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+</style>
+
+<!-- Toast notifications -->
+<div class="um-toasts" id="umToasts" aria-live="polite">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="um-toast {% if 'error' in message.tags %}error{% endif %}">
+                <div class="um-toast-body">
+                    <i class="fa-solid {% if 'error' in message.tags %}fa-circle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+                    <span>{{ message }}</span>
+                </div>
+                <button type="button" class="um-toast-close" aria-label="Dismiss">×</button>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<div class="um-page">
+
+    <!-- Page header -->
+    <div class="um-header">
+        <div class="um-header-left">
+            <div class="um-eyebrow">
+                <i class="fa-solid fa-shield-halved"></i>
+                Administration
+            </div>
+            <h1>User Management</h1>
+            <p>Manage Intela Group LLC user accounts, access roles, verification and account status.</p>
+        </div>
+
+        <a href="{% url 'website:admin_signup' %}" class="um-btn-create">
+            <i class="fa-solid fa-user-plus"></i>
+            Create Admin / HR
+        </a>
+    </div>
+
+    <!-- All users -->
+    <section class="um-card">
+        <div class="um-card-header">
+            <div>
+                <h2>
+                    <i class="fa-solid fa-users"></i>
+                    All Users
+                </h2>
+                <p id="userCount">
+                    {{ users|length }} user{{ users|length|pluralize }}
+                </p>
+            </div>
+
+            <div class="um-search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input
+                    type="text"
+                    id="userSearch"
+                    placeholder="Search name, username, email..."
+                    autocomplete="off"
+                    aria-label="Search users"
+                >
+            </div>
+        </div>
+
+        {% if users %}
+            <div class="um-table-wrap">
+                <table class="um-table" id="userTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Role</th>
+                            <th>Verified</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for user in users %}
+                            <tr data-search="{{ user.get_full_name|lower }} {{ user.username|lower }} {{ user.email|lower }} {{ user.phone_number|default:''|lower }}">
+                                <td>
+                                    <span class="um-name">
+                                        {{ user.get_full_name|default:user.username }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="um-username">{{ user.username }}</span>
+                                </td>
+
+                                <td>
+                                    <span class="um-email">{{ user.email|default:"—" }}</span>
+                                </td>
+
+                                <td>{{ user.phone_number|default:"—" }}</td>
+
+                                <td>
+                                    {% if user.role == "SUPERUSER" or user.is_superuser %}
+                                        <span class="um-role super">
+                                            <i class="fa-solid fa-crown"></i>
+                                            Superuser
+                                        </span>
+                                    {% else %}
+                                        <span class="um-role admin">
+                                            <i class="fa-solid fa-user-gear"></i>
+                                            Admin / HR
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if user.email_verified %}
+                                        <span class="um-verified">
+                                            <i class="fa-solid fa-circle-check"></i>
+                                            Verified
+                                        </span>
+                                    {% else %}
+                                        <span class="um-not-verified">
+                                            <i class="fa-solid fa-circle-exclamation"></i>
+                                            Not Verified
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if user.is_active %}
+                                        <span class="um-status active">Active</span>
+                                    {% else %}
+                                        <span class="um-status inactive">Inactive</span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if user.is_superuser %}
+                                        <span class="um-super-label" title="Superuser accounts are protected">
+                                            <i class="fa-solid fa-shield-halved"></i>
+                                            Protected
+                                        </span>
+                                    {% else %}
+                                        <form
+                                            method="post"
+                                            action="{% url 'website:toggle_user_status' user.id %}"
+                                            class="um-status-form"
+                                            data-username="{{ user.username }}"
+                                            data-next-status="{% if user.is_active %}deactivate{% else %}activate{% endif %}"
+                                        >
+                                            {% csrf_token %}
+
+                                            {% if user.is_active %}
+                                                <button
+                                                    type="submit"
+                                                    class="um-btn um-btn-sm um-btn-deactivate"
+                                                    title="Deactivate {{ user.username }}"
+                                                >
+                                                    <i class="fa-solid fa-user-slash"></i>
+                                                    Deactivate
+                                                </button>
+                                            {% else %}
+                                                <button
+                                                    type="submit"
+                                                    class="um-btn um-btn-sm um-btn-activate"
+                                                    title="Activate {{ user.username }}"
+                                                >
+                                                    <i class="fa-solid fa-user-check"></i>
+                                                    Activate
+                                                </button>
+                                            {% endif %}
+                                        </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="um-no-results" id="userNoResults">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                No matching users found. Try another search.
+            </div>
+
+            <div class="um-table-footer">
+                <span id="visibleUserCount">
+                    Showing {{ users|length }} user{{ users|length|pluralize }}
+                </span>
+                <span class="um-footer-brand">
+                    <i class="fa-solid fa-lock"></i>
+                    User access management
+                </span>
+            </div>
+
+        {% else %}
+            <div class="um-empty">
+                <div class="um-empty-icon">
+                    <i class="fa-solid fa-users-slash"></i>
+                </div>
+                <h3>No users found</h3>
+                <p>Create an Admin / HR account using the button above.</p>
+            </div>
+        {% endif %}
+    </section>
+</div>
+
+<script>
+(function () {
+    // Dismissible toast notifications
+    document.querySelectorAll('.um-toast').forEach(function (toast) {
+        const closeBtn = toast.querySelector('.um-toast-close');
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function () {
+                toast.style.animation = 'umOut .3s ease forwards';
+                setTimeout(function () {
+                    toast.remove();
+                }, 300);
+            });
+        }
+
+        setTimeout(function () {
+            if (toast.parentNode) {
+                toast.remove();
+            }
+        }, 3000);
+    });
+
+    // User table search
+    const search = document.getElementById('userSearch');
+    const table = document.getElementById('userTable');
+    const noResults = document.getElementById('userNoResults');
+    const visibleUserCount = document.getElementById('visibleUserCount');
+
+    if (search && table) {
+        search.addEventListener('input', function () {
+            const query = this.value.trim().toLowerCase();
+            const rows = table.querySelectorAll('tbody tr');
+            let visible = 0;
+
+            rows.forEach(function (row) {
+                const text = row.getAttribute('data-search') || '';
+                const matches = text.includes(query);
+
+                row.style.display = matches ? '' : 'none';
+
+                if (matches) {
+                    visible++;
+                }
+            });
+
+            if (noResults) {
+                noResults.style.display =
+                    query && visible === 0 ? 'block' : 'none';
+            }
+
+            if (visibleUserCount) {
+                visibleUserCount.textContent =
+                    'Showing ' + visible + ' of ' + rows.length + ' users';
+            }
+        });
+    }
+
+    // Confirm account status changes
+    document.querySelectorAll('.um-status-form').forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            const username = form.dataset.username || 'this user';
+            const action = form.dataset.nextStatus || 'change the status';
+
+            const confirmed = window.confirm(
+                'Are you sure you want to ' + action +
+                ' the account for "' + username + '"?'
+            );
+
+            if (!confirmed) {
+                event.preventDefault();
+            }
+        });
+    });
+})();
+</script>
+{% endblock %}

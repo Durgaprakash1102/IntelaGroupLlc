@@ -1,0 +1,1175 @@
+
+{% extends "includes/sidebar.html" %}
+{% load static %}
+
+{% block title %}Job Management | Intela Group LLC{% endblock %}
+
+{% block content %}
+
+<style>
+:root {
+    --navy: #293D63;
+    --navy-dark: #1D2D4A;
+    --orange: #FFA033;
+    --orange-dark: #E88B20;
+    --text: #26344B;
+    --muted: #788397;
+    --border: #E2E8F0;
+    --light: #F6F8FB;
+    --danger: #C0392B;
+    --success: #16865D;
+}
+
+.jm-page {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 28px 32px 48px;
+    color: var(--text);
+    box-sizing: border-box;
+}
+
+/* Toast notifications */
+.jm-toasts {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: min(360px, calc(100% - 32px));
+    pointer-events: none;
+}
+
+.jm-toast {
+    pointer-events: auto;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--success);
+    border-radius: 12px;
+    box-shadow: 0 12px 32px rgba(29, 45, 74, .14);
+    animation: jmToastIn .3s ease;
+}
+
+.jm-toast.error {
+    border-left-color: var(--danger);
+}
+
+.jm-toast-body {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.jm-toast-body i {
+    margin-top: 2px;
+    color: var(--success);
+}
+
+.jm-toast.error .jm-toast-body i {
+    color: var(--danger);
+}
+
+.jm-toast-close {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+@keyframes jmToastIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes jmToastOut {
+    to { opacity: 0; transform: translateX(20px); }
+}
+
+/* Header */
+.jm-header {
+    margin-bottom: 25px;
+}
+
+.jm-header-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.jm-header h1 {
+    margin: 0 0 7px;
+    font-size: clamp(23px, 3vw, 30px);
+    font-weight: 800;
+    letter-spacing: -.7px;
+    color: var(--navy);
+}
+
+.jm-header p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.jm-header-accent {
+    width: 54px;
+    height: 4px;
+    margin-top: 15px;
+    border-radius: 5px;
+    background: linear-gradient(90deg, var(--navy), var(--orange));
+}
+
+/* Main form card */
+.jm-form-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 17px;
+    box-shadow: 0 8px 28px rgba(29, 45, 74, .055);
+    margin-bottom: 34px;
+    overflow: hidden;
+}
+
+.jm-card-header {
+    padding: 19px 23px;
+    border-top: 4px solid var(--orange);
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(115deg, #F6F8FB 0%, #fff 78%);
+}
+
+.jm-card-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 5px;
+    color: var(--navy);
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.jm-card-header h2 i {
+    color: var(--orange-dark);
+}
+
+.jm-card-header p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.jm-form-body {
+    padding: 24px;
+}
+
+.jm-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 19px 22px;
+}
+
+.jm-field {
+    min-width: 0;
+}
+
+.jm-field.full {
+    grid-column: 1 / -1;
+}
+
+.jm-field label {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--navy);
+    font-size: 12px;
+    font-weight: 750;
+}
+
+.jm-required {
+    color: var(--orange-dark);
+}
+
+.jm-field input,
+.jm-field select,
+.jm-field textarea {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 12px 13px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    background: #fff;
+    color: var(--text);
+    font: inherit;
+    font-size: 13px;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+.jm-field input:focus,
+.jm-field select:focus,
+.jm-field textarea:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(41, 61, 99, .11);
+}
+
+.jm-field textarea {
+    min-height: 110px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+.jm-field input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    accent-color: var(--navy);
+    cursor: pointer;
+}
+
+.jm-field input[type="file"] {
+    padding: 9px;
+}
+
+.jm-field .helptext {
+    display: block;
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.jm-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-height: 43px;
+    box-sizing: border-box;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--light);
+}
+
+.jm-checkbox input {
+    flex-shrink: 0;
+    margin: 0;
+}
+
+.jm-checkbox label {
+    margin: 0;
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 650;
+    cursor: pointer;
+}
+
+.jm-field .errorlist,
+.jm-form-body .errorlist {
+    list-style: none;
+    margin: 6px 0 0;
+    padding: 0;
+    color: var(--danger);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.jm-form-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 23px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+}
+
+.jm-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 12px 21px;
+    border: 0;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--navy), var(--navy-dark));
+    color: #fff;
+    font-size: 13px;
+    font-weight: 750;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(41, 61, 99, .2);
+    transition: transform .2s, box-shadow .2s;
+}
+
+.jm-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 9px 20px rgba(41, 61, 99, .25);
+}
+
+.jm-btn-primary i {
+    color: var(--orange);
+}
+
+.jm-cancel {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 11px 14px;
+    border-radius: 9px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 650;
+    text-decoration: none;
+}
+
+.jm-cancel:hover {
+    background: var(--light);
+    color: var(--navy);
+}
+
+/* Jobs section header */
+.jm-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 19px;
+    flex-wrap: wrap;
+}
+
+.jm-section-heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.jm-section-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #FFF1DF;
+    color: var(--orange-dark);
+}
+
+.jm-section-heading h2 {
+    margin: 0;
+    color: var(--navy);
+    font-size: 19px;
+    font-weight: 800;
+}
+
+.jm-section-heading p {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.jm-section-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.jm-count {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    background: var(--light);
+    color: var(--navy);
+    font-size: 12px;
+    font-weight: 750;
+    white-space: nowrap;
+}
+
+.jm-search-wrap {
+    position: relative;
+    width: 260px;
+}
+
+.jm-search-wrap i {
+    position: absolute;
+    top: 50%;
+    left: 13px;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 13px;
+    pointer-events: none;
+}
+
+.jm-search-wrap input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 13px 11px 38px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    background: #fff;
+    color: var(--text);
+    font: inherit;
+    font-size: 13px;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+.jm-search-wrap input:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(41, 61, 99, .1);
+}
+
+/* Job cards */
+.jm-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+    align-items: stretch;
+    gap: 19px;
+}
+
+.jm-job-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(29, 45, 74, .045);
+    transition: transform .23s ease, box-shadow .23s ease, border-color .23s ease;
+}
+
+.jm-job-card:hover {
+    transform: translateY(-3px);
+    border-color: #D3DCE9;
+    box-shadow: 0 13px 30px rgba(29, 45, 74, .1);
+}
+
+.jm-job-card-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 20px 19px 16px;
+}
+
+.jm-job-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 13px;
+}
+
+.jm-job-title-wrap {
+    min-width: 0;
+}
+
+.jm-job-card-body h3 {
+    margin: 0;
+    color: var(--navy);
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+.jm-job-label {
+    display: inline-block;
+    margin-top: 7px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.jm-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    padding: 5px 10px;
+    border-radius: 30px;
+    font-size: 10px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.jm-status::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.jm-status.active {
+    background: #E8F8F0;
+    color: #0D7A4F;
+}
+
+.jm-status.inactive {
+    background: #F0F2F5;
+    color: #6C757D;
+}
+
+.jm-job-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px 13px;
+    margin-bottom: 15px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.jm-job-meta span {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 6px;
+    overflow-wrap: anywhere;
+}
+
+.jm-job-meta i {
+    margin-top: 2px;
+    color: var(--navy);
+}
+
+.jm-job-desc {
+    display: -webkit-box;
+    flex: 1;
+    overflow: hidden;
+    margin: 0 0 16px;
+    color: #59677B;
+    font-size: 13px;
+    line-height: 1.65;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.jm-job-extra {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin: 0 0 15px;
+}
+
+.jm-job-extra span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 9px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--light);
+    color: var(--text);
+    font-size: 11px;
+    font-weight: 650;
+}
+
+.jm-job-extra i {
+    color: var(--orange-dark);
+}
+
+/* Card action buttons */
+.jm-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+}
+
+.jm-card-actions form {
+    display: inline-flex;
+    margin: 0;
+}
+
+.jm-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 10px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font: inherit;
+    font-size: 11px;
+    font-weight: 750;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform .15s, background .2s;
+}
+
+.jm-btn:hover {
+    transform: translateY(-1px);
+}
+
+.jm-btn.edit {
+    background: #EEF2F8;
+    color: var(--navy);
+}
+
+.jm-btn.edit:hover {
+    background: #DFE7F2;
+}
+
+.jm-btn.applicants {
+    background: #FFF1DF;
+    color: #91520A;
+}
+
+.jm-btn.applicants:hover {
+    background: #FFE5C2;
+}
+
+.jm-btn.activate {
+    background: #E8F8F0;
+    color: #0D7A4F;
+}
+
+.jm-btn.deactivate {
+    background: #FFF4E5;
+    color: #945500;
+}
+
+.jm-btn.delete {
+    background: #FFF0F0;
+    color: var(--danger);
+}
+
+.jm-btn.delete:hover {
+    background: #FFE0E0;
+}
+
+/* Empty and search states */
+.jm-empty,
+.jm-no-results {
+    grid-column: 1 / -1;
+    padding: 52px 20px;
+    border: 1px dashed #D7DFEA;
+    border-radius: 16px;
+    background: #fff;
+    text-align: center;
+    color: var(--muted);
+}
+
+.jm-empty i,
+.jm-no-results i {
+    display: block;
+    margin-bottom: 14px;
+    color: #AAB6C7;
+    font-size: 38px;
+}
+
+.jm-empty h3,
+.jm-no-results h3 {
+    margin: 0 0 7px;
+    color: var(--navy);
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.jm-empty p,
+.jm-no-results p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.jm-no-results {
+    display: none;
+}
+
+@media (max-width: 850px) {
+    .jm-page {
+        padding: 23px 20px 36px;
+    }
+
+    .jm-search-wrap {
+        width: 220px;
+    }
+}
+
+@media (max-width: 650px) {
+    .jm-page {
+        padding: 20px 14px 30px;
+    }
+
+    .jm-form-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .jm-field.full {
+        grid-column: auto;
+    }
+
+    .jm-form-body {
+        padding: 17px;
+    }
+
+    .jm-card-header {
+        padding: 16px 18px;
+    }
+
+    .jm-section-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .jm-section-right {
+        width: 100%;
+        align-items: stretch;
+    }
+
+    .jm-search-wrap {
+        flex: 1;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .jm-cards-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .jm-job-top {
+        flex-wrap: wrap;
+    }
+
+    .jm-card-actions {
+        gap: 8px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .jm-job-card,
+    .jm-btn,
+    .jm-btn-primary,
+    .jm-toast {
+        animation: none;
+        transition: none;
+    }
+}
+</style>
+
+<!-- Toast notifications -->
+<div class="jm-toasts" id="jmToasts" aria-live="polite">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="jm-toast {% if 'error' in message.tags %}error{% endif %}">
+                <div class="jm-toast-body">
+                    <i class="fa-solid {% if 'error' in message.tags %}fa-circle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+                    <span>{{ message }}</span>
+                </div>
+                <button type="button" class="jm-toast-close" aria-label="Dismiss notification">&times;</button>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<main class="jm-page">
+
+    <!-- Page header -->
+    <header class="jm-header">
+        <div class="jm-header-top">
+            <div>
+                <h1>Job Management</h1>
+                <p>Create, update, publish and manage Intela Group LLC job postings.</p>
+                <div class="jm-header-accent"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Create / update job form -->
+    <section class="jm-form-card">
+        <div class="jm-card-header">
+            <h2>
+                <i class="fa-solid {% if editing_job %}fa-pen-to-square{% else %}fa-circle-plus{% endif %}"></i>
+                {% if editing_job %}Edit Job{% else %}Create New Job{% endif %}
+            </h2>
+
+            <p>
+                {% if editing_job %}
+                    Update the selected job posting and save your changes.
+                {% else %}
+                    Add a new career opportunity to your job listings.
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="jm-form-body">
+            <form method="post">
+                {% csrf_token %}
+
+                {% if editing_job %}
+                    <input type="hidden" name="job_id" value="{{ editing_job.id }}">
+                    <input type="hidden" name="action" value="update_job">
+                {% else %}
+                    <input type="hidden" name="action" value="create_job">
+                {% endif %}
+
+                {{ form.non_field_errors }}
+
+                <div class="jm-form-grid">
+
+                    <div class="jm-field">
+                        <label for="{{ form.title.id_for_label }}">
+                            Job Title <span class="jm-required">*</span>
+                        </label>
+                        {{ form.title }}
+                        {{ form.title.errors }}
+                    </div>
+
+                    <div class="jm-field">
+                        <label for="{{ form.department.id_for_label }}">Department</label>
+                        {{ form.department }}
+                        {{ form.department.errors }}
+                    </div>
+
+                    <div class="jm-field">
+                        <label for="{{ form.location.id_for_label }}">Location</label>
+                        {{ form.location }}
+                        {{ form.location.errors }}
+                    </div>
+
+                    <div class="jm-field">
+                        <label for="{{ form.employment_type.id_for_label }}">
+                            Employment Type <span class="jm-required">*</span>
+                        </label>
+                        {{ form.employment_type }}
+                        {{ form.employment_type.errors }}
+                    </div>
+
+                    <div class="jm-field">
+                        <label for="{{ form.experience.id_for_label }}">Experience</label>
+                        {{ form.experience }}
+                        {{ form.experience.errors }}
+                    </div>
+
+                    <div class="jm-field">
+                        <label for="{{ form.salary.id_for_label }}">Salary</label>
+                        {{ form.salary }}
+                        {{ form.salary.errors }}
+                    </div>
+
+                    <div class="jm-field full">
+                        <label for="{{ form.short_description.id_for_label }}">
+                            Short Description <span class="jm-required">*</span>
+                        </label>
+                        {{ form.short_description }}
+                        {{ form.short_description.errors }}
+                    </div>
+
+                    <div class="jm-field full">
+                        <label for="{{ form.description.id_for_label }}">
+                            Job Description <span class="jm-required">*</span>
+                        </label>
+                        {{ form.description }}
+                        {{ form.description.errors }}
+                    </div>
+
+                    <div class="jm-field full">
+                        <label for="{{ form.responsibilities.id_for_label }}">Responsibilities</label>
+                        {{ form.responsibilities }}
+                        {{ form.responsibilities.errors }}
+                    </div>
+
+                    <div class="jm-field full">
+                        <label for="{{ form.requirements.id_for_label }}">Requirements</label>
+                        {{ form.requirements }}
+                        {{ form.requirements.errors }}
+                    </div>
+
+                    <div class="jm-field">
+                        <label for="{{ form.deadline.id_for_label }}">Application Deadline</label>
+                        {{ form.deadline }}
+                        {{ form.deadline.errors }}
+                    </div>
+
+                    <div class="jm-field">
+                        <label>Job Status</label>
+                        <div class="jm-checkbox">
+                            {{ form.is_active }}
+                            <label for="{{ form.is_active.id_for_label }}">Publish this job</label>
+                        </div>
+                        {{ form.is_active.errors }}
+                    </div>
+
+                </div>
+
+                <div class="jm-form-actions">
+                    <button type="submit" class="jm-btn-primary">
+                        <i class="fa-solid {% if editing_job %}fa-floppy-disk{% else %}fa-plus{% endif %}"></i>
+                        {% if editing_job %}Update Job{% else %}Create Job{% endif %}
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+
+                    {% if editing_job %}
+                        <a href="{% url 'website:manage_jobs' %}" class="jm-cancel">
+                            <i class="fa-solid fa-xmark"></i>
+                            Cancel Edit
+                        </a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Existing jobs -->
+    <section class="jm-jobs-section">
+        <div class="jm-section-header">
+            <div class="jm-section-heading">
+                <div class="jm-section-icon">
+                    <i class="fa-solid fa-briefcase"></i>
+                </div>
+                <div>
+                    <h2>Existing Jobs</h2>
+                    <p>Manage your published and unpublished opportunities.</p>
+                </div>
+            </div>
+
+            <div class="jm-section-right">
+                <span class="jm-count">
+                    <i class="fa-solid fa-layer-group"></i>
+                    {{ jobs|length }} job{{ jobs|length|pluralize }}
+                </span>
+
+                <div class="jm-search-wrap">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input
+                        type="text"
+                        id="jobSearch"
+                        placeholder="Search jobs..."
+                        autocomplete="off"
+                        aria-label="Search jobs">
+                </div>
+            </div>
+        </div>
+
+        <div class="jm-cards-grid" id="jobList">
+
+            {% if jobs %}
+                {% for job in jobs %}
+                    <article
+                        class="jm-job-card"
+                        data-title="{{ job.title|lower }}"
+                        data-desc="{{ job.short_description|default:''|lower }}"
+                        data-dept="{{ job.department|default:''|lower }}"
+                        data-loc="{{ job.location|default:''|lower }}"
+                        data-type="{{ job.get_employment_type_display|default:''|lower }}"
+                        data-exp="{{ job.experience|default:''|lower }}">
+
+                        <div class="jm-job-card-body">
+
+                            <div class="jm-job-top">
+                                <div class="jm-job-title-wrap">
+                                    <h3>{{ job.title }}</h3>
+                                    <span class="jm-job-label">Intela Group LLC</span>
+                                </div>
+
+                                {% if job.is_active %}
+                                    <span class="jm-status active">Active</span>
+                                {% else %}
+                                    <span class="jm-status inactive">Inactive</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="jm-job-meta">
+                                {% if job.department %}
+                                    <span>
+                                        <i class="fa-solid fa-building"></i>
+                                        {{ job.department }}
+                                    </span>
+                                {% endif %}
+
+                                {% if job.location %}
+                                    <span>
+                                        <i class="fa-solid fa-location-dot"></i>
+                                        {{ job.location }}
+                                    </span>
+                                {% endif %}
+
+                                <span>
+                                    <i class="fa-solid fa-clock"></i>
+                                    {{ job.get_employment_type_display }}
+                                </span>
+
+                                {% if job.experience %}
+                                    <span>
+                                        <i class="fa-solid fa-chart-line"></i>
+                                        {{ job.experience }}
+                                    </span>
+                                {% endif %}
+                            </div>
+
+                            {% if job.short_description %}
+                                <p class="jm-job-desc">{{ job.short_description }}</p>
+                            {% else %}
+                                <p class="jm-job-desc">No short description provided for this position.</p>
+                            {% endif %}
+
+                            <div class="jm-job-extra">
+                                {% if job.salary %}
+                                    <span>
+                                        <i class="fa-solid fa-wallet"></i>
+                                        {{ job.salary }}
+                                    </span>
+                                {% endif %}
+
+                                {% if job.deadline %}
+                                    <span>
+                                        <i class="fa-regular fa-calendar"></i>
+                                        Deadline: {{ job.deadline|date:"M d, Y" }}
+                                    </span>
+                                {% endif %}
+                            </div>
+
+                            <div class="jm-card-actions">
+
+                                <a href="?edit={{ job.id }}" class="jm-btn edit">
+                                    <i class="fa-solid fa-pen"></i>
+                                    Edit
+                                </a>
+
+                                <a
+                                    href="{% url 'website:manage_career_applicants' %}?job={{ job.id }}"
+                                    class="jm-btn applicants">
+                                    <i class="fa-solid fa-users"></i>
+                                    Applicants
+                                </a>
+
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="toggle_job">
+                                    <input type="hidden" name="job_id" value="{{ job.id }}">
+
+                                    <button
+                                        type="submit"
+                                        class="jm-btn {% if job.is_active %}deactivate{% else %}activate{% endif %}">
+                                        {% if job.is_active %}
+                                            <i class="fa-solid fa-pause"></i>
+                                            Deactivate
+                                        {% else %}
+                                            <i class="fa-solid fa-play"></i>
+                                            Activate
+                                        {% endif %}
+                                    </button>
+                                </form>
+
+                                <form
+                                    method="post"
+                                    onsubmit="return confirm('Are you sure you want to delete this job? All applications for this job may also be deleted.');">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="delete_job">
+                                    <input type="hidden" name="job_id" value="{{ job.id }}">
+
+                                    <button type="submit" class="jm-btn delete">
+                                        <i class="fa-solid fa-trash"></i>
+                                        Delete
+                                    </button>
+                                </form>
+
+                            </div>
+                        </div>
+                    </article>
+                {% endfor %}
+
+                <div class="jm-no-results" id="noResults">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <h3>No matching jobs</h3>
+                    <p>Try another job title, department, location or employment type.</p>
+                </div>
+
+            {% else %}
+                <div class="jm-empty">
+                    <i class="fa-solid fa-folder-open"></i>
+                    <h3>No job postings yet</h3>
+                    <p>Create your first job using the form above.</p>
+                </div>
+            {% endif %}
+
+        </div>
+    </section>
+</main>
+
+<script>
+(function () {
+    /* Toast notifications */
+    document.querySelectorAll('.jm-toast').forEach(function (toast) {
+        const closeButton = toast.querySelector('.jm-toast-close');
+        let dismissed = false;
+
+        function dismissToast() {
+            if (dismissed) return;
+            dismissed = true;
+
+            toast.style.animation = 'jmToastOut .3s ease forwards';
+
+            setTimeout(function () {
+                if (toast.parentNode) {
+                    toast.remove();
+                }
+            }, 300);
+        }
+
+        if (closeButton) {
+            closeButton.addEventListener('click', dismissToast);
+        }
+
+        setTimeout(dismissToast, 3500);
+    });
+
+    /* Live job search */
+    const searchInput = document.getElementById('jobSearch');
+    const cards = document.querySelectorAll('.jm-job-card');
+    const noResults = document.getElementById('noResults');
+
+    if (!searchInput) return;
+
+    searchInput.addEventListener('input', function () {
+        const query = this.value.trim().toLowerCase();
+        let visibleCount = 0;
+
+        cards.forEach(function (card) {
+            const searchableFields = [
+                card.getAttribute('data-title') || '',
+                card.getAttribute('data-desc') || '',
+                card.getAttribute('data-dept') || '',
+                card.getAttribute('data-loc') || '',
+                card.getAttribute('data-type') || '',
+                card.getAttribute('data-exp') || ''
+            ];
+
+            const matches = searchableFields.some(function (field) {
+                return field.includes(query);
+            });
+
+            card.style.display = matches ? '' : 'none';
+
+            if (matches) {
+                visibleCount++;
+            }
+        });
+
+        if (noResults) {
+            noResults.style.display =
+                query !== '' && visibleCount === 0 ? 'block' : 'none';
+        }
+    });
+})();
+</script>
+
+{% endblock %}

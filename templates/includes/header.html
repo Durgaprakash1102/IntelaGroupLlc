@@ -1,0 +1,1493 @@
+
+{% load static %}
+
+<style>
+    :root {
+        --intela-navy: #293D63;
+        --intela-dark-navy: #1D2D4A;
+        --intela-orange: #FFA033;
+        --intela-orange-dark: #E88B20;
+        --intela-pale-orange: #FFF4E5;
+        --intela-border: #E8EDF4;
+        --intela-muted: #788397;
+    }
+
+    /* ================= TOP CONTACT BAR ================= */
+
+    .intela-topbar {
+        width: 100%;
+        background: var(--intela-dark-navy);
+        color: #FFFFFF;
+        position: relative;
+        z-index: 1002;
+    }
+
+    .intela-topbar-inner {
+        width: 100%;
+        max-width: 1440px;
+        min-height: 42px;
+        margin: 0 auto;
+        padding: 8px 5%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+    }
+
+    .intela-topbar-brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        color: #FFFFFF;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .intela-topbar-brand i,
+    .intela-topbar-link i {
+        color: var(--intela-orange);
+        flex-shrink: 0;
+    }
+
+    .intela-topbar-brand i {
+        font-size: 13px;
+    }
+
+    .intela-topbar-contacts {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 18px;
+        flex-wrap: nowrap;
+    }
+
+    .intela-topbar-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: #FFFFFF;
+        text-decoration: none;
+        font-size: 12px;
+        white-space: nowrap;
+        transition: color 0.2s ease;
+    }
+
+    .intela-topbar-link i {
+        font-size: 12px;
+    }
+
+    .intela-topbar-link:hover {
+        color: var(--intela-orange);
+    }
+
+    /* ================= MAIN HEADER ================= */
+
+    .intela-main-header {
+        position: sticky;
+        top: 0;
+        z-index: 1001;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.98);
+        border-bottom: 1px solid rgba(41, 61, 99, 0.09);
+        box-shadow: 0 4px 18px rgba(29, 45, 74, 0.04);
+        backdrop-filter: blur(12px);
+    }
+
+    .intela-header-inner {
+        width: 100%;
+        max-width: 1440px;
+        min-height: 96px;
+        margin: 0 auto;
+        padding: 10px 5%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 24px;
+    }
+
+    /* ================= LOGO ================= */
+
+    .intela-logo {
+        display: inline-flex;
+        align-items: center;
+        flex-shrink: 0;
+        text-decoration: none;
+    }
+
+    .intela-logo img {
+        display: block;
+        width: 260px;
+        max-width: 100%;
+        height: 76px;
+        object-fit: contain;
+        object-position: left center;
+        transition: transform 0.25s ease;
+    }
+
+    .intela-logo:hover img {
+        transform: scale(1.025);
+    }
+
+    /* ================= DESKTOP NAVIGATION ================= */
+
+    .intela-desktop-nav {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 24px;
+        margin-left: auto;
+    }
+
+    .intela-nav-link {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 0;
+        color: var(--intela-navy);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        white-space: nowrap;
+        transition: color 0.25s ease;
+    }
+
+    .intela-nav-link::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 4px;
+        width: 0;
+        height: 2px;
+        background: var(--intela-orange);
+        border-radius: 3px;
+        transition: width 0.25s ease;
+    }
+
+    .intela-nav-link:hover,
+    .intela-nav-link:focus-visible {
+        color: var(--intela-orange-dark);
+    }
+
+    .intela-nav-link:hover::after,
+    .intela-nav-link:focus-visible::after {
+        width: 100%;
+    }
+
+    .intela-nav-link > i {
+        color: var(--intela-orange-dark);
+        font-size: 13px;
+        transition: transform 0.25s ease, color 0.25s ease;
+    }
+
+    .intela-nav-link:hover > i {
+        color: var(--intela-navy);
+        transform: translateY(-2px);
+    }
+
+    /* ================= SERVICES DROPDOWN ================= */
+
+    .intela-services-dropdown {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .intela-services-trigger {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .intela-dropdown-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 24px;
+        width: 24px;
+        height: 36px;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: var(--intela-navy);
+        cursor: pointer;
+        transition: color 0.25s ease;
+    }
+
+    .intela-dropdown-toggle i {
+        font-size: 11px;
+        transition: transform 0.25s ease;
+    }
+
+    .intela-services-dropdown:hover .intela-dropdown-toggle,
+    .intela-services-dropdown.is-open .intela-dropdown-toggle {
+        color: var(--intela-orange-dark);
+    }
+
+    .intela-services-dropdown.is-open
+    .intela-dropdown-toggle i {
+        transform: rotate(180deg);
+    }
+
+    .intela-dropdown-panel {
+        position: absolute;
+        top: 100%;
+        left: -12px;
+        z-index: 1005;
+        display: none;
+        width: max-content;
+        min-width: 230px;
+        max-width: min(360px, 90vw);
+        padding: 7px;
+        background: #FFFFFF;
+        border: 1px solid var(--intela-border);
+        border-radius: 12px;
+        box-shadow: 0 16px 38px rgba(29, 45, 74, 0.15);
+        animation: intelaDropdownIn 0.2s ease both;
+    }
+
+    .intela-services-dropdown:hover .intela-dropdown-panel,
+    .intela-services-dropdown:focus-within .intela-dropdown-panel,
+    .intela-services-dropdown.is-open .intela-dropdown-panel {
+        display: block;
+    }
+
+    .intela-dropdown-panel::before {
+        content: "";
+        position: absolute;
+        top: -9px;
+        left: 0;
+        right: 0;
+        height: 9px;
+    }
+
+    .intela-service-item {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        padding: 10px 11px;
+        border-radius: 8px;
+        color: var(--intela-navy);
+        text-decoration: none;
+        white-space: normal;
+        transition: background 0.2s ease, color 0.2s ease,
+                    transform 0.2s ease;
+    }
+
+    .intela-service-item:hover {
+        background: var(--intela-pale-orange);
+        color: var(--intela-orange-dark);
+        transform: translateX(3px);
+    }
+
+    .intela-service-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 34px;
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        background: #F0F3F8;
+        color: var(--intela-navy);
+        font-size: 15px;
+        transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .intela-service-item:hover .intela-service-icon {
+        background: var(--intela-orange);
+        color: #FFFFFF;
+    }
+
+    .intela-service-name {
+        flex: 1;
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1.5;
+    }
+
+    .intela-service-arrow {
+        flex: 0 0 auto;
+        font-size: 10px;
+        opacity: 0;
+        transform: translateX(-4px);
+        transition: all 0.2s ease;
+    }
+
+    .intela-service-item:hover .intela-service-arrow {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .intela-no-services {
+        display: block;
+        padding: 12px;
+        color: var(--intela-muted);
+        font-size: 13px;
+    }
+
+    @keyframes intelaDropdownIn {
+        from {
+            opacity: 0;
+            transform: translateY(6px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ================= MOBILE MENU BUTTON ================= */
+
+    .intela-mobile-toggle {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        border: 1px solid var(--intela-border);
+        border-radius: 8px;
+        background: #FFFFFF;
+        color: var(--intela-navy);
+        cursor: pointer;
+        transition: color 0.2s ease, border-color 0.2s ease,
+                    background 0.2s ease;
+    }
+
+    .intela-mobile-toggle:hover {
+        color: var(--intela-orange-dark);
+        border-color: var(--intela-orange);
+        background: var(--intela-pale-orange);
+    }
+
+    .intela-mobile-toggle i {
+        font-size: 19px;
+    }
+
+    /* ================= MOBILE NAVIGATION ================= */
+
+    .intela-mobile-nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 1004;
+        max-height: calc(100vh - 100px);
+        overflow-y: auto;
+        padding: 12px 5% 20px;
+        background: #FFFFFF;
+        border-top: 1px solid var(--intela-border);
+        box-shadow: 0 15px 25px rgba(29, 45, 74, 0.12);
+    }
+
+    .intela-mobile-nav.is-open {
+        display: block;
+        animation: intelaDropdownIn 0.2s ease both;
+    }
+
+    .intela-mobile-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        min-height: 46px;
+        padding: 12px 10px;
+        border-bottom: 1px solid #F0F2F6;
+        color: var(--intela-navy);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        transition: color 0.2s ease, background 0.2s ease;
+    }
+
+    .intela-mobile-link:hover {
+        color: var(--intela-orange-dark);
+        background: #FFFAF3;
+    }
+
+    .intela-mobile-link > span {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .intela-mobile-link > span > i {
+        width: 18px;
+        color: var(--intela-orange-dark);
+        text-align: center;
+    }
+
+    .intela-mobile-services-row {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #F0F2F6;
+    }
+
+    .intela-mobile-services-row > .intela-mobile-link {
+        flex: 1;
+        border-bottom: 0;
+    }
+
+    .intela-mobile-service-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 42px;
+        width: 42px;
+        height: 42px;
+        border: 0;
+        border-radius: 7px;
+        background: transparent;
+        color: var(--intela-navy);
+        cursor: pointer;
+    }
+
+    .intela-mobile-service-toggle:hover {
+        background: var(--intela-pale-orange);
+        color: var(--intela-orange-dark);
+    }
+
+    .intela-mobile-service-toggle i {
+        font-size: 12px;
+        transition: transform 0.25s ease;
+    }
+
+    .intela-mobile-services-row.is-open
+    .intela-mobile-service-toggle i {
+        transform: rotate(180deg);
+    }
+
+    .intela-mobile-submenu {
+        display: none;
+        padding: 5px 0 8px 12px;
+        background: #FAFBFD;
+    }
+
+    .intela-mobile-services-row.is-open
+    + .intela-mobile-submenu {
+        display: block;
+    }
+
+    .intela-mobile-submenu .intela-mobile-link {
+        min-height: 42px;
+        padding-left: 13px;
+        font-size: 13px;
+        font-weight: 500;
+        border-bottom: 0;
+    }
+
+    .intela-mobile-submenu .intela-mobile-link > i {
+        width: 19px;
+        color: var(--intela-orange-dark);
+        text-align: center;
+    }
+
+    /* ================= RESPONSIVE ================= */
+
+    @media (max-width: 1200px) {
+        .intela-header-inner {
+            gap: 18px;
+        }
+
+        .intela-logo img {
+            width: 220px;
+            height: 68px;
+        }
+
+        .intela-desktop-nav {
+            gap: 17px;
+        }
+
+        .intela-nav-link {
+            font-size: 13px;
+        }
+    }
+
+    @media (max-width: 1000px) {
+        .intela-desktop-nav {
+            gap: 13px;
+        }
+
+        .intela-logo img {
+            width: 195px;
+            height: 62px;
+        }
+
+        .intela-nav-link {
+            gap: 6px;
+            font-size: 12px;
+        }
+    }
+
+    @media (max-width: 900px) {
+        .intela-header-inner {
+            min-height: 82px;
+        }
+
+        .intela-desktop-nav {
+            display: none;
+        }
+
+        .intela-mobile-toggle {
+            display: inline-flex;
+            margin-left: auto;
+        }
+
+        .intela-logo img {
+            width: 220px;
+            height: 65px;
+        }
+    }
+
+    /* Keep topbar in one horizontal row on mobile */
+    @media (max-width: 600px) {
+        .intela-topbar-inner {
+            min-height: 36px;
+            padding: 8px 10px;
+            flex-direction: row;
+            justify-content: space-between;
+            flex-wrap: nowrap;
+            gap: 8px;
+        }
+
+        .intela-topbar-brand {
+            flex: 0 1 auto;
+            min-width: 0;
+            gap: 5px;
+            font-size: 10px;
+            letter-spacing: 0;
+        }
+
+        .intela-topbar-brand i {
+            flex-shrink: 0;
+            font-size: 11px;
+        }
+
+        .intela-topbar-brand span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .intela-topbar-contacts {
+            flex: 0 0 auto;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .intela-topbar-link {
+            gap: 4px;
+            font-size: 10px;
+        }
+
+        .intela-topbar-link i {
+            font-size: 11px;
+        }
+
+        .intela-header-inner {
+            min-height: 74px;
+            padding: 8px 5%;
+            gap: 10px;
+        }
+
+        .intela-logo img {
+            width: 190px;
+            height: 57px;
+        }
+
+        .intela-mobile-toggle {
+            flex: 0 0 42px;
+            width: 42px;
+            height: 42px;
+        }
+
+        .intela-mobile-nav {
+            padding-left: 5%;
+            padding-right: 5%;
+        }
+    }
+
+    /* Small phones: retain only the building icon and contact links */
+    @media (max-width: 420px) {
+        .intela-topbar-inner {
+            padding: 8px;
+            gap: 8px;
+        }
+
+        .intela-topbar-brand {
+            flex: 0 0 auto;
+            font-size: 0;
+        }
+
+        .intela-topbar-brand span {
+            display: none;
+        }
+
+        .intela-topbar-brand i {
+            font-size: 13px;
+        }
+
+        .intela-topbar-contacts {
+            margin-left: auto;
+            gap: 12px;
+        }
+
+        .intela-topbar-link {
+            font-size: 10px;
+        }
+    }
+
+    /* Very small phones: hide phone and email completely */
+    @media (max-width: 350px) {
+        .intela-topbar-contacts {
+            display: none;
+        }
+
+        .intela-topbar-inner {
+            justify-content: flex-start;
+            min-height: 34px;
+            padding: 8px 12px;
+        }
+
+        .intela-topbar-brand {
+            font-size: 10px;
+            gap: 7px;
+        }
+
+        .intela-topbar-brand span {
+            display: inline;
+        }
+
+        .intela-topbar-brand i {
+            font-size: 12px;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .intela-main-header *,
+        .intela-topbar *,
+        .intela-mobile-nav * {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+    /* Hide company name AND building icon on very small screens */
+@media (max-width: 420px) {
+    .intela-topbar-brand {
+        display: none !important;
+    }
+}
+
+/* Hide phone and email on extra-small screens */
+@media (max-width: 350px) {
+    .intela-topbar-contacts {
+        display: none !important;
+    }
+}
+
+/* ==========================================
+   FIX: SCROLLABLE DESKTOP SERVICES DROPDOWN
+========================================== */
+
+.intela-dropdown-panel {
+    width: 580px;
+    min-width: 0;
+    max-width: min(580px, calc(100vw - 30px));
+
+    /* Keep the dropdown within the visible screen */
+    max-height: calc(100vh - 125px);
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    /* Keep existing styling */
+    padding: 8px;
+    background: #FFFFFF;
+    border: 1px solid #E8EDF4;
+    border-radius: 14px;
+    box-shadow: 0 16px 38px rgba(29, 45, 74, 0.15);
+
+    /* Smooth scrolling */
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #FFA033 #F0F3F8;
+}
+
+/* Chrome, Edge and Safari scrollbar */
+.intela-dropdown-panel::-webkit-scrollbar {
+    width: 7px;
+}
+
+.intela-dropdown-panel::-webkit-scrollbar-track {
+    background: #F0F3F8;
+    border-radius: 10px;
+}
+
+.intela-dropdown-panel::-webkit-scrollbar-thumb {
+    background: #FFA033;
+    border-radius: 10px;
+}
+
+.intela-dropdown-panel::-webkit-scrollbar-thumb:hover {
+    background: #E88B20;
+}
+
+/* Keep each service readable */
+.intela-service-item {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 10px 11px;
+    min-height: 54px;
+    border-radius: 8px;
+    white-space: normal;
+}
+
+/* Ensure long service names wrap properly */
+.intela-service-name {
+    flex: 1;
+    min-width: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+/* Prevent icons from shrinking */
+.intela-service-icon {
+    flex: 0 0 34px;
+}
+
+/* Responsive desktop dropdown */
+@media (max-width: 1200px) {
+    .intela-dropdown-panel {
+        width: 460px;
+        max-width: min(460px, calc(100vw - 30px));
+        max-height: calc(100vh - 110px);
+    }
+}
+
+/* Mobile services use the existing mobile navigation */
+@media (max-width: 900px) {
+    .intela-dropdown-panel {
+        width: auto;
+        max-width: none;
+        max-height: none;
+        overflow: visible;
+    }
+}
+
+/* ==========================================
+   MOBILE SERVICES MENU — LAYOUT + SCROLL FIX
+========================================== */
+
+@media (max-width: 900px) {
+
+    /* Mobile navigation itself can scroll */
+    .intela-mobile-nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+
+        width: 100%;
+        max-height: calc(100dvh - 90px);
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        overscroll-behavior-y: contain;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: #FFA033 #F0F3F8;
+
+        padding: 10px 15px 20px;
+        background: #FFFFFF;
+        box-sizing: border-box;
+    }
+
+    .intela-mobile-nav::-webkit-scrollbar,
+    .intela-mobile-submenu::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .intela-mobile-nav::-webkit-scrollbar-track,
+    .intela-mobile-submenu::-webkit-scrollbar-track {
+        background: #F0F3F8;
+    }
+
+    .intela-mobile-nav::-webkit-scrollbar-thumb,
+    .intela-mobile-submenu::-webkit-scrollbar-thumb {
+        background: #FFA033;
+        border-radius: 10px;
+    }
+
+    /* Services row */
+    .intela-mobile-services-row {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        min-width: 0;
+        border-bottom: 1px solid #F0F2F6;
+    }
+
+    .intela-mobile-services-row > .intela-mobile-link {
+        flex: 1;
+        min-width: 0;
+        border-bottom: 0;
+    }
+
+    .intela-mobile-service-toggle {
+        flex: 0 0 42px;
+        width: 42px;
+        height: 42px;
+    }
+
+    /* Scrollable services list */
+    .intela-mobile-submenu {
+        display: none;
+        width: 100%;
+        max-height: min(48dvh, 360px);
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        overscroll-behavior-y: contain;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: #FFA033 #F0F3F8;
+
+        padding: 6px;
+        background: #F8FAFD;
+        border: 1px solid #E8EDF4;
+        border-radius: 10px;
+        box-sizing: border-box;
+    }
+
+    /* Show submenu when expanded */
+    .intela-mobile-services-row.is-open
+    + .intela-mobile-submenu {
+        display: block;
+    }
+
+    /* Individual service links */
+    .intela-mobile-submenu .intela-mobile-link {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 10px;
+
+        width: 100%;
+        min-width: 0;
+        min-height: 44px;
+        padding: 10px 9px;
+
+        border: 0;
+        border-bottom: 1px solid #EDF0F5;
+        border-radius: 7px;
+
+        color: #293D63;
+        background: transparent;
+
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1.45;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        box-sizing: border-box;
+    }
+
+    .intela-mobile-submenu .intela-mobile-link:last-child {
+        border-bottom: 0;
+    }
+
+    /* Service icons */
+    .intela-mobile-submenu .intela-mobile-link > i {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        flex: 0 0 30px;
+        width: 30px;
+        min-width: 30px;
+        height: 30px;
+
+        color: #E88B20;
+        background: #FFF4E5;
+        border-radius: 7px;
+        text-align: center;
+        font-size: 13px;
+    }
+
+    /* Touch-friendly hover and active state */
+    .intela-mobile-submenu .intela-mobile-link:hover,
+    .intela-mobile-submenu .intela-mobile-link:active {
+        background: #FFF4E5;
+        color: #E88B20;
+    }
+
+    .intela-mobile-service-toggle i {
+        transition: transform .2s ease;
+    }
+
+    .intela-mobile-services-row.is-open
+    .intela-mobile-service-toggle i {
+        transform: rotate(180deg);
+    }
+}
+
+/* Smaller phones */
+@media (max-width: 420px) {
+    .intela-mobile-nav {
+        padding-left: 10px;
+        padding-right: 10px;
+        max-height: calc(100dvh - 80px);
+    }
+
+    .intela-mobile-submenu {
+        max-height: min(45dvh, 320px);
+        padding: 4px;
+    }
+
+    .intela-mobile-submenu .intela-mobile-link {
+        gap: 8px;
+        padding: 9px 7px;
+        font-size: 12px;
+    }
+
+    .intela-mobile-submenu .intela-mobile-link > i {
+        flex-basis: 28px;
+        width: 28px;
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+}
+
+/* Dashboard button */
+.intela-dashboard-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-shrink: 0;
+    padding: 11px 17px;
+    border: 1px solid #FFA033;
+    border-radius: 8px;
+    background: #FFA033;
+    color: #1D2D4A;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.25s ease;
+}
+
+.intela-dashboard-btn:hover {
+    background: #E88B20;
+    border-color: #E88B20;
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.intela-dashboard-btn i {
+    font-size: 14px;
+}
+
+.intela-mobile-dashboard {
+    color: #293D63;
+}
+
+.intela-mobile-dashboard > i {
+    color: #FFA033;
+}
+
+.intela-mobile-dashboard:hover {
+    color: #E88B20;
+    background: #FFF4E5;
+}
+
+
+</style>
+
+
+<!-- ================= TOP CONTACT BAR ================= -->
+
+<div class="intela-topbar">
+    <div class="intela-topbar-inner">
+
+        <div class="intela-topbar-brand">
+            <i class="fa-solid fa-building"></i>
+            <span>Information Technology Labs</span>
+        </div>
+
+        <div class="intela-topbar-contacts">
+
+            <a href="tel:+12143770443" class="intela-topbar-link">
+                <i class="fa-solid fa-phone"></i>
+                <span>+1(214)377-0443</span>
+            </a>
+
+            <a
+                href="mailto:info@intelagroupllc.com"
+                class="intela-topbar-link"
+            >
+                <i class="fa-solid fa-envelope"></i>
+                <span>info@intelagroupllc.com</span>
+            </a>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- ================= MAIN HEADER ================= -->
+
+<header class="intela-main-header">
+
+    <div class="intela-header-inner">
+
+        <a
+            href="{% url 'website:home' %}"
+            class="intela-logo"
+            aria-label="Intela Group home"
+        >
+            <img
+                src="{% static 'intelaimages/intelalogo.png' %}"
+                alt="Intela Group LLC"
+            >
+        </a>
+
+
+        <!-- DESKTOP NAVIGATION -->
+
+        <nav class="intela-desktop-nav" aria-label="Main navigation">
+
+            <a href="{% url 'website:home' %}" class="intela-nav-link">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </a>
+
+            <a href="{% url 'website:about' %}" class="intela-nav-link">
+                <i class="fa-solid fa-building"></i>
+                <span>About</span>
+            </a>
+
+
+            <!-- SERVICES DROPDOWN -->
+
+            <div class="intela-services-dropdown" id="intelaDesktopServices">
+
+                <div class="intela-services-trigger">
+
+                    <a
+                        href="{% url 'website:services' %}"
+                        class="intela-nav-link"
+                    >
+                        <i class="fa-solid fa-layer-group"></i>
+                        <span>Services</span>
+                    </a>
+
+                    <button
+                        type="button"
+                        class="intela-dropdown-toggle"
+                        id="intelaDesktopServicesToggle"
+                        aria-label="Toggle services dropdown"
+                        aria-expanded="false"
+                        aria-controls="intelaDesktopServicesPanel"
+                    >
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+
+                </div>
+
+                <div
+                    class="intela-dropdown-panel"
+                    id="intelaDesktopServicesPanel"
+                >
+                    {% for service in navigation_services %}
+
+                        <a
+                            href="{% url 'website:service_detail' service.pk %}"
+                            class="intela-service-item"
+                        >
+
+                            <span class="intela-service-icon">
+                                <i class="fa-solid
+                                    {% if 'cloud' in service.title|lower %}fa-cloud
+                                    {% elif 'software' in service.title|lower %}fa-code
+                                    {% elif 'develop' in service.title|lower %}fa-laptop-code
+                                    {% elif 'data' in service.title|lower %}fa-database
+                                    {% elif 'security' in service.title|lower %}fa-shield-halved
+                                    {% elif 'consult' in service.title|lower %}fa-lightbulb
+                                    {% elif 'network' in service.title|lower %}fa-network-wired
+                                    {% elif 'support' in service.title|lower %}fa-headset
+                                    {% elif 'artificial intelligence' in service.title|lower or 'ai' in service.title|lower %}fa-robot
+                                    {% elif 'web' in service.title|lower %}fa-globe
+                                    {% elif 'app' in service.title|lower %}fa-mobile-screen-button
+                                    {% elif 'digital' in service.title|lower %}fa-chart-line
+                                    {% elif 'staff' in service.title|lower or 'talent' in service.title|lower or 'recruit' in service.title|lower %}fa-users
+                                    {% elif 'project' in service.title|lower %}fa-list-check
+                                    {% elif 'test' in service.title|lower or 'quality' in service.title|lower %}fa-bug
+                                    {% elif 'automation' in service.title|lower %}fa-gears
+                                    {% else %}fa-layer-group
+                                    {% endif %}">
+                                </i>
+                            </span>
+
+                            <span class="intela-service-name">
+                                {{ service.title }}
+                            </span>
+
+                            <i class="fa-solid fa-arrow-right intela-service-arrow"></i>
+
+                        </a>
+
+                    {% empty %}
+
+                        <span class="intela-no-services">
+                            No services available.
+                        </span>
+
+                    {% endfor %}
+                </div>
+
+            </div>
+
+
+            <a href="{% url 'website:industries' %}" class="intela-nav-link">
+                <i class="fa-solid fa-industry"></i>
+                <span>Industries</span>
+            </a>
+
+            <a href="{% url 'website:careers' %}" class="intela-nav-link">
+                <i class="fa-solid fa-briefcase"></i>
+                <span>Careers</span>
+            </a>
+
+            <a href="{% url 'website:contact' %}" class="intela-nav-link">
+                <i class="fa-solid fa-envelope"></i>
+                <span>Contact</span>
+            </a>
+            
+{% if user.is_authenticated %}
+    <a href="{% url 'website:dashboard' %}"
+       class="intela-dashboard-btn">
+        <i class="fa-solid fa-house"></i>
+        <span>Dashboard</span>
+    </a>
+{% endif %}
+
+
+        </nav>
+
+
+        <!-- MOBILE MENU BUTTON -->
+
+        <button
+            type="button"
+            class="intela-mobile-toggle"
+            id="intelaMobileToggle"
+            aria-label="Open navigation menu"
+            aria-expanded="false"
+            aria-controls="intelaMobileNav"
+        >
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+    </div>
+
+
+    <!-- ================= MOBILE NAVIGATION ================= -->
+
+    <nav
+        class="intela-mobile-nav"
+        id="intelaMobileNav"
+        aria-label="Mobile navigation"
+    >
+
+        <a href="{% url 'website:home' %}" class="intela-mobile-link">
+            <span><i class="fa-solid fa-house"></i> Home</span>
+        </a>
+
+        <a href="{% url 'website:about' %}" class="intela-mobile-link">
+            <span><i class="fa-solid fa-building"></i> About</span>
+        </a>
+
+
+        <div
+            class="intela-mobile-services-row"
+            id="intelaMobileServicesRow"
+        >
+            <a
+                href="{% url 'website:services' %}"
+                class="intela-mobile-link"
+            >
+                <span><i class="fa-solid fa-layer-group"></i> Services</span>
+            </a>
+
+            <button
+                type="button"
+                class="intela-mobile-service-toggle"
+                id="intelaMobileServicesToggle"
+                aria-label="Expand services"
+                aria-expanded="false"
+                aria-controls="intelaMobileServicesSubmenu"
+            >
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+        </div>
+
+        <div
+            class="intela-mobile-submenu"
+            id="intelaMobileServicesSubmenu"
+        >
+            {% for service in navigation_services %}
+
+                <a
+                    href="{% url 'website:service_detail' service.pk %}"
+                    class="intela-mobile-link"
+                >
+                    <i class="fa-solid
+                        {% if 'cloud' in service.title|lower %}fa-cloud
+                        {% elif 'software' in service.title|lower %}fa-code
+                        {% elif 'develop' in service.title|lower %}fa-laptop-code
+                        {% elif 'data' in service.title|lower %}fa-database
+                        {% elif 'security' in service.title|lower %}fa-shield-halved
+                        {% elif 'consult' in service.title|lower %}fa-lightbulb
+                        {% elif 'network' in service.title|lower %}fa-network-wired
+                        {% elif 'support' in service.title|lower %}fa-headset
+                        {% elif 'artificial intelligence' in service.title|lower or 'ai' in service.title|lower %}fa-robot
+                        {% elif 'web' in service.title|lower %}fa-globe
+                        {% elif 'app' in service.title|lower %}fa-mobile-screen-button
+                        {% elif 'digital' in service.title|lower %}fa-chart-line
+                        {% elif 'staff' in service.title|lower or 'talent' in service.title|lower or 'recruit' in service.title|lower %}fa-users
+                        {% elif 'project' in service.title|lower %}fa-list-check
+                        {% elif 'test' in service.title|lower or 'quality' in service.title|lower %}fa-bug
+                        {% elif 'automation' in service.title|lower %}fa-gears
+                        {% else %}fa-layer-group
+                        {% endif %}">
+                    </i>
+
+                    {{ service.title }}
+                </a>
+
+            {% empty %}
+
+                <span class="intela-no-services">No services available.</span>
+
+            {% endfor %}
+        </div>
+
+
+        <a href="{% url 'website:industries' %}" class="intela-mobile-link">
+            <span><i class="fa-solid fa-industry"></i> Industries</span>
+        </a>
+
+        <a href="{% url 'website:careers' %}" class="intela-mobile-link">
+            <span><i class="fa-solid fa-briefcase"></i> Careers</span>
+        </a>
+
+        <a href="{% url 'website:contact' %}" class="intela-mobile-link">
+            <span><i class="fa-solid fa-envelope"></i> Contact</span>
+        </a>
+
+        
+{% if user.is_authenticated %}
+    <a href="{% url 'website:dashboard' %}"
+       class="intela-mobile-link intela-mobile-dashboard">
+        <span>
+            <i class="fa-solid fa-house"></i>
+            Dashboard
+        </span>
+        <i class="fa-solid fa-arrow-right"></i>
+    </a>
+{% endif %}
+
+    </nav>
+
+</header>
+
+
+<!-- ================= HEADER JAVASCRIPT ================= -->
+
+<script>
+(function () {
+    function initializeIntelaHeader() {
+        const mobileToggle = document.getElementById("intelaMobileToggle");
+        const mobileNav = document.getElementById("intelaMobileNav");
+
+        const mobileServicesRow = document.getElementById(
+            "intelaMobileServicesRow"
+        );
+
+        const mobileServicesToggle = document.getElementById(
+            "intelaMobileServicesToggle"
+        );
+
+        const desktopServices = document.getElementById(
+            "intelaDesktopServices"
+        );
+
+        const desktopServicesToggle = document.getElementById(
+            "intelaDesktopServicesToggle"
+        );
+
+        if (!mobileToggle || !mobileNav) {
+            return;
+        }
+
+        if (mobileToggle.dataset.initialized === "true") {
+            return;
+        }
+
+        mobileToggle.dataset.initialized = "true";
+
+        function setMobileMenu(open) {
+            mobileNav.classList.toggle("is-open", open);
+
+            mobileToggle.setAttribute("aria-expanded", String(open));
+            mobileToggle.setAttribute(
+                "aria-label",
+                open ? "Close navigation menu" : "Open navigation menu"
+            );
+
+            const icon = mobileToggle.querySelector("i");
+
+            if (icon) {
+                icon.className = open
+                    ? "fa-solid fa-xmark"
+                    : "fa-solid fa-bars";
+            }
+
+            if (!open && mobileServicesRow && mobileServicesToggle) {
+                mobileServicesRow.classList.remove("is-open");
+
+                mobileServicesToggle.setAttribute("aria-expanded", "false");
+                mobileServicesToggle.setAttribute(
+                    "aria-label",
+                    "Expand services"
+                );
+            }
+        }
+
+        mobileToggle.addEventListener("click", function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            setMobileMenu(!mobileNav.classList.contains("is-open"));
+        });
+
+        if (mobileServicesRow && mobileServicesToggle) {
+            mobileServicesToggle.addEventListener("click", function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                const isOpen =
+                    mobileServicesRow.classList.toggle("is-open");
+
+                mobileServicesToggle.setAttribute(
+                    "aria-expanded",
+                    String(isOpen)
+                );
+
+                mobileServicesToggle.setAttribute(
+                    "aria-label",
+                    isOpen ? "Collapse services" : "Expand services"
+                );
+            });
+        }
+
+        if (desktopServices && desktopServicesToggle) {
+            desktopServicesToggle.addEventListener("click", function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                const isOpen =
+                    desktopServices.classList.toggle("is-open");
+
+                desktopServicesToggle.setAttribute(
+                    "aria-expanded",
+                    String(isOpen)
+                );
+            });
+        }
+
+        document.addEventListener("click", function (event) {
+            if (
+                !mobileNav.contains(event.target) &&
+                !mobileToggle.contains(event.target)
+            ) {
+                setMobileMenu(false);
+            }
+
+            if (
+                desktopServices &&
+                !desktopServices.contains(event.target)
+            ) {
+                desktopServices.classList.remove("is-open");
+
+                if (desktopServicesToggle) {
+                    desktopServicesToggle.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+                }
+            }
+        });
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key !== "Escape") {
+                return;
+            }
+
+            setMobileMenu(false);
+
+            if (desktopServices) {
+                desktopServices.classList.remove("is-open");
+            }
+
+            if (desktopServicesToggle) {
+                desktopServicesToggle.setAttribute("aria-expanded", "false");
+            }
+        });
+
+        mobileNav.querySelectorAll("a").forEach(function (link) {
+            link.addEventListener("click", function () {
+                setMobileMenu(false);
+            });
+        });
+
+        window.addEventListener("resize", function () {
+            if (window.innerWidth > 900) {
+                setMobileMenu(false);
+            }
+        });
+
+        if (desktopServices) {
+            desktopServices
+                .querySelectorAll(".intela-service-item")
+                .forEach(function (link) {
+                    link.addEventListener("click", function () {
+                        desktopServices.classList.remove("is-open");
+
+                        if (desktopServicesToggle) {
+                            desktopServicesToggle.setAttribute(
+                                "aria-expanded",
+                                "false"
+                            );
+                        }
+                    });
+                });
+        }
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener(
+            "DOMContentLoaded",
+            initializeIntelaHeader
+        );
+    } else {
+        initializeIntelaHeader();
+    }
+})();
+</script>

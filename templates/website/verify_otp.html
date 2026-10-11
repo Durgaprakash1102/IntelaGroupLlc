@@ -1,0 +1,798 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#293D63">
+    <meta name="description" content="Verify your OTP securely with Intela Group LLC.">
+    <title>{{ title|default:"Verify OTP" }} | Intela Group LLC</title>
+
+    <link rel="icon" type="image/jpg" href="{% static 'intelaimages/intelafavicon.jpg' %}">
+    <link rel="apple-touch-icon" href="{% static 'intelaimages/intelafavicon.jpg' %}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --navy: #293D63;
+            --navy-dark: #1D2D4A;
+            --orange: #FFA033;
+            --orange-dark: #E88B20;
+            --text: #172033;
+            --muted: #788397;
+            --border: #E2E8F0;
+            --surface: #F6F8FB;
+            --success: #16865D;
+            --danger: #C0392B;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            min-height: 100%;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 28px;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at 12% 15%, rgba(255, 160, 51, 0.13), transparent 35%),
+                radial-gradient(circle at 88% 85%, rgba(41, 61, 99, 0.28), transparent 42%),
+                linear-gradient(135deg, #101C31, #1D2D4A 55%, #0D1729);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        button, input {
+            font: inherit;
+        }
+
+        /* ===================== OTP CARD ===================== */
+
+        .otp-card {
+            width: 100%;
+            max-width: 900px;
+            min-height: 510px;
+            display: grid;
+            grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+            background: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.32);
+        }
+
+        /* ===================== LEFT BRAND PANEL ===================== */
+
+        .otp-left {
+            position: relative;
+            isolation: isolate;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-width: 0;
+            padding: 48px 38px;
+            overflow: hidden;
+            text-align: center;
+            color: #fff;
+            background: linear-gradient(145deg, #101C31, #293D63 65%, #1D2D4A);
+        }
+
+        .otp-left-bg {
+            position: absolute;
+            inset: 0;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .otp-left-bg img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .otp-left::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 20% 25%, rgba(41, 61, 99, 0.42), transparent 50%),
+                linear-gradient(150deg, rgba(12, 23, 42, 0.90), rgba(29, 45, 74, 0.88));
+        }
+
+        .brand {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 38px;
+        }
+
+        .brand a {
+            display: inline-block;
+        }
+
+        .brand img {
+            display: block;
+            width: auto;
+            height: 62px;
+            max-width: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
+        }
+
+        .brand-kicker {
+            position: relative;
+            z-index: 1;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 18px;
+            color: #FFD29A;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+        }
+
+        .brand-kicker::before {
+            content: "";
+            width: 20px;
+            height: 2px;
+            border-radius: 5px;
+            background: var(--orange);
+        }
+
+        .otp-left h2 {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 14px;
+            font-size: clamp(23px, 2.5vw, 29px);
+            font-weight: 800;
+            letter-spacing: -0.8px;
+            line-height: 1.25;
+        }
+
+        .otp-left h2 span {
+            display: block;
+            margin-top: 5px;
+            color: var(--orange);
+        }
+
+        .otp-left p {
+            position: relative;
+            z-index: 1;
+            max-width: 285px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 13px;
+            line-height: 1.85;
+        }
+
+        .accent {
+            position: relative;
+            z-index: 1;
+            width: 52px;
+            height: 3px;
+            margin-top: 25px;
+            border-radius: 99px;
+            background: linear-gradient(90deg, var(--orange), #FFD29A);
+        }
+
+        .brand-features {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .brand-feature {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 11px;
+            border: 1px solid rgba(255, 255, 255, 0.13);
+            border-radius: 9px;
+            background: rgba(255, 255, 255, 0.07);
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .brand-feature i {
+            color: var(--orange);
+        }
+
+        .brand-footer {
+            position: relative;
+            z-index: 1;
+            margin-top: 34px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 10px;
+            line-height: 1.7;
+        }
+
+        /* ===================== RIGHT OTP FORM ===================== */
+
+        .otp-right {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 0;
+            padding: 48px clamp(28px, 4vw, 54px);
+            background: #fff;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
+        .otp-icon {
+            display: grid;
+            place-items: center;
+            width: 66px;
+            height: 66px;
+            margin: 0 auto 21px;
+            border: 1px solid rgba(255, 160, 51, 0.25);
+            border-radius: 20px;
+            background: linear-gradient(
+                135deg,
+                rgba(41, 61, 99, 0.10),
+                rgba(255, 160, 51, 0.15)
+            );
+            color: var(--navy);
+            font-size: 25px;
+        }
+
+        .form-kicker {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            color: var(--orange-dark);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .otp-right h1 {
+            margin-bottom: 10px;
+            color: var(--navy);
+            font-size: clamp(25px, 2.5vw, 32px);
+            font-weight: 800;
+            letter-spacing: -0.9px;
+            line-height: 1.25;
+            text-align: center;
+            overflow-wrap: anywhere;
+        }
+
+        .subtitle {
+            margin-bottom: 27px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.8;
+            text-align: center;
+        }
+
+        /* ===================== DJANGO MESSAGES ===================== */
+
+        .messages {
+            margin-bottom: 18px;
+        }
+
+        .messages .msg {
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+            padding: 11px 13px;
+            margin-bottom: 8px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .messages .msg:last-child {
+            margin-bottom: 0;
+        }
+
+        .messages .msg i {
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .messages .msg.error {
+            background: #FFF1F0;
+            color: var(--danger);
+            border-color: #F2C9C5;
+        }
+
+        .messages .msg.success {
+            background: #EAF8F1;
+            color: #0D7A4F;
+            border-color: #B7E4CD;
+        }
+
+        .messages .msg.info {
+            background: #F0F5FF;
+            color: var(--navy);
+            border-color: #D4E0F5;
+        }
+
+        .form-error-summary {
+            margin-bottom: 16px;
+            padding: 12px 14px;
+            border: 1px solid #F2C9C5;
+            border-radius: 10px;
+            background: #FFF5F4;
+            color: var(--danger);
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .form-error-summary ul {
+            margin-top: 5px;
+            padding-left: 18px;
+        }
+
+        /* ===================== OTP INPUT ===================== */
+
+        .otp-input-wrap {
+            margin-bottom: 22px;
+        }
+
+        .otp-input-wrap label {
+            display: block;
+            margin-bottom: 9px;
+            color: var(--navy);
+            font-size: 12px;
+            font-weight: 800;
+            text-align: left;
+        }
+
+        .otp-input-wrap input {
+            display: block;
+            width: 100%;
+            min-height: 62px;
+            padding: 15px 18px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            outline: none;
+            background: #fff;
+            color: var(--navy);
+            font-family: inherit;
+            font-size: 27px;
+            font-weight: 800;
+            letter-spacing: 13px;
+            text-align: center;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .otp-input-wrap input:focus {
+            border-color: var(--navy);
+            box-shadow: 0 0 0 4px rgba(41, 61, 99, 0.10);
+        }
+
+        .otp-input-wrap input::placeholder {
+            color: #B0B8C5;
+            font-size: 19px;
+            font-weight: 500;
+            letter-spacing: 7px;
+        }
+
+        .otp-input-wrap input[aria-invalid="true"] {
+            border-color: var(--danger);
+        }
+
+        .errorlist {
+            list-style: none;
+            margin: 8px 0 0;
+            padding: 0;
+            color: var(--danger);
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1.6;
+            text-align: left;
+        }
+
+        /* ===================== BUTTONS ===================== */
+
+        .btn-primary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            min-height: 53px;
+            padding: 15px 18px;
+            border: 1px solid transparent;
+            border-radius: 11px;
+            background: linear-gradient(115deg, var(--navy), var(--navy-dark));
+            color: #fff;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 9px 22px rgba(29, 45, 74, 0.19);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-primary i {
+            color: var(--orange);
+            transition: transform 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 13px 28px rgba(29, 45, 74, 0.26);
+        }
+
+        .btn-primary:hover i {
+            transform: translateX(3px);
+        }
+
+        .btn-secondary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            width: 100%;
+            min-height: 49px;
+            margin-top: 13px;
+            padding: 13px 18px;
+            border: 1.5px solid var(--border);
+            border-radius: 11px;
+            background: #fff;
+            color: var(--navy);
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary i {
+            color: var(--orange-dark);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--navy);
+            background: var(--surface);
+        }
+
+        .btn-primary:focus-visible,
+        .btn-secondary:focus-visible {
+            outline: 3px solid rgba(255, 160, 51, 0.7);
+            outline-offset: 3px;
+        }
+
+        .secure-note {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 22px;
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.7;
+            text-align: center;
+        }
+
+        .secure-note i {
+            flex-shrink: 0;
+            margin-top: 2px;
+            color: var(--orange-dark);
+        }
+
+        .form-footer {
+            margin-top: 26px;
+            color: #98A1B0;
+            font-size: 10px;
+            line-height: 1.7;
+            text-align: center;
+        }
+
+        .form-footer strong {
+            color: var(--navy);
+        }
+
+        /* ===================== RESPONSIVE ===================== */
+
+        @media (max-width: 720px) {
+            body {
+                align-items: flex-start;
+                padding: 20px;
+            }
+
+            .otp-card {
+                max-width: 460px;
+                margin: auto;
+                grid-template-columns: 1fr;
+                border-radius: 20px;
+            }
+
+            .otp-left {
+                padding: 30px 24px;
+            }
+
+            .brand {
+                margin-bottom: 24px;
+            }
+
+            .brand img {
+                height: 49px;
+            }
+
+            .brand-kicker {
+                margin-bottom: 12px;
+            }
+
+            .otp-left h2 {
+                font-size: 23px;
+            }
+
+            .otp-left p {
+                max-width: 320px;
+            }
+
+            .brand-features {
+                margin-top: 22px;
+            }
+
+            .brand-footer {
+                margin-top: 22px;
+            }
+
+            .otp-right {
+                padding: 34px 27px;
+            }
+
+            .otp-right h1 {
+                font-size: 27px;
+            }
+
+            .otp-input-wrap input {
+                font-size: 25px;
+                letter-spacing: 11px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            body {
+                padding: 12px;
+            }
+
+            .otp-left {
+                padding: 26px 19px;
+            }
+
+            .otp-right {
+                padding: 28px 19px;
+            }
+
+            .otp-input-wrap input {
+                min-height: 57px;
+                padding: 13px 10px;
+                font-size: 22px;
+                letter-spacing: 8px;
+            }
+
+            .otp-input-wrap input::placeholder {
+                font-size: 16px;
+                letter-spacing: 5px;
+            }
+
+            .brand-feature {
+                padding: 8px;
+                font-size: 9px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="otp-card">
+
+        <!-- ===================== LEFT: INTELA BRAND PANEL ===================== -->
+        <section class="otp-left" aria-label="Intela Group secure verification">
+
+            <div class="otp-left-bg" aria-hidden="true">
+                <img
+                    src="{% static 'intelaimages/intela-login-banner.png' %}"
+                    alt=""
+                    onerror="this.style.display='none'"
+                >
+            </div>
+
+            <div class="brand">
+                <a href="{% url 'website:home' %}" aria-label="Intela Group home">
+                    <img
+                        src="{% static 'intelaimages/intelalogo.png' %}"
+                        alt="Intela Group LLC — Information Technology Labs"
+                        onerror="this.style.display='none'"
+                    >
+                </a>
+            </div>
+
+            <div class="brand-kicker">Information Technology Labs</div>
+
+            <h2>
+                Secure
+                <span>Verification</span>
+            </h2>
+
+            <p>
+                We have sent a one-time password to your registered email
+                address. Enter the code to continue securely.
+            </p>
+
+            <div class="accent" aria-hidden="true"></div>
+
+            <div class="brand-features">
+                <div class="brand-feature">
+                    <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                    Secure Verification
+                </div>
+
+                <div class="brand-feature">
+                    <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                    Account Protection
+                </div>
+            </div>
+
+            <div class="brand-footer">
+                Intela Group LLC<br>
+                Information Technology Labs
+            </div>
+        </section>
+
+        <!-- ===================== RIGHT: OTP FORM ===================== -->
+        <section class="otp-right" aria-label="Verify one-time password">
+
+            <div class="form-container">
+
+                <div class="otp-icon">
+                    <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                </div>
+
+                <div class="form-kicker">
+                    <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                    Secure Account Access
+                </div>
+
+                <h1>{{ title|default:"Verify OTP" }}</h1>
+
+                <p class="subtitle">
+                    Enter the 6-digit code sent to your email to verify your identity.
+                </p>
+
+                <!-- Django messages -->
+                {% if messages %}
+                    <div class="messages" aria-live="polite" aria-atomic="false">
+                        {% for message in messages %}
+                            <div class="msg {% if 'error' in message.tags %}error{% elif 'success' in message.tags %}success{% else %}info{% endif %}"
+                                 role="{% if 'error' in message.tags %}alert{% else %}status{% endif %}">
+                                <i class="fa-solid {% if 'error' in message.tags %}fa-circle-exclamation{% elif 'success' in message.tags %}fa-circle-check{% else %}fa-circle-info{% endif %}"
+                                   aria-hidden="true"></i>
+                                <span>{{ message }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="form-error-summary" role="alert">
+                            <strong>Verification failed.</strong>
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    <div class="otp-input-wrap">
+                        <label for="id_otp">One-time password (OTP)</label>
+
+                        {{ form.otp }}
+
+                        {{ form.otp.errors }}
+                    </div>
+
+                    <button type="submit" class="btn-primary">
+                        <span>Verify OTP</span>
+                        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                    </button>
+                </form>
+
+                <a href="{% url 'website:login' %}" class="btn-secondary">
+                    <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+                    Back to Login
+                </a>
+
+                <div class="secure-note">
+                    <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                    <span>Your verification is handled through Intela Group's existing account security process.</span>
+                </div>
+
+                <footer class="form-footer">
+                    &copy; {% now "Y" %} <strong>Intela Group LLC</strong>.
+                    All rights reserved.
+                </footer>
+
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const otpInput =
+                document.querySelector('input[name="otp"]') ||
+                document.getElementById('id_otp');
+
+            if (!otpInput) return;
+
+            // Preserve the existing Django field and its validation attributes.
+            otpInput.placeholder = '• • • • • •';
+            otpInput.setAttribute('maxlength', '6');
+            otpInput.setAttribute('inputmode', 'numeric');
+            otpInput.setAttribute('autocomplete', 'one-time-code');
+            otpInput.setAttribute('pattern', '[0-9]{6}');
+            otpInput.setAttribute('aria-label', 'Enter your six-digit OTP');
+
+            // Accept digits only while preserving normal paste and autofill behavior.
+            otpInput.addEventListener('input', function () {
+                const cleanedValue = otpInput.value.replace(/\D/g, '').slice(0, 6);
+
+                if (otpInput.value !== cleanedValue) {
+                    otpInput.value = cleanedValue;
+                }
+            });
+
+            // Focus the OTP field unless a validation error needs attention.
+            const hasErrors = document.querySelector(
+                '.form-error-summary, .otp-input-wrap .errorlist'
+            );
+
+            if (!hasErrors) {
+                otpInput.focus({ preventScroll: true });
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,795 @@
+
+{% extends layout_template %}
+{% load static %}
+
+{% block title %}Superuser Registration | Intela Group LLC{% endblock %}
+
+{% block content %}
+
+<style>
+/* =========================================================
+   INTELA GROUP LLC — SUPERUSER REGISTRATION
+   ========================================================= */
+
+:root {
+    --rg-navy: #293D63;
+    --rg-navy-dark: #1D2D4A;
+    --rg-blue: #293D63;
+    --rg-orange: #FFA033;
+    --rg-orange-dark: #E58A18;
+    --rg-text: #172033;
+    --rg-muted: #788397;
+    --rg-border: #e2e8f0;
+    --rg-white: #ffffff;
+}
+
+/* Page */
+
+.rg-signup-page {
+    min-height: calc(100vh - 80px);
+    background:
+        radial-gradient(circle at 90% 10%, rgba(41,61,99,.09), transparent 28%),
+        linear-gradient(135deg, #F6F8FB 0%, #EEF2F7 100%);
+    padding: 40px 24px 50px;
+}
+
+.rg-signup-wrapper {
+    width: 100%;
+    max-width: 1140px;
+    min-height: 620px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 43% 57%;
+    background: var(--rg-white);
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 22px 60px rgba(29,45,74,.13);
+}
+
+/* Left panel */
+
+.rg-signup-left {
+    position: relative;
+    overflow: hidden;
+    padding: 48px 42px;
+    color: white;
+    background:
+        linear-gradient(
+            155deg,
+            rgba(29,45,74,.94) 0%,
+            rgba(41,61,99,.91) 50%,
+            rgba(41,61,99,.85) 100%
+        ),
+        url("{% static 'intelaimages/intela-login-banner.png' %}");
+    background-size: cover;
+    background-position: center;
+}
+
+.rg-signup-left::before {
+    content: "";
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    right: -200px;
+    top: 30px;
+    border: 1px solid rgba(255,255,255,.10);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.rg-signup-left::after {
+    content: "";
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    left: -280px;
+    bottom: -280px;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.rg-left-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.rg-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: rgba(255,255,255,.9);
+    font-size: 11.5px;
+    font-weight: 800;
+    letter-spacing: 2.6px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+}
+
+.rg-eyebrow::before {
+    content: "";
+    width: 38px;
+    height: 3px;
+    border-radius: 4px;
+    background: var(--rg-orange);
+}
+
+.rg-left-title {
+    margin: 0;
+    max-width: 400px;
+    font-size: clamp(32px, 3.5vw, 44px);
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.rg-left-title span {
+    color: var(--rg-orange);
+}
+
+.rg-left-description {
+    max-width: 390px;
+    margin: 16px 0 28px;
+    color: rgba(255,255,255,.80);
+    font-size: 14.5px;
+    line-height: 1.65;
+}
+
+.rg-benefits {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.rg-benefit {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.rg-benefit-icon {
+    flex: 0 0 46px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #ffffff;
+    color: var(--rg-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 6px 18px rgba(0,0,0,.15);
+}
+
+.rg-benefit:first-child .rg-benefit-icon {
+    color: var(--rg-orange-dark);
+}
+
+.rg-benefit-text h4 {
+    margin: 0 0 2px;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.rg-benefit-text p {
+    margin: 0;
+    color: rgba(255,255,255,.72);
+    font-size: 12.5px;
+    line-height: 1.5;
+}
+
+.rg-left-bottom {
+    margin-top: auto;
+    padding-top: 30px;
+}
+
+.rg-tagline {
+    margin: 0;
+    font-size: 24px;
+    line-height: 1.15;
+    font-style: italic;
+    font-weight: 500;
+    color: #ffffff;
+}
+
+.rg-tagline-line {
+    width: 100px;
+    height: 3px;
+    margin-top: 10px;
+    margin-left: 60px;
+    background: var(--rg-orange);
+    transform: rotate(-7deg);
+    border-radius: 10px;
+}
+
+/* Right form panel */
+
+.rg-signup-right {
+    padding: 32px 40px;
+    display: flex;
+    align-items: center;
+    background: #F6F8FB;
+}
+
+.rg-form-card {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 28px 32px;
+    box-shadow: 0 12px 36px rgba(29,45,74,.08);
+    border: 1px solid rgba(220,228,237,.9);
+}
+
+/* Form heading */
+
+.rg-form-eyebrow {
+    margin: 0 0 6px;
+    color: var(--rg-orange-dark);
+    font-size: 11.5px;
+    font-weight: 800;
+    letter-spacing: 2.2px;
+    text-transform: uppercase;
+}
+
+.rg-form-title {
+    margin: 0;
+    color: var(--rg-navy);
+    font-size: 28px;
+    line-height: 1.1;
+    font-weight: 800;
+}
+
+.rg-form-subtitle {
+    margin: 8px 0 20px;
+    color: var(--rg-muted);
+    font-size: 13.5px;
+    line-height: 1.5;
+}
+
+/* Form errors */
+
+.rg-non-field-errors {
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    border-radius: 9px;
+    background: #fff1f1;
+    border: 1px solid #ffd2d2;
+    color: #c62828;
+    font-size: 12.5px;
+}
+
+.rg-field-error {
+    display: block;
+    margin-top: 5px;
+    color: #c62828;
+    font-size: 11.5px;
+    line-height: 1.5;
+}
+
+.rg-field-error ul {
+    margin: 0;
+    padding-left: 18px;
+}
+
+/* Form grid */
+
+.rg-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.rg-form-group {
+    min-width: 0;
+}
+
+.rg-form-group.full {
+    grid-column: 1 / -1;
+}
+
+.rg-form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #1e293b;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.rg-form-group label .required {
+    color: var(--rg-orange-dark);
+    margin-left: 2px;
+}
+
+/* Input with icon */
+
+.rg-input-wrap {
+    position: relative;
+}
+
+.rg-input-wrap .rg-icon {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 14px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.rg-input-wrap input,
+.rg-input-wrap select,
+.rg-input-wrap textarea {
+    width: 100%;
+    min-height: 42px;
+    padding: 10px 12px 10px 38px;
+    border: 1.5px solid var(--rg-border);
+    border-radius: 9px;
+    background: #f8fafc;
+    color: var(--rg-text);
+    font-family: inherit;
+    font-size: 13.5px;
+    outline: none;
+    transition: border-color .2s ease, box-shadow .2s ease,
+                background .2s ease;
+}
+
+.rg-input-wrap input {
+    height: 42px;
+}
+
+.rg-input-wrap input::placeholder,
+.rg-input-wrap textarea::placeholder {
+    color: #94a3b8;
+}
+
+.rg-input-wrap input:focus,
+.rg-input-wrap select:focus,
+.rg-input-wrap textarea:focus {
+    background: #ffffff;
+    border-color: var(--rg-navy);
+    box-shadow: 0 0 0 3px rgba(41,61,99,.12);
+}
+
+.rg-input-wrap input:disabled,
+.rg-input-wrap select:disabled {
+    opacity: .7;
+    cursor: not-allowed;
+}
+
+/* Password visibility toggle */
+
+.rg-toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 5px;
+    z-index: 3;
+}
+
+.rg-toggle-password:hover {
+    color: var(--rg-navy);
+}
+
+.rg-toggle-password:focus-visible {
+    outline: 2px solid var(--rg-orange);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Help text */
+
+.rg-help-text {
+    display: block;
+    margin-top: 5px;
+    color: #788397;
+    font-size: 11.5px;
+    line-height: 1.5;
+}
+
+.rg-help-text ul {
+    margin: 5px 0 0;
+    padding-left: 18px;
+}
+
+/* Submit button */
+
+.rg-submit-btn {
+    width: 100%;
+    min-height: 46px;
+    margin-top: 18px;
+    padding: 12px 18px;
+    border: 0;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #FFA033, #F08B19);
+    color: #1D2D4A;
+    font-size: 14.5px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(255,160,51,.25);
+    transition: transform .2s ease, box-shadow .2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.rg-submit-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 24px rgba(255,160,51,.34);
+}
+
+.rg-submit-btn:active {
+    transform: translateY(0);
+}
+
+.rg-submit-btn:focus-visible {
+    outline: 3px solid rgba(41,61,99,.35);
+    outline-offset: 3px;
+}
+
+/* Login link */
+
+.rg-login {
+    margin: 18px 0 0;
+    padding-top: 16px;
+    border-top: 1px solid #e8eef5;
+    text-align: center;
+    color: var(--rg-muted);
+    font-size: 13px;
+}
+
+.rg-login a {
+    color: var(--rg-navy);
+    font-weight: 800;
+    text-decoration: none;
+    margin-left: 4px;
+}
+
+.rg-login a:hover {
+    color: var(--rg-orange-dark);
+    text-decoration: underline;
+}
+
+/* Security note */
+
+.rg-security-note {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 7px;
+    margin-top: 12px;
+    color: #788397;
+    font-size: 11.5px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.rg-security-note i {
+    color: var(--rg-navy);
+    margin-top: 2px;
+}
+
+/* Responsive */
+
+@media (max-width: 1050px) {
+    .rg-signup-wrapper {
+        grid-template-columns: 42% 58%;
+    }
+
+    .rg-signup-left,
+    .rg-signup-right {
+        padding: 36px 28px;
+    }
+
+    .rg-form-card {
+        padding: 26px 24px;
+    }
+}
+
+@media (max-width: 850px) {
+    .rg-signup-page {
+        padding: 24px 16px 40px;
+    }
+
+    .rg-signup-wrapper {
+        grid-template-columns: 1fr;
+        min-height: auto;
+    }
+
+    .rg-signup-left {
+        min-height: 420px;
+        padding: 36px 28px;
+    }
+
+    .rg-signup-right {
+        padding: 28px 18px;
+    }
+
+    .rg-form-card {
+        max-width: 600px;
+    }
+}
+
+@media (max-width: 600px) {
+    .rg-signup-page {
+        padding: 14px 10px 32px;
+    }
+
+    .rg-signup-wrapper {
+        border-radius: 16px;
+    }
+
+    .rg-signup-left {
+        min-height: auto;
+        padding: 32px 22px;
+    }
+
+    .rg-left-title {
+        font-size: 30px;
+    }
+
+    .rg-left-description {
+        margin-bottom: 22px;
+    }
+
+    .rg-benefit-icon {
+        flex-basis: 42px;
+        width: 42px;
+        height: 42px;
+    }
+
+    .rg-form-card {
+        padding: 24px 20px;
+        border-radius: 14px;
+    }
+
+    .rg-form-title {
+        font-size: 24px;
+    }
+
+    .rg-form-grid {
+        grid-template-columns: 1fr;
+        gap: 13px;
+    }
+
+    .rg-form-group.full {
+        grid-column: auto;
+    }
+
+    .rg-tagline {
+        font-size: 22px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .rg-submit-btn,
+    .rg-input-wrap input,
+    .rg-input-wrap select,
+    .rg-input-wrap textarea {
+        transition: none;
+    }
+}
+</style>
+
+<section class="rg-signup-page">
+    <div class="rg-signup-wrapper">
+
+        <!-- LEFT SIDE -->
+        <div class="rg-signup-left">
+            <div class="rg-left-content">
+
+                <div>
+                    <div class="rg-eyebrow">Intela Group LLC</div>
+
+                    <h1 class="rg-left-title">
+                        Create<br>
+                        <span>Superuser</span>
+                    </h1>
+
+                    <p class="rg-left-description">
+                        Create the primary administrator account for
+                        Intela Group LLC. This account has full system
+                        access and administrative control.
+                    </p>
+
+                    <div class="rg-benefits">
+                        <div class="rg-benefit">
+                            <div class="rg-benefit-icon">
+                                <i class="fa-solid fa-crown"></i>
+                            </div>
+                            <div class="rg-benefit-text">
+                                <h4>Full System Access</h4>
+                                <p>Complete administrative control over the platform.</p>
+                            </div>
+                        </div>
+
+                        <div class="rg-benefit">
+                            <div class="rg-benefit-icon">
+                                <i class="fa-solid fa-user-shield"></i>
+                            </div>
+                            <div class="rg-benefit-text">
+                                <h4>Highest Privileges</h4>
+                                <p>Manage users, settings, and system configurations.</p>
+                            </div>
+                        </div>
+
+                        <div class="rg-benefit">
+                            <div class="rg-benefit-icon">
+                                <i class="fa-solid fa-lock"></i>
+                            </div>
+                            <div class="rg-benefit-text">
+                                <h4>Secure Setup</h4>
+                                <p>Create a strong administrator account with care.</p>
+                            </div>
+                        </div>
+
+                        <div class="rg-benefit">
+                            <div class="rg-benefit-icon">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <div class="rg-benefit-text">
+                                <h4>Protected Access</h4>
+                                <p>Keep administrator credentials private and secure.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rg-left-bottom">
+                    <p class="rg-tagline">
+                        Superuser Control<br>Center
+                    </p>
+                    <div class="rg-tagline-line"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE — FORM -->
+        <div class="rg-signup-right">
+            <div class="rg-form-card">
+
+                <p class="rg-form-eyebrow">Superuser Setup</p>
+                <h2 class="rg-form-title">Create Superuser</h2>
+
+                <p class="rg-form-subtitle">
+                    Set up the primary Intela Group LLC administrator account.
+                    Complete all required fields below.
+                </p>
+
+                {% if form.non_field_errors %}
+                    <div class="rg-non-field-errors" role="alert">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+
+                    <div class="rg-form-grid">
+
+                        {% for field in form %}
+                            <div class="rg-form-group
+                                {% if field.name != 'password1' and field.name != 'password2' %}
+                                    full
+                                {% endif %}
+                            ">
+
+                                <label for="{{ field.id_for_label }}">
+                                    {{ field.label }}
+                                    {% if field.field.required %}
+                                        <span class="required">*</span>
+                                    {% endif %}
+                                </label>
+
+                                <div class="rg-input-wrap">
+
+                                    {% if 'first' in field.name or 'last' in field.name or field.name == 'username' %}
+                                        <i class="fa-solid fa-user rg-icon"></i>
+                                    {% elif 'email' in field.name %}
+                                        <i class="fa-solid fa-envelope rg-icon"></i>
+                                    {% elif 'phone' in field.name or 'mobile' in field.name %}
+                                        <i class="fa-solid fa-phone rg-icon"></i>
+                                    {% elif 'password' in field.name %}
+                                        <i class="fa-solid fa-lock rg-icon"></i>
+                                    {% else %}
+                                        <i class="fa-solid fa-pen rg-icon"></i>
+                                    {% endif %}
+
+                                    {{ field }}
+
+                                    {% if 'password' in field.name %}
+                                        <button
+                                            type="button"
+                                            class="rg-toggle-password"
+                                            onclick="togglePassword(this)"
+                                            aria-label="Show password"
+                                            aria-pressed="false"
+                                        >
+                                            <i class="fa-regular fa-eye"></i>
+                                        </button>
+                                    {% endif %}
+
+                                </div>
+
+                                {% if field.help_text %}
+                                    <span class="rg-help-text">
+                                        {{ field.help_text|safe }}
+                                    </span>
+                                {% endif %}
+
+                                {% if field.errors %}
+                                    <div class="rg-field-error" role="alert">
+                                        {{ field.errors }}
+                                    </div>
+                                {% endif %}
+
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+                    <button type="submit" class="rg-submit-btn">
+                        Create Superuser
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </form>
+
+                <div class="rg-login">
+                    Already have an account?
+                    <a href="{% url 'website:login' %}">Login</a>
+                </div>
+
+                <div class="rg-security-note">
+                    <i class="fa-solid fa-lock"></i>
+                    <span>
+                        Superuser credentials are highly sensitive.
+                        Keep them secure.
+                    </span>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script>
+function togglePassword(btn) {
+    const input = btn.parentElement.querySelector('input');
+    const icon = btn.querySelector('i');
+
+    if (!input || !icon) {
+        return;
+    }
+
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+        btn.setAttribute('aria-label', 'Hide password');
+        btn.setAttribute('aria-pressed', 'true');
+    } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+        btn.setAttribute('aria-label', 'Show password');
+        btn.setAttribute('aria-pressed', 'false');
+    }
+}
+</script>
+
+{% endblock %}

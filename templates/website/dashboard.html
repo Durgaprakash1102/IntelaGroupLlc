@@ -1,0 +1,806 @@
+
+{% extends "includes/sidebar.html" %}
+{% load static %}
+
+{% block title %}Dashboard | Intela Group{% endblock %}
+
+{% block page_heading %}Welcome to Intela Group{% endblock %}
+{% block page_subtitle %}Your company management overview{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ==========================================
+       INTELA GROUP DASHBOARD
+    ========================================== */
+
+    .rg-dashboard {
+        width: 100%;
+        color: #1D2D4A;
+    }
+
+    .rg-banner {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1078 / 362;
+        margin-bottom: 30px;
+        overflow: hidden;
+        border: 1px solid #E5EAF2;
+        border-radius: 18px;
+        background-color: #293D63;
+        background-image:
+            linear-gradient(
+                100deg,
+                rgba(29,45,74,.16),
+                rgba(41,61,99,.03)
+            ),
+            url("{% static 'intelaimages/dashboardbanner.png' %}");
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        box-shadow: 0 10px 28px rgba(29,45,74,.08);
+    }
+
+    .rg-section {
+        width: 100%;
+        margin-bottom: 30px;
+    }
+
+    .rg-section-header {
+        margin-bottom: 17px;
+    }
+
+    .rg-section-header h2 {
+        margin: 0;
+        color: #1D2D4A;
+        font-size: 21px;
+        line-height: 1.35;
+        font-weight: 800;
+        letter-spacing: -.4px;
+    }
+
+    .rg-section-header p {
+        margin: 6px 0 0;
+        color: #788397;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    /* ==========================================
+       ACCOUNT DETAILS CARD
+    ========================================== */
+
+    .rg-id-card {
+        width: 100%;
+        overflow: hidden;
+        background: #FFFFFF;
+        border: 1px solid #E5EAF2;
+        border-radius: 18px;
+        box-shadow: 0 8px 28px rgba(29,45,74,.055);
+    }
+
+    .rg-id-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 17px 22px;
+        color: #FFFFFF;
+        background: linear-gradient(
+            115deg,
+            #1D2D4A 0%,
+            #293D63 72%,
+            #344D78 100%
+        );
+        border-bottom: 3px solid #FFA033;
+    }
+
+    .rg-id-brand {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        min-width: 0;
+    }
+
+    .rg-id-logo {
+        display: block;
+        width: 45px;
+        height: 45px;
+        flex-shrink: 0;
+        padding: 5px;
+        border-radius: 10px;
+        background: #FFFFFF;
+        object-fit: contain;
+    }
+
+    .rg-id-brand-text {
+        min-width: 0;
+    }
+
+    .rg-id-brand-text strong {
+        display: block;
+        color: #FFFFFF;
+        font-size: 14px;
+        font-weight: 800;
+        letter-spacing: .2px;
+        line-height: 1.4;
+    }
+
+    .rg-id-brand-text span {
+        display: block;
+        margin-top: 3px;
+        color: rgba(255,255,255,.76);
+        font-size: 11px;
+        font-weight: 500;
+    }
+
+    .rg-id-badge {
+        flex-shrink: 0;
+        padding: 7px 12px;
+        border: 1px solid rgba(255,255,255,.23);
+        border-radius: 20px;
+        background: rgba(255,255,255,.09);
+        color: #FFFFFF;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: .8px;
+        text-transform: uppercase;
+    }
+
+    .rg-id-body {
+        display: grid;
+        grid-template-columns: 190px minmax(0, 1fr);
+    }
+
+    .rg-id-photo-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 24px 18px;
+        border-right: 1px solid #E5EAF2;
+        background: linear-gradient(180deg, #F5F7FB, #FFFFFF);
+        text-align: center;
+    }
+
+    .rg-id-photo {
+        width: 116px;
+        height: 116px;
+        border: 3px solid #FFFFFF;
+        border-radius: 16px;
+        background: #EDF1F7;
+        box-shadow: 0 6px 20px rgba(29,45,74,.12);
+        object-fit: cover;
+    }
+
+    .rg-id-photo-fallback {
+        display: grid;
+        place-items: center;
+        width: 116px;
+        height: 116px;
+        border: 3px solid #FFFFFF;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #293D63, #1D2D4A);
+        color: #FFFFFF;
+        box-shadow: 0 6px 20px rgba(29,45,74,.12);
+        font-size: 38px;
+        font-weight: 800;
+    }
+
+    .rg-id-name {
+        margin: 14px 0 6px;
+        color: #1D2D4A;
+        font-size: 14px;
+        font-weight: 800;
+        line-height: 1.45;
+        overflow-wrap: anywhere;
+    }
+
+    .rg-id-role-chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        margin-top: 4px;
+        padding: 6px 11px;
+        border: 1px solid #E5EAF2;
+        border-radius: 20px;
+        background: #F1F4F9;
+        color: #293D63;
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+    .rg-id-role-chip i {
+        color: #E88B20;
+    }
+
+    .rg-id-details {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        align-content: center;
+        gap: 22px 20px;
+        padding: 25px;
+    }
+
+    .rg-id-field {
+        min-width: 0;
+    }
+
+    .rg-id-label {
+        display: block;
+        margin-bottom: 6px;
+        color: #8793A7;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: .7px;
+        text-transform: uppercase;
+    }
+
+    .rg-id-value {
+        display: block;
+        color: #293D63;
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+    }
+
+    .rg-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        color: #237A58;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .rg-status-dot {
+        width: 8px;
+        height: 8px;
+        flex: 0 0 8px;
+        border-radius: 50%;
+        background: #28A66B;
+        box-shadow: 0 0 0 3px rgba(40,166,107,.10);
+    }
+
+    .rg-status-orange {
+        color: #B76A12;
+    }
+
+    .rg-status-orange .rg-status-dot {
+        background: #FFA033;
+        box-shadow: 0 0 0 3px rgba(255,160,51,.15);
+    }
+
+    .rg-id-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 13px 22px;
+        border-top: 1px solid #E5EAF2;
+        background: #F8FAFD;
+        color: #788397;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .rg-id-footer strong {
+        color: #293D63;
+    }
+
+    /* ==========================================
+       QUICK ACTION CARDS
+    ========================================== */
+
+    .rg-actions {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 17px;
+    }
+
+    .rg-action-card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        min-height: 205px;
+        padding: 21px;
+        overflow: hidden;
+        border: 1px solid #E5EAF2;
+        border-radius: 16px;
+        background: #FFFFFF;
+        text-decoration: none;
+        box-shadow: 0 5px 18px rgba(29,45,74,.035);
+        transition:
+            transform .25s ease,
+            box-shadow .25s ease,
+            border-color .25s ease;
+    }
+
+    .rg-action-card::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 75px;
+        height: 75px;
+        border-radius: 0 0 0 100%;
+        background: rgba(41,61,99,.035);
+        pointer-events: none;
+    }
+
+    .rg-action-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(41,61,99,.22);
+        box-shadow: 0 14px 30px rgba(29,45,74,.09);
+    }
+
+    .rg-action-blue {
+        border-top: 3px solid #293D63;
+    }
+
+    .rg-action-orange {
+        border-top: 3px solid #FFA033;
+    }
+
+    .rg-action-icon {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        margin-bottom: 18px;
+        border: 1px solid #E5EAF2;
+        border-radius: 13px;
+        background: #F1F4F9;
+        color: #293D63;
+        font-size: 18px;
+    }
+
+    .rg-action-orange .rg-action-icon {
+        background: #FFF5E8;
+        border-color: #FFE5C5;
+        color: #D77B12;
+    }
+
+    .rg-action-card h3 {
+        margin: 0 0 8px;
+        color: #1D2D4A;
+        font-size: 15px;
+        line-height: 1.4;
+        font-weight: 800;
+    }
+
+    .rg-action-card p {
+        margin: 0;
+        color: #788397;
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+    .rg-action-arrow {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: auto;
+        padding-top: 19px;
+        color: #293D63;
+        font-size: 11px;
+        font-weight: 800;
+    }
+
+    .rg-action-orange .rg-action-arrow {
+        color: #D77B12;
+    }
+
+    .rg-action-arrow i {
+        transition: transform .2s ease;
+    }
+
+    .rg-action-card:hover .rg-action-arrow i {
+        transform: translateX(4px);
+    }
+
+    /* ==========================================
+       RESPONSIVE
+    ========================================== */
+
+    @media (max-width: 1200px) {
+        .rg-actions {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .rg-id-body {
+            grid-template-columns: 175px minmax(0, 1fr);
+        }
+
+        .rg-id-details {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+            padding: 22px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .rg-banner {
+            aspect-ratio: 1078 / 362;
+            border-radius: 14px;
+        }
+
+        .rg-id-body {
+            grid-template-columns: 1fr;
+        }
+
+        .rg-id-photo-col {
+            padding: 24px 18px;
+            border-right: 0;
+            border-bottom: 1px solid #E5EAF2;
+        }
+
+        .rg-id-details {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            justify-items: stretch;
+            padding: 23px 18px;
+            gap: 20px 14px;
+        }
+
+        .rg-id-field {
+            width: 100%;
+            text-align: left;
+        }
+
+        .rg-id-value {
+            display: block;
+            text-align: left;
+        }
+
+        .rg-id-footer {
+            padding: 13px 16px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .rg-banner {
+            border-radius: 11px;
+        }
+
+        .rg-section-header h2 {
+            font-size: 19px;
+        }
+
+        .rg-section-header p {
+            font-size: 12px;
+        }
+
+        .rg-id-top {
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            padding: 17px 14px;
+            text-align: center;
+        }
+
+        .rg-id-brand {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .rg-id-brand-text {
+            text-align: center;
+        }
+
+        .rg-id-details {
+            grid-template-columns: 1fr;
+            gap: 17px;
+            padding: 21px;
+        }
+
+        .rg-id-footer {
+            flex-direction: column;
+            gap: 5px;
+            text-align: center;
+        }
+
+        .rg-actions {
+            grid-template-columns: 1fr;
+            gap: 13px;
+        }
+
+        .rg-action-card {
+            min-height: 170px;
+            padding: 19px;
+        }
+
+        .rg-action-icon {
+            margin-bottom: 14px;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .rg-action-card,
+        .rg-action-arrow i {
+            transition: none;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="rg-dashboard">
+
+    <!-- DASHBOARD BANNER -->
+    <section class="rg-banner"
+             role="img"
+             aria-label="Intela Group dashboard banner">
+    </section>
+
+    <!-- ACCOUNT DETAILS -->
+    <section class="rg-section">
+
+        <div class="rg-section-header">
+            <h2>Account Details</h2>
+            <p>Your account information and current status.</p>
+        </div>
+
+        <div class="rg-id-card">
+
+            <!-- Company Header -->
+            <div class="rg-id-top">
+
+                <div class="rg-id-brand">
+                    <img
+                        class="rg-id-logo"
+                        src="{% static 'intelaimages/intelafavicon.jpg' %}"
+                        alt="Intela Group logo"
+                    >
+
+                    <div class="rg-id-brand-text">
+                        <strong>Intela Group LLC</strong>
+                        <span>Information Technology Labs</span>
+                    </div>
+                </div>
+
+                <div class="rg-id-badge">
+                    <i class="fa-solid fa-id-card"></i>
+                    &nbsp; Profile Card
+                </div>
+
+            </div>
+
+            <div class="rg-id-body">
+
+                <!-- USER PROFILE -->
+                <div class="rg-id-photo-col">
+
+                    {% if request.user.profile_image %}
+                        <img
+                            class="rg-id-photo"
+                            src="{{ request.user.profile_image.url }}"
+                            alt="{{ request.user.username }}"
+                        >
+                    {% elif request.user.avatar %}
+                        <img
+                            class="rg-id-photo"
+                            src="{{ request.user.avatar.url }}"
+                            alt="{{ request.user.username }}"
+                        >
+                    {% else %}
+                        <div class="rg-id-photo-fallback">
+                            {{ request.user.username|slice:":1"|upper }}
+                        </div>
+                    {% endif %}
+
+                    <div>
+                        <div class="rg-id-name">
+                            {% if request.user.get_full_name %}
+                                {{ request.user.get_full_name }}
+                            {% else %}
+                                {{ request.user.username }}
+                            {% endif %}
+                        </div>
+
+                        <div class="rg-id-role-chip">
+                            <i class="fa-solid fa-shield-halved"></i>
+
+                            {% if request.user.is_superuser %}
+                                Super Admin
+                            {% elif request.user.is_staff %}
+                                Staff
+                            {% else %}
+                                User
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- ACCOUNT FIELDS -->
+                <div class="rg-id-details">
+
+                    <div class="rg-id-field">
+                        <span class="rg-id-label">Username</span>
+                        <span class="rg-id-value">
+                            {{ request.user.username }}
+                        </span>
+                    </div>
+
+                    <div class="rg-id-field">
+                        <span class="rg-id-label">Email</span>
+                        <span class="rg-id-value">
+                            {{ request.user.email|default:"Not provided" }}
+                        </span>
+                    </div>
+
+                    <div class="rg-id-field">
+                        <span class="rg-id-label">Phone</span>
+                        <span class="rg-id-value">
+                            {{ request.user.phone|default:"Not provided" }}
+                        </span>
+                    </div>
+
+                    <div class="rg-id-field">
+                        <span class="rg-id-label">Role</span>
+                        <span class="rg-id-value">
+                            {% if request.user.is_superuser %}
+                                Super Admin
+                            {% elif request.user.is_staff %}
+                                Staff
+                            {% else %}
+                                User
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    <div class="rg-id-field">
+                        <span class="rg-id-label">Email Verification</span>
+                        <span class="rg-id-value">
+                            {% if request.user.email_verified %}
+                                <span class="rg-status">
+                                    <span class="rg-status-dot"></span>
+                                    Verified
+                                </span>
+                            {% else %}
+                                <span class="rg-status rg-status-orange">
+                                    <span class="rg-status-dot"></span>
+                                    Not Verified
+                                </span>
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    <div class="rg-id-field">
+                        <span class="rg-id-label">Account Status</span>
+                        <span class="rg-id-value">
+                            {% if request.user.is_active %}
+                                <span class="rg-status">
+                                    <span class="rg-status-dot"></span>
+                                    Active
+                                </span>
+                            {% else %}
+                                <span class="rg-status rg-status-orange">
+                                    <span class="rg-status-dot"></span>
+                                    Inactive
+                                </span>
+                            {% endif %}
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="rg-id-footer">
+                <span>
+                    User ID · <strong>#{{ request.user.id }}</strong>
+                </span>
+                <span>Intela Group LLC</span>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- QUICK ACTIONS -->
+    <section class="rg-section">
+
+        <div class="rg-section-header">
+            <h2>Quick Actions</h2>
+            <p>Access your main website management tools.</p>
+        </div>
+
+        <div class="rg-actions">
+
+            <!-- SERVICES -->
+            <a href="{% url 'website:manage_services' %}"
+               class="rg-action-card rg-action-blue">
+
+                <div class="rg-action-icon">
+                    <i class="fa-solid fa-layer-group"></i>
+                </div>
+
+                <h3>Services</h3>
+
+                <p>
+                    Manage your company's services and website offerings.
+                </p>
+
+                <span class="rg-action-arrow">
+                    Manage Services
+                    <i class="fa-solid fa-arrow-right"></i>
+                </span>
+
+            </a>
+
+            <!-- JOBS -->
+            <a href="{% url 'website:manage_jobs' %}"
+               class="rg-action-card rg-action-orange">
+
+                <div class="rg-action-icon">
+                    <i class="fa-solid fa-briefcase"></i>
+                </div>
+
+                <h3>Jobs</h3>
+
+                <p>
+                    Create, update, and manage available job opportunities.
+                </p>
+
+                <span class="rg-action-arrow">
+                    Manage Jobs
+                    <i class="fa-solid fa-arrow-right"></i>
+                </span>
+
+            </a>
+
+            <!-- CAREER APPLICANTS -->
+            <a href="{% url 'website:manage_career_applicants' %}"
+               class="rg-action-card rg-action-blue">
+
+                <div class="rg-action-icon">
+                    <i class="fa-solid fa-user-tie"></i>
+                </div>
+
+                <h3>Career Applicants</h3>
+
+                <p>
+                    Review and manage applications submitted by candidates.
+                </p>
+
+                <span class="rg-action-arrow">
+                    View Applicants
+                    <i class="fa-solid fa-arrow-right"></i>
+                </span>
+
+            </a>
+
+            <!-- COMPANY CONTACT -->
+            <a href="{% url 'website:manage_company_contact' %}"
+               class="rg-action-card rg-action-orange">
+
+                <div class="rg-action-icon">
+                    <i class="fa-solid fa-building"></i>
+                </div>
+
+                <h3>Company Contact</h3>
+
+                <p>
+                    Manage company contact information and enquiries.
+                </p>
+
+                <span class="rg-action-arrow">
+                    Manage Contact
+                    <i class="fa-solid fa-arrow-right"></i>
+                </span>
+
+            </a>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}

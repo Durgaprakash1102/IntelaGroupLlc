@@ -1,0 +1,1581 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Rainsoft Global | Recruitment, Staffing, Software & Digital Solutions
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+    /* =========================================================
+   RAINSOFT GLOBAL - HOME PAGE
+   ========================================================= */
+
+    :root {
+        --rg-navy: #031b31;
+        --rg-navy-light: #062b4b;
+        --rg-blue: #0878c9;
+        --rg-blue-light: #eaf5fc;
+        --rg-orange: #ff5b1f;
+        --rg-orange-dark: #e84f18;
+
+        --rg-white: #ffffff;
+        --rg-offwhite: #f6f9fc;
+
+        --rg-text: #12253a;
+        --rg-muted: #647487;
+        --rg-border: #e4eaf0;
+
+        --rg-container: 1180px;
+    }
+
+
+    /* =========================================================
+   RESET / GLOBAL
+   ========================================================= */
+
+    .rg-home {
+        width: 100%;
+        overflow: hidden;
+        color: var(--rg-text);
+        background: #fff;
+
+        font-family:
+            Inter,
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+    }
+
+    .rg-home *,
+    .rg-home *::before,
+    .rg-home *::after {
+        box-sizing: border-box;
+    }
+
+    .rg-home img {
+        display: block;
+        max-width: 100%;
+    }
+
+    .rg-container {
+        width: min(var(--rg-container), calc(100% - 48px));
+        margin: 0 auto;
+    }
+
+
+    /* =========================================================
+   BUTTONS
+   ========================================================= */
+
+    .rg-btn {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        padding: 0 20px;
+        border-radius: 5px;
+        font-size: 10px;
+        font-weight: 800;
+        text-decoration: none;
+        cursor: pointer;
+        border: none;
+        transition: transform .25s ease, background .25s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+
+    .rg-btn i {
+        font-size: 9px;
+    }
+
+    .rg-btn-orange {
+        color: #fff !important;
+        background: var(--rg-orange);
+        border: 1px solid var(--rg-orange);
+        box-shadow: 0 8px 20px rgba(255, 91, 31, .20);
+    }
+
+    .rg-btn-orange:hover {
+        color: #fff !important;
+        background: var(--rg-orange-dark);
+        border-color: var(--rg-orange-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 12px 28px rgba(255, 91, 31, .25);
+    }
+
+    .rg-btn-outline {
+        color: #fff !important;
+        background: rgba(255, 255, 255, .04);
+        border: 1px solid rgba(255, 255, 255, .35);
+    }
+
+    .rg-btn-outline:hover {
+        color: #fff !important;
+        background: rgba(255, 255, 255, .12);
+        border-color: rgba(255, 255, 255, .6);
+        transform: translateY(-2px);
+    }
+
+
+    /* =========================================================
+   SECTION HEADING
+   ========================================================= */
+
+    .rg-section-heading {
+        margin-bottom: 40px;
+        text-align: center;
+    }
+
+    .rg-section-kicker {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 10px;
+        color: var(--rg-orange);
+        font-size: 8px;
+        font-weight: 900;
+        letter-spacing: 2.8px;
+        text-transform: uppercase;
+    }
+
+    .rg-section-kicker::before,
+    .rg-section-kicker::after {
+        content: "";
+        width: 23px;
+        height: 1px;
+        background: var(--rg-orange);
+    }
+
+    .rg-section-heading h2 {
+        margin: 0 0 10px;
+        color: var(--rg-text);
+        font-size: clamp(28px, 3vw, 39px);
+        line-height: 1.08;
+        font-weight: 850;
+        letter-spacing: -1.3px;
+    }
+
+    .rg-section-heading p {
+        max-width: 680px;
+        margin: 0 auto;
+        color: var(--rg-muted);
+        font-size: 10.5px;
+        line-height: 1.7;
+    }
+
+    .rg-left-kicker {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 11px;
+        color: var(--rg-orange);
+        font-size: 8px;
+        font-weight: 900;
+        letter-spacing: 2.7px;
+        text-transform: uppercase;
+    }
+
+    .rg-left-kicker::before {
+        content: "";
+        width: 30px;
+        height: 2px;
+        background: var(--rg-orange);
+    }
+
+    .rg-left-kicker.on-dark {
+        color: rgba(255, 255, 255, .62);
+    }
+
+
+    /* =========================================================
+   HERO
+   ========================================================= */
+
+    .rg-hero {
+        position: relative;
+        min-height: 560px;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        background: var(--rg-navy);
+    }
+
+    .rg-hero-bg {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+    }
+
+    /* PLACEHOLDER: replace background-image url with {% static 'images/hero-banner.jpg' %} */
+    .rg-hero-bg-img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: .55;
+    }
+
+    .rg-hero-bg::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg,
+                rgba(3, 27, 49, .98) 0%,
+                rgba(3, 27, 49, .94) 32%,
+                rgba(3, 27, 49, .75) 55%,
+                rgba(3, 27, 49, .30) 80%,
+                rgba(3, 27, 49, .12) 100%);
+    }
+
+    .rg-hero-container {
+        position: relative;
+        z-index: 2;
+        width: min(var(--rg-container), calc(100% - 48px));
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        min-height: 560px;
+    }
+
+    .rg-hero-content {
+        width: 58%;
+        padding: 40px 0;
+    }
+
+    .rg-hero-kicker {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin-bottom: 15px;
+        color: rgba(255, 255, 255, .68);
+        font-size: 8px;
+        font-weight: 800;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+    }
+
+    .rg-hero-kicker::before {
+        content: "";
+        width: 30px;
+        height: 2px;
+        background: var(--rg-orange);
+    }
+
+    .rg-hero-kicker span {
+        color: var(--rg-orange);
+    }
+
+    .rg-hero h1 {
+        max-width: 650px;
+        margin: 0 0 14px;
+        color: #fff;
+        font-size: clamp(40px, 5vw, 62px);
+        line-height: .98;
+        font-weight: 900;
+        letter-spacing: -2.8px;
+    }
+
+    .rg-hero h1 span {
+        display: block;
+        color: var(--rg-orange);
+    }
+
+    .rg-hero-tagline {
+        max-width: 620px;
+        margin-bottom: 12px;
+        color: #fff;
+        font-size: 11px;
+        font-weight: 800;
+        line-height: 1.5;
+    }
+
+    .rg-hero-description {
+        max-width: 590px;
+        margin: 0 0 8px;
+        color: rgba(255, 255, 255, .72);
+        font-size: 10px;
+        line-height: 1.65;
+    }
+
+    .rg-hero-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .rg-hero-countries {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-top: 22px;
+    }
+
+    .rg-hero-country {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: rgba(255, 255, 255, .68);
+        font-size: 8px;
+        font-weight: 700;
+    }
+
+    .rg-hero-country i {
+        color: var(--rg-blue);
+        font-size: 11px;
+    }
+
+    /* Decorative rotated quote near the globe */
+    .rg-hero-quote {
+        position: absolute;
+        right: 6%;
+        top: 16%;
+        z-index: 2;
+        max-width: 150px;
+        color: rgba(255, 255, 255, .85);
+        font-family: Georgia, "Times New Roman", serif;
+        font-style: italic;
+        font-size: 15px;
+        line-height: 1.35;
+        text-align: right;
+        transform: rotate(-4deg);
+    }
+
+    .rg-hero-line {
+        position: absolute;
+        right: 7%;
+        top: 55%;
+        width: 1px;
+        height: 130px;
+        background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, .28), transparent);
+        z-index: 2;
+    }
+
+
+    /* =========================================================
+   AT A GLANCE / STATS
+   ========================================================= */
+
+    .rg-stats {
+        background: #fff;
+        border-bottom: 1px solid var(--rg-border);
+    }
+
+    .rg-stat-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .rg-stat {
+        min-height: 112px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 18px 20px;
+        border-right: 1px solid var(--rg-border);
+    }
+
+    .rg-stat:last-child {
+        border-right: 0;
+    }
+
+    .rg-stat-icon {
+        width: 42px;
+        height: 42px;
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
+        border-radius: 50%;
+        background: var(--rg-blue-light);
+        color: var(--rg-blue);
+        font-size: 16px;
+    }
+
+    .rg-stat-number {
+        color: var(--rg-navy);
+        font-size: 26px;
+        line-height: 1;
+        font-weight: 900;
+        display: inline;
+    }
+
+    .rg-stat-title {
+        margin-top: 4px;
+        color: var(--rg-text);
+        font-size: 9px;
+        font-weight: 850;
+    }
+
+    .rg-stat-subtitle {
+        margin-top: 3px;
+        color: var(--rg-muted);
+        font-size: 8px;
+        line-height: 1.4;
+    }
+
+
+    /* =========================================================
+   WHAT WE DO
+   ========================================================= */
+
+    .rg-whatwedo {
+        padding: 68px 0 72px;
+        background: var(--rg-offwhite);
+    }
+
+    .rg-whatwedo-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 14px;
+    }
+
+    .rg-service-card {
+        padding: 26px 18px;
+        text-align: center;
+        background: #fff;
+        border: 1px solid #e6ecf1;
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(3, 27, 49, .05);
+        transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .rg-service-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 16px 35px rgba(3, 27, 49, .10);
+    }
+
+    .rg-service-icon {
+        width: 50px;
+        height: 50px;
+        display: grid;
+        place-items: center;
+        margin: 0 auto 15px;
+        border-radius: 50%;
+        background: var(--rg-blue-light);
+        color: var(--rg-blue);
+        font-size: 17px;
+    }
+
+    .rg-service-card.is-orange .rg-service-icon {
+        color: var(--rg-orange);
+        background: rgba(255, 91, 31, .09);
+    }
+
+    .rg-service-card h3 {
+        margin: 0 0 8px;
+        color: var(--rg-text);
+        font-size: 11.5px;
+        font-weight: 850;
+    }
+
+    .rg-service-card p {
+        margin: 0;
+        color: var(--rg-muted);
+        font-size: 8.5px;
+        line-height: 1.65;
+    }
+
+
+    /* =========================================================
+   WHY RAINSOFT GLOBAL
+   ========================================================= */
+
+    .rg-why {
+        position: relative;
+        padding: 70px 0;
+        overflow: hidden;
+        background: var(--rg-navy);
+    }
+
+    .rg-why-bg {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+    }
+
+    /* PLACEHOLDER: replace with {% static 'images/why-team.jpg' %} */
+    .rg-why-bg-img {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 55%;
+        height: 100%;
+        object-fit: cover;
+        opacity: .5;
+    }
+
+    .rg-why-bg::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, rgba(3, 27, 49, .99) 0%, rgba(3, 27, 49, .94) 45%, rgba(3, 27, 49, .55) 75%, rgba(3, 27, 49, .35) 100%);
+    }
+
+    .rg-why-inner {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 30px;
+    }
+
+    .rg-why-content {
+        max-width: 650px;
+    }
+
+    .rg-why h2 {
+        margin: 0 0 13px;
+        color: #fff;
+        font-size: clamp(30px, 3.7vw, 45px);
+        line-height: 1.05;
+        letter-spacing: -1.7px;
+    }
+
+    .rg-why-description {
+        max-width: 520px;
+        margin: 0 0 22px;
+        color: rgba(255, 255, 255, .66);
+        font-size: 10.5px;
+        line-height: 1.75;
+    }
+
+    .rg-why-checklist {
+        display: flex;
+        flex-direction: column;
+        gap: 11px;
+        margin-bottom: 26px;
+    }
+
+    .rg-why-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: rgba(255, 255, 255, .85);
+        font-size: 10px;
+        font-weight: 600;
+        line-height: 1.5;
+    }
+
+    .rg-why-item i {
+        width: 18px;
+        height: 18px;
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
+        border-radius: 50%;
+        color: #fff;
+        background: var(--rg-orange);
+        font-size: 7.5px;
+    }
+
+    .rg-why-vertical {
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        padding: 20px 0;
+        color: rgba(255, 255, 255, .55);
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        writing-mode: vertical-rl;
+    }
+
+    .rg-why-vertical::before,
+    .rg-why-vertical::after {
+        content: "";
+        width: 1px;
+        flex: 1;
+        background: rgba(255, 255, 255, .25);
+    }
+
+    .rg-why-vertical span {
+        display: block;
+    }
+
+    .rg-why-vertical span:nth-child(2) {
+        color: var(--rg-orange);
+    }
+
+
+    /* =========================================================
+   OUR APPROACH
+   ========================================================= */
+
+    .rg-approach {
+        padding: 72px 0 78px;
+        background: #fff;
+    }
+
+    .rg-approach-flow {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0;
+    }
+
+    .rg-approach-item {
+        position: relative;
+        text-align: center;
+        padding: 0 16px;
+    }
+
+    .rg-approach-item:not(:last-child)::after {
+        content: "→";
+        position: absolute;
+        right: -6px;
+        top: 22px;
+        color: #8aa0b4;
+        font-size: 18px;
+    }
+
+    .rg-approach-number {
+        width: 49px;
+        height: 49px;
+        display: grid;
+        place-items: center;
+        margin: 0 auto 14px;
+        border-radius: 50%;
+        color: var(--rg-blue);
+        background: var(--rg-blue-light);
+        font-size: 15px;
+    }
+
+    .rg-approach-item.is-orange .rg-approach-number {
+        color: var(--rg-orange);
+        background: rgba(255, 91, 31, .09);
+    }
+
+    .rg-approach-item h3 {
+        margin: 0 0 6px;
+        color: var(--rg-text);
+        font-size: 11px;
+        font-weight: 850;
+    }
+
+    .rg-approach-item p {
+        max-width: 155px;
+        margin: 0 auto;
+        color: var(--rg-muted);
+        font-size: 8px;
+        line-height: 1.6;
+    }
+
+
+    /* =========================================================
+   GLOBAL PRESENCE
+   ========================================================= */
+
+    .rg-global {
+        padding: 70px 0;
+        background: var(--rg-offwhite);
+    }
+
+    .rg-global-grid {
+        display: grid;
+        grid-template-columns: .8fr 1.2fr;
+        gap: 50px;
+        align-items: center;
+    }
+
+    .rg-global-content h2 {
+        max-width: 430px;
+        margin: 0 0 14px;
+        color: var(--rg-text);
+        font-size: clamp(28px, 3.4vw, 40px);
+        line-height: 1.08;
+        letter-spacing: -1.5px;
+    }
+
+    .rg-global-content p {
+        max-width: 420px;
+        margin: 0 0 18px;
+        color: var(--rg-muted);
+        font-size: 10px;
+        line-height: 1.75;
+    }
+
+    .rg-location-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+    }
+
+    .rg-location-card {
+        position: relative;
+        min-height: 210px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 16px;
+        overflow: hidden;
+        border-radius: 8px;
+        background: var(--rg-navy);
+        box-shadow: 0 8px 22px rgba(3, 27, 49, .10);
+    }
+
+    /* PLACEHOLDER: replace src with real static images per location */
+    .rg-location-image {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .rg-location-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(transparent 30%, rgba(3, 27, 49, .92));
+    }
+
+    .rg-location-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .rg-location-flag {
+        width: 26px;
+        height: 26px;
+        margin-bottom: 8px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, .15);
+        color: #fff;
+        font-size: 11px;
+    }
+
+    .rg-location-card h3 {
+        margin: 0;
+        color: #fff;
+        font-size: 15px;
+        font-weight: 850;
+    }
+
+    .rg-location-card span {
+        display: block;
+        margin-top: 3px;
+        color: rgba(255, 255, 255, .75);
+        font-size: 8.5px;
+        font-weight: 600;
+    }
+
+
+    /* =========================================================
+   FINAL CTA
+   ========================================================= */
+
+    .rg-final {
+        position: relative;
+        padding: 55px 0;
+        overflow: hidden;
+        background: var(--rg-navy);
+    }
+
+    .rg-final::after {
+        content: "";
+        position: absolute;
+        width: 420px;
+        height: 420px;
+        right: -200px;
+        top: -245px;
+        border: 1px solid rgba(255, 255, 255, .10);
+        border-radius: 50%;
+        box-shadow: 0 0 0 45px rgba(255, 255, 255, .02), 0 0 0 90px rgba(255, 255, 255, .01);
+    }
+
+    .rg-final-layout {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 35px;
+    }
+
+    .rg-final-label {
+        margin-bottom: 7px;
+        color: rgba(255, 255, 255, .48);
+        font-size: 8px;
+        font-weight: 800;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+    }
+
+    .rg-final h2 {
+        margin: 0 0 9px;
+        color: #fff;
+        font-size: clamp(28px, 3.5vw, 42px);
+        line-height: 1;
+        letter-spacing: -1.6px;
+    }
+
+    .rg-final p {
+        max-width: 690px;
+        margin: 0;
+        color: rgba(255, 255, 255, .59);
+        font-size: 10px;
+        line-height: 1.65;
+    }
+
+    .rg-final-action {
+        flex-shrink: 0;
+    }
+
+
+    /* =========================================================
+   TABLET
+   ========================================================= */
+
+    @media (max-width: 1050px) {
+
+        .rg-hero,
+        .rg-hero-container {
+            min-height: 520px;
+        }
+
+        .rg-hero-content {
+            width: 65%;
+        }
+
+        .rg-hero h1 {
+            font-size: clamp(38px, 5vw, 55px);
+        }
+
+        .rg-hero-quote {
+            display: none;
+        }
+
+        .rg-whatwedo-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .rg-why-inner {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .rg-why-vertical {
+            writing-mode: horizontal-tb;
+            flex-direction: row;
+        }
+
+        .rg-why-vertical::before,
+        .rg-why-vertical::after {
+            width: 30px;
+            height: 1px;
+            flex: none;
+        }
+
+        .rg-approach-flow {
+            grid-template-columns: repeat(3, 1fr);
+            row-gap: 40px;
+        }
+
+        .rg-approach-item:nth-child(3)::after {
+            display: none;
+        }
+
+        .rg-global-grid {
+            grid-template-columns: 1fr;
+            gap: 35px;
+        }
+
+        .rg-global-content {
+            text-align: center;
+        }
+
+        .rg-global-content h2,
+        .rg-global-content p {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .rg-location-grid {
+            max-width: 750px;
+            margin: 0 auto;
+        }
+    }
+
+
+    /* =========================================================
+   TABLET / SMALL LAPTOP
+   ========================================================= */
+
+    @media (max-width: 800px) {
+
+        .rg-container,
+        .rg-hero-container {
+            width: calc(100% - 36px);
+        }
+
+        .rg-hero,
+        .rg-hero-container {
+            min-height: 500px;
+        }
+
+        .rg-hero-content {
+            width: 72%;
+        }
+
+        .rg-hero h1 {
+            font-size: clamp(37px, 6vw, 51px);
+        }
+
+        .rg-whatwedo-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .rg-approach-flow {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .rg-approach-item:nth-child(2)::after {
+            display: none;
+        }
+
+        .rg-final-layout {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+    }
+
+
+    /* =========================================================
+   MOBILE
+   ========================================================= */
+
+    @media (max-width: 600px) {
+
+        .rg-container,
+        .rg-hero-container {
+            width: calc(100% - 28px);
+        }
+
+        /* Hero */
+        .rg-hero,
+        .rg-hero-container {
+            min-height: 500px;
+        }
+
+        .rg-hero-container {
+            align-items: flex-start;
+            padding-top: 80px;
+            padding-bottom: 45px;
+        }
+
+        .rg-hero-content {
+            width: 100%;
+        }
+
+        .rg-hero-bg::after {
+            background: linear-gradient(180deg, rgba(3, 27, 49, .96) 0%, rgba(3, 27, 49, .90) 55%, rgba(3, 27, 49, .82) 100%);
+        }
+
+        .rg-hero h1 {
+            font-size: clamp(36px, 11vw, 47px);
+            letter-spacing: -2px;
+        }
+
+        .rg-hero-tagline {
+            font-size: 10px;
+        }
+
+        .rg-hero-description {
+            font-size: 9px;
+            line-height: 1.65;
+        }
+
+        .rg-hero-actions {
+            width: 100%;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 8px;
+        }
+
+        .rg-hero-actions .rg-btn {
+            width: 100%;
+        }
+
+        .rg-hero-countries {
+            gap: 14px;
+        }
+
+        .rg-hero-country {
+            font-size: 7px;
+        }
+
+        .rg-hero-line {
+            display: none;
+        }
+
+        /* Stats */
+        .rg-stat-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .rg-stat {
+            min-height: 96px;
+            padding: 12px;
+        }
+
+        .rg-stat:nth-child(2) {
+            border-right: 0;
+        }
+
+        .rg-stat:nth-child(-n+2) {
+            border-bottom: 1px solid var(--rg-border);
+        }
+
+        .rg-stat-icon {
+            width: 34px;
+            height: 34px;
+            font-size: 13px;
+        }
+
+        .rg-stat-number {
+            font-size: 21px;
+        }
+
+        .rg-stat-title {
+            font-size: 7.5px;
+        }
+
+        .rg-stat-subtitle {
+            font-size: 6.5px;
+        }
+
+        /* Sections */
+        .rg-whatwedo,
+        .rg-why,
+        .rg-approach,
+        .rg-global {
+            padding: 55px 0;
+        }
+
+        .rg-section-heading {
+            margin-bottom: 30px;
+        }
+
+        .rg-section-heading h2 {
+            font-size: 27px;
+        }
+
+        .rg-whatwedo-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .rg-why h2 {
+            font-size: 30px;
+        }
+
+        .rg-why-item {
+            font-size: 9.5px;
+        }
+
+        .rg-approach-flow {
+            grid-template-columns: 1fr;
+        }
+
+        .rg-approach-item {
+            padding: 0 25px 32px;
+        }
+
+        .rg-approach-item::after {
+            display: none !important;
+        }
+
+        .rg-approach-item:not(:last-child)::before {
+            content: "↓";
+            position: absolute;
+            left: 50%;
+            bottom: 1px;
+            transform: translateX(-50%);
+            color: #8aa0b4;
+            font-size: 16px;
+        }
+
+        .rg-global-content h2 {
+            font-size: 28px;
+        }
+
+        .rg-location-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .rg-location-card {
+            min-height: 160px;
+        }
+
+        .rg-final h2 {
+            font-size: 28px;
+        }
+
+        .rg-final-action {
+            width: 100%;
+        }
+
+        .rg-final-action .rg-btn {
+            width: 100%;
+        }
+    }
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="rg-home">
+
+
+    <!-- =====================================================
+     HERO
+     ===================================================== -->
+
+    <section class="rg-hero">
+
+        <div class="rg-hero-bg">
+            <!-- PLACEHOLDER IMAGE: replace src with {% static 'images/hero-banner.jpg' %} -->
+            <img class="rg-hero-bg-img" src="https://placehold.co/1800x900/0a2540/13314f?text=Hero+Banner+Placeholder"
+                alt="Rainsoft Global">
+        </div>
+
+        <div class="rg-hero-container">
+
+            <div class="rg-hero-content">
+
+                <div class="rg-hero-kicker">
+                    PEOPLE
+                    <span>|</span>
+                    TECHNOLOGY
+                    <span>|</span>
+                    OPPORTUNITIES
+                </div>
+
+                <h1>
+                    Empowering Talent.
+                    <span>Elevating Brands.</span>
+                </h1>
+
+                <div class="rg-hero-tagline">
+                    Your Trusted Partner for Recruitment, Staffing, Software & Digital Solutions
+                </div>
+
+                <p class="rg-hero-description">
+                    Rainsoft Global helps businesses find the right talent, build capable teams,
+                    address technology requirements, and strengthen their presence in the digital world.
+                </p>
+
+                <p class="rg-hero-description">
+                    With a presence across <strong>India, USA, and Canada</strong>, we bring together
+                    people, expertise, technology, and business solutions to help organizations move forward.
+                </p>
+
+                <div class="rg-hero-actions">
+
+                    <a href="{% url 'website:services' %}" class="rg-btn rg-btn-orange">
+                        Explore Our Services
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+
+                    <a href="{% url 'website:contact' %}" class="rg-btn rg-btn-outline">
+                        Get in Touch
+                    </a>
+
+                </div>
+
+                <div class="rg-hero-countries">
+
+                    <div class="rg-hero-country">
+                        <i class="fa-solid fa-location-dot"></i>
+                        India
+                    </div>
+
+                    <div class="rg-hero-country">
+                        <i class="fa-solid fa-location-dot"></i>
+                        USA
+                    </div>
+
+                    <div class="rg-hero-country">
+                        <i class="fa-solid fa-location-dot"></i>
+                        Canada
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="rg-hero-line"></div>
+
+        </div>
+
+        <div class="rg-hero-quote">
+            A Global Partner for a Brighter Tomorrow
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+     AT A GLANCE / STATS
+     ===================================================== -->
+
+    <section class="rg-stats">
+
+        <div class="rg-container">
+
+            <div class="rg-stat-grid">
+
+                <div class="rg-stat">
+                    <div class="rg-stat-icon"><i class="fa-solid fa-award"></i></div>
+                    <div>
+                        <div><span class="rg-stat-number">10+</span></div>
+                        <div class="rg-stat-title">Years of Experience</div>
+                        <div class="rg-stat-subtitle">A decade of trusted expertise.</div>
+                    </div>
+                </div>
+
+                <div class="rg-stat">
+                    <div class="rg-stat-icon"><i class="fa-solid fa-users"></i></div>
+                    <div>
+                        <div><span class="rg-stat-number">25+</span></div>
+                        <div class="rg-stat-title">Qualified Experts</div>
+                        <div class="rg-stat-subtitle">A skilled and dedicated team.</div>
+                    </div>
+                </div>
+
+                <div class="rg-stat">
+                    <div class="rg-stat-icon"><i class="fa-solid fa-building"></i></div>
+                    <div>
+                        <div><span class="rg-stat-number">90+</span></div>
+                        <div class="rg-stat-title">Clients Served Annually</div>
+                        <div class="rg-stat-subtitle">Growing through your trust.</div>
+                    </div>
+                </div>
+
+                <div class="rg-stat">
+                    <div class="rg-stat-icon"><i class="fa-solid fa-globe"></i></div>
+                    <div>
+                        <div><span class="rg-stat-number">5+</span></div>
+                        <div class="rg-stat-title">International Clients</div>
+                        <div class="rg-stat-subtitle">Serving beyond borders.</div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+     WHAT WE DO
+     ===================================================== -->
+
+    <section class="rg-whatwedo">
+
+        <div class="rg-container">
+
+            <div class="rg-section-heading">
+                <div class="rg-section-kicker">What We Do</div>
+                <h2>Comprehensive Solutions for a Stronger Tomorrow</h2>
+                <p>
+                    From finding the right people to building technology and digital presence,
+                    we deliver solutions that help your business grow.
+                </p>
+            </div>
+
+            <div class="rg-whatwedo-grid">
+
+                <article class="rg-service-card">
+                    <div class="rg-service-icon"><i class="fa-solid fa-users"></i></div>
+                    <h3>Recruitment</h3>
+                    <p>Connecting businesses with exceptional talent across IT and Non-IT.</p>
+                </article>
+
+                <article class="rg-service-card is-orange">
+                    <div class="rg-service-icon"><i class="fa-solid fa-layer-group"></i></div>
+                    <h3>Staffing</h3>
+                    <p>Flexible workforce solutions for changing business needs.</p>
+                </article>
+
+                <article class="rg-service-card">
+                    <div class="rg-service-icon"><i class="fa-solid fa-landmark"></i></div>
+                    <h3>Government Services</h3>
+                    <p>Specialized staffing for federal and state government projects.</p>
+                </article>
+
+                <article class="rg-service-card">
+                    <div class="rg-service-icon"><i class="fa-solid fa-code"></i></div>
+                    <h3>Software Services</h3>
+                    <p>Technology solutions designed around your business requirements.</p>
+                </article>
+
+                <article class="rg-service-card">
+                    <div class="rg-service-icon"><i class="fa-solid fa-bullhorn"></i></div>
+                    <h3>Digital Solutions</h3>
+                    <p>Helping businesses strengthen their online presence and visibility.</p>
+                </article>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+     WHY RAINSOFT GLOBAL
+     ===================================================== -->
+
+    <section class="rg-why">
+
+        <div class="rg-why-bg">
+            <!-- PLACEHOLDER IMAGE: replace src with {% static 'images/why-team.jpg' %} -->
+            <img class="rg-why-bg-img" src="https://placehold.co/1200x1000/0a2540/13314f?text=Team+Photo+Placeholder"
+                alt="Rainsoft Global team">
+        </div>
+
+        <div class="rg-container">
+
+            <div class="rg-why-inner">
+
+                <div class="rg-why-content">
+
+                    <div class="rg-left-kicker on-dark">Why Rainsoft Global</div>
+
+                    <h2>More Than a Service Provider</h2>
+
+                    <p class="rg-why-description">
+                        We build lasting partnerships through understanding, expertise and a
+                        commitment to your success.
+                    </p>
+
+                    <div class="rg-why-checklist">
+
+                        <div class="rg-why-item">
+                            <i class="fa-solid fa-check"></i>
+                            Global reach across India, USA and Canada
+                        </div>
+
+                        <div class="rg-why-item">
+                            <i class="fa-solid fa-check"></i>
+                            Expertise across multiple industries
+                        </div>
+
+                        <div class="rg-why-item">
+                            <i class="fa-solid fa-check"></i>
+                            Flexible and tailored solutions
+                        </div>
+
+                        <div class="rg-why-item">
+                            <i class="fa-solid fa-check"></i>
+                            Experienced and qualified team
+                        </div>
+
+                        <div class="rg-why-item">
+                            <i class="fa-solid fa-check"></i>
+                            A client-focused approach
+                        </div>
+
+                    </div>
+
+                    <a href="{% url 'website:about' %}" class="rg-btn rg-btn-orange">
+                        Discover Our Story
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+
+                </div>
+
+                <div class="rg-why-vertical">
+                    <span>People</span>
+                    <span>Ideas</span>
+                    <span>Solutions</span>
+                    <span>Success</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+     OUR APPROACH
+     ===================================================== -->
+
+    <section class="rg-approach">
+
+        <div class="rg-container">
+
+            <div class="rg-section-heading">
+                <div class="rg-section-kicker">Our Approach</div>
+                <h2>Understand. Connect. Deliver.</h2>
+                <p>A straightforward approach to help you achieve your goals.</p>
+            </div>
+
+            <div class="rg-approach-flow">
+
+                <div class="rg-approach-item">
+                    <div class="rg-approach-number"><i class="fa-solid fa-magnifying-glass"></i></div>
+                    <h3>Understand</h3>
+                    <p>We learn about your requirements.</p>
+                </div>
+
+                <div class="rg-approach-item is-orange">
+                    <div class="rg-approach-number"><i class="fa-solid fa-lightbulb"></i></div>
+                    <h3>Identify</h3>
+                    <p>We find the right talent or solution.</p>
+                </div>
+
+                <div class="rg-approach-item">
+                    <div class="rg-approach-number"><i class="fa-solid fa-bullseye"></i></div>
+                    <h3>Align</h3>
+                    <p>We tailor our approach to your needs.</p>
+                </div>
+
+                <div class="rg-approach-item">
+                    <div class="rg-approach-number"><i class="fa-solid fa-gear"></i></div>
+                    <h3>Deliver</h3>
+                    <p>We work towards successful outcomes.</p>
+                </div>
+
+                <div class="rg-approach-item">
+                    <div class="rg-approach-number"><i class="fa-solid fa-chart-column"></i></div>
+                    <h3>Build</h3>
+                    <p>We aim for long-term partnerships.</p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+     GLOBAL PRESENCE
+     ===================================================== -->
+
+    <section class="rg-global">
+
+        <div class="rg-container">
+
+            <div class="rg-global-grid">
+
+                <div class="rg-global-content">
+
+                    <h2>A Global Presence. A Local Understanding.</h2>
+
+                    <p>
+                        Rainsoft Global operates across key international locations, allowing us
+                        to support businesses and professionals across different markets.
+                    </p>
+
+                    <a href="{% url 'website:contact' %}" class="rg-btn rg-btn-orange">
+                        Get in Touch
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+
+                </div>
+
+                <div class="rg-location-grid">
+
+                    <!-- India -->
+                    <article class="rg-location-card">
+                        <!-- PLACEHOLDER IMAGE: replace src with {% static 'images/location-india.jpg' %} -->
+                        <img class="rg-location-image" src="https://placehold.co/500x500/0878c9/ffffff?text=India"
+                            alt="India">
+                        <div class="rg-location-content">
+                            <div class="rg-location-flag"><i class="fa-solid fa-location-dot"></i></div>
+                            <h3>India</h3>
+                            <span>Hyderabad</span>
+                        </div>
+                    </article>
+
+                    <!-- USA -->
+                    <article class="rg-location-card">
+                        <!-- PLACEHOLDER IMAGE: replace src with {% static 'images/location-usa.jpg' %} -->
+                        <img class="rg-location-image" src="https://placehold.co/500x500/0878c9/ffffff?text=USA"
+                            alt="USA">
+                        <div class="rg-location-content">
+                            <div class="rg-location-flag"><i class="fa-solid fa-location-dot"></i></div>
+                            <h3>USA</h3>
+                            <span>New Jersey</span>
+                        </div>
+                    </article>
+
+                    <!-- Canada -->
+                    <article class="rg-location-card">
+                        <!-- PLACEHOLDER IMAGE: replace src with {% static 'images/location-canada.jpg' %} -->
+                        <img class="rg-location-image" src="https://placehold.co/500x500/0878c9/ffffff?text=Canada"
+                            alt="Canada">
+                        <div class="rg-location-content">
+                            <div class="rg-location-flag"><i class="fa-solid fa-location-dot"></i></div>
+                            <h3>Canada</h3>
+                            <span>Ontario, Pickering</span>
+                        </div>
+                    </article>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+     FINAL CTA
+     ===================================================== -->
+
+    <section class="rg-final">
+
+        <div class="rg-container">
+
+            <div class="rg-final-layout">
+
+                <div>
+                    <div class="rg-final-label">Ready to Move Forward?</div>
+                    <h2>Let's Build What's Next</h2>
+                    <p>
+                        Whether you need the right talent, workforce support, technology services,
+                        or digital expertise, Rainsoft Global is ready to understand your requirement.
+                    </p>
+                </div>
+
+                <div class="rg-final-action">
+                    <a href="{% url 'website:contact' %}" class="rg-btn rg-btn-orange">
+                        Start a Conversation
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+</div>
+
+{% endblock %}

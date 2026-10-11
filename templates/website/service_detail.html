@@ -1,0 +1,843 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ service.title }} | Intela Group LLC{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ==========================================
+   INTELA SERVICE DETAIL PAGE
+========================================== */
+.service-detail-page {
+    --intela-navy: #293D63;
+    --intela-deep: #1D2D4A;
+    --intela-orange: #FFA033;
+    --intela-blue: #3478B9;
+    --intela-bg: #F6F8FB;
+    --intela-muted: #788397;
+    --intela-border: #E5EAF1;
+
+    color: var(--intela-deep);
+    background: #fff;
+    font-family: inherit;
+}
+
+.service-detail-page *,
+.service-detail-page *::before,
+.service-detail-page *::after {
+    box-sizing: border-box;
+}
+
+.service-detail-page a {
+    text-decoration: none;
+}
+
+.service-detail-page .sd-container {
+    width: min(1200px, calc(100% - 40px));
+    margin: 0 auto;
+}
+
+/* ==========================================
+   HERO BANNER
+========================================== */
+.service-detail-page .sd-hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 200px;
+    padding: 30px 0;
+    overflow: hidden;
+
+    background-image:
+        linear-gradient(
+            90deg,
+            rgba(29, 45, 74, 0.94) 0%,
+            rgba(41, 61, 99, 0.82) 55%,
+            rgba(29, 45, 74, 0.68) 100%
+        ),
+        url("{% static 'intelaimages/intelaservicesbanner.png' %}");
+
+    background-size: cover;
+    background-position: center;
+}
+
+.service-detail-page .sd-hero-content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.service-detail-page .sd-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+    margin: 0 0 12px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 13px;
+}
+
+.service-detail-page .sd-breadcrumb a {
+    color: #fff;
+    transition: color 0.2s ease;
+}
+
+.service-detail-page .sd-breadcrumb a:hover {
+    color: var(--intela-orange);
+}
+
+.service-detail-page .sd-breadcrumb i {
+    font-size: 10px;
+}
+
+.service-detail-page .sd-hero h1 {
+    max-width: 900px;
+    margin: 0;
+    color: #fff;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 750;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+}
+
+.service-detail-page .sd-hero-accent {
+    width: 60px;
+    height: 4px;
+    margin-top: 14px;
+    border-radius: 5px;
+    background: var(--intela-orange);
+}
+
+/* ==========================================
+   MAIN CONTENT
+========================================== */
+.service-detail-page .sd-main {
+    width: 100%;
+    padding: 20px 0;
+}
+
+.service-detail-page .sd-section {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.service-detail-page .sd-card {
+    min-width: 0;
+    border: 1px solid var(--intela-border);
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 5px 20px rgba(29, 45, 74, 0.055);
+}
+
+/* ==========================================
+   IMAGE + SIDEBAR GRID
+========================================== */
+.service-detail-page .sd-top-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.65fr) minmax(280px, 1fr);
+    gap: 20px;
+    align-items: stretch;
+    margin-bottom: 20px;
+}
+
+/* Desktop image height */
+.service-detail-page .sd-image-card {
+    height: 280px;
+    min-height: 280px;
+    overflow: hidden;
+    background: var(--intela-bg);
+}
+
+.service-detail-page .sd-service-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.service-detail-page .sd-image-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    color: var(--intela-navy);
+    text-align: center;
+
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(255, 160, 51, 0.18),
+            transparent 45%
+        ),
+        linear-gradient(135deg, #F6F8FB, #EAF0F8);
+}
+
+.service-detail-page .sd-image-placeholder i {
+    color: var(--intela-blue);
+    font-size: 45px;
+}
+
+.service-detail-page .sd-image-placeholder p {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+/* ==========================================
+   SIDEBAR: SAME TOTAL HEIGHT AS IMAGE
+   130px + 20px gap + 130px = 280px
+========================================== */
+.service-detail-page .sd-sidebar {
+    display: grid;
+    grid-template-rows: 130px 130px;
+    gap: 20px;
+    height: 280px;
+    min-height: 0;
+}
+
+/* Compact cards without internal scrolling */
+.service-detail-page .sd-contact-card,
+.service-detail-page .sd-why-card {
+    height: 130px;
+    min-height: 0;
+    padding: 10px 14px;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+/* Let's Talk card */
+.service-detail-page .sd-contact-card {
+    color: #fff;
+    border: none;
+    background: linear-gradient(
+        135deg,
+        var(--intela-navy),
+        var(--intela-deep)
+    );
+}
+
+/* Why Intela card */
+.service-detail-page .sd-why-card {
+    background: var(--intela-bg);
+}
+
+/* Hide decorative icons to save vertical space */
+.service-detail-page .sd-contact-card .sd-card-icon,
+.service-detail-page .sd-why-card .sd-card-icon {
+    display: none;
+}
+
+/* Card headings */
+.service-detail-page .sd-contact-card h2,
+.service-detail-page .sd-why-card h2 {
+    margin: 0 0 6px;
+    font-size: 16px;
+    font-weight: 750;
+    line-height: 1.2;
+}
+
+.service-detail-page .sd-contact-card h2 {
+    color: #fff;
+}
+
+.service-detail-page .sd-why-card h2 {
+    color: var(--intela-navy);
+}
+
+/* Compact descriptions */
+.service-detail-page .sd-contact-card p,
+.service-detail-page .sd-why-card > p {
+    margin: 0 0 6px;
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+.service-detail-page .sd-contact-card p {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.service-detail-page .sd-why-card > p {
+    color: var(--intela-muted);
+}
+
+/* Contact details */
+.service-detail-page .sd-contact-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    margin: 5px 0 7px;
+}
+
+.service-detail-page .sd-contact-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 10px;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+.service-detail-page .sd-contact-item i {
+    flex: 0 0 12px;
+    margin: 0;
+    color: var(--intela-orange);
+    text-align: center;
+}
+
+.service-detail-page .sd-contact-item a {
+    color: inherit;
+}
+
+.service-detail-page .sd-contact-item a:hover {
+    color: var(--intela-orange);
+}
+
+/* Buttons */
+.service-detail-page .sd-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    max-width: 100%;
+    padding: 5px 10px;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.4;
+    transition: all 0.2s ease;
+}
+
+.service-detail-page .sd-button-primary {
+    color: var(--intela-deep);
+    background: var(--intela-orange);
+}
+
+.service-detail-page .sd-button-primary:hover {
+    color: var(--intela-deep);
+    background: #FFB75C;
+}
+
+/* Why Intela benefits */
+.service-detail-page .sd-benefits {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px 10px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.service-detail-page .sd-benefits li {
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+    min-width: 0;
+    color: var(--intela-deep);
+    font-size: 10px;
+    line-height: 1.3;
+}
+
+.service-detail-page .sd-benefits i {
+    flex: 0 0 11px;
+    margin-top: 2px;
+    color: var(--intela-blue);
+    font-size: 10px;
+}
+
+/* ==========================================
+   FULL-WIDTH DESCRIPTION SECTIONS
+========================================== */
+.service-detail-page .sd-content-card {
+    display: block;
+    width: 100%;
+    padding: 24px;
+    margin: 0 0 20px;
+}
+
+.service-detail-page .sd-section-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 13px;
+}
+
+.service-detail-page .sd-heading-icon {
+    display: inline-flex;
+    flex: 0 0 40px;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    color: #fff;
+    background: var(--intela-navy);
+    font-size: 16px;
+}
+
+.service-detail-page .sd-section-title {
+    margin: 0 0 6px;
+    color: var(--intela-navy);
+    font-size: 23px;
+    font-weight: 750;
+    line-height: 1.35;
+}
+
+.service-detail-page .sd-section-subtitle {
+    margin: 0;
+    color: var(--intela-muted);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.service-detail-page .sd-description-text {
+    width: 100%;
+    color: #56647A;
+    font-size: 14px;
+    line-height: 1.85;
+    overflow-wrap: anywhere;
+}
+
+.service-detail-page .sd-description-text p {
+    margin: 0 0 12px;
+}
+
+.service-detail-page .sd-description-text p:last-child {
+    margin-bottom: 0;
+}
+
+.service-detail-page .sd-description-text ul,
+.service-detail-page .sd-description-text ol {
+    padding-left: 22px;
+    margin: 10px 0;
+}
+
+.service-detail-page .sd-description-text li {
+    padding-left: 4px;
+    margin-bottom: 7px;
+}
+
+.service-detail-page .sd-description-text h2,
+.service-detail-page .sd-description-text h3,
+.service-detail-page .sd-description-text h4 {
+    margin: 18px 0 9px;
+    color: var(--intela-navy);
+}
+
+/* ==========================================
+   BOTTOM CTA
+========================================== */
+.service-detail-page .sd-bottom-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    width: 100%;
+    padding: 24px 28px;
+    margin-top: 20px;
+    border-radius: 12px;
+    color: #fff;
+    background: linear-gradient(
+        110deg,
+        var(--intela-navy),
+        var(--intela-deep)
+    );
+}
+
+.service-detail-page .sd-bottom-cta h2 {
+    margin: 0 0 7px;
+    color: #fff;
+    font-size: 22px;
+    font-weight: 750;
+    line-height: 1.35;
+}
+
+.service-detail-page .sd-bottom-cta p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+/* ==========================================
+   TABLET
+========================================== */
+@media (max-width: 900px) and (min-width: 701px) {
+    .service-detail-page .sd-top-grid {
+        grid-template-columns: minmax(0, 1.2fr) minmax(240px, 1fr);
+    }
+
+    .service-detail-page .sd-image-card {
+        height: 250px;
+        min-height: 250px;
+    }
+
+    .service-detail-page .sd-sidebar {
+        grid-template-rows: 115px 115px;
+        gap: 20px;
+        height: 250px;
+    }
+
+    .service-detail-page .sd-contact-card,
+    .service-detail-page .sd-why-card {
+        height: 115px;
+        padding: 8px 10px;
+    }
+
+    .service-detail-page .sd-contact-card h2,
+    .service-detail-page .sd-why-card h2 {
+        font-size: 14px;
+    }
+
+    .service-detail-page .sd-contact-card p,
+    .service-detail-page .sd-why-card > p {
+        font-size: 10px;
+    }
+
+    .service-detail-page .sd-hero-content {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+}
+
+/* ==========================================
+   MOBILE
+========================================== */
+@media (max-width: 700px) {
+    .service-detail-page .sd-container {
+        width: calc(100% - 30px);
+    }
+
+    .service-detail-page .sd-hero {
+        min-height: 175px;
+        padding: 25px 0;
+    }
+
+    .service-detail-page .sd-hero-content {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    .service-detail-page .sd-top-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+    }
+
+    .service-detail-page .sd-image-card {
+        height: 230px;
+        min-height: 230px;
+    }
+
+    .service-detail-page .sd-sidebar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: auto;
+        gap: 20px;
+        height: auto;
+    }
+
+    .service-detail-page .sd-contact-card,
+    .service-detail-page .sd-why-card {
+        height: auto;
+        min-height: 0;
+        padding: 16px;
+        overflow: visible;
+    }
+
+    .service-detail-page .sd-contact-card h2,
+    .service-detail-page .sd-why-card h2 {
+        font-size: 16px;
+    }
+
+    .service-detail-page .sd-contact-card p,
+    .service-detail-page .sd-why-card > p {
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .service-detail-page .sd-contact-details {
+        display: grid;
+        gap: 7px;
+    }
+
+    .service-detail-page .sd-contact-item,
+    .service-detail-page .sd-benefits li {
+        font-size: 11px;
+    }
+
+    .service-detail-page .sd-content-card {
+        padding: 21px;
+    }
+
+    .service-detail-page .sd-bottom-cta {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 22px;
+    }
+}
+
+/* ==========================================
+   SMALL MOBILE
+========================================== */
+@media (max-width: 480px) {
+    .service-detail-page .sd-container {
+        width: calc(100% - 24px);
+    }
+
+    .service-detail-page .sd-hero {
+        min-height: 155px;
+        padding: 23px 0;
+    }
+
+    .service-detail-page .sd-hero-content {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .service-detail-page .sd-hero h1 {
+        font-size: 27px;
+    }
+
+    .service-detail-page .sd-breadcrumb {
+        font-size: 12px;
+    }
+
+    .service-detail-page .sd-image-card {
+        height: 200px;
+        min-height: 200px;
+    }
+
+    .service-detail-page .sd-sidebar {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .service-detail-page .sd-contact-card,
+    .service-detail-page .sd-why-card {
+        padding: 18px;
+    }
+
+    .service-detail-page .sd-content-card {
+        padding: 17px;
+    }
+
+    .service-detail-page .sd-section-title {
+        font-size: 21px;
+    }
+
+    .service-detail-page .sd-heading-icon {
+        flex-basis: 36px;
+        width: 36px;
+        height: 36px;
+    }
+
+    .service-detail-page .sd-bottom-cta {
+        padding: 19px;
+    }
+
+    .service-detail-page .sd-bottom-cta h2 {
+        font-size: 20px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="service-detail-page">
+
+    <!-- HERO BANNER -->
+    <section class="sd-hero">
+        <div class="sd-container sd-hero-content">
+
+            <nav class="sd-breadcrumb" aria-label="Breadcrumb">
+                <a href="{% url 'website:home' %}">Home</a>
+                <i class="fa-solid fa-chevron-right"></i>
+                <a href="{% url 'website:services' %}">Services</a>
+                <i class="fa-solid fa-chevron-right"></i>
+                <span>{{ service.title }}</span>
+            </nav>
+
+            <h1>{{ service.title }}</h1>
+            <div class="sd-hero-accent"></div>
+
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="sd-main">
+        <div class="sd-container">
+
+            <!-- SERVICE IMAGE + SIDEBAR -->
+            <section class="sd-top-grid sd-section">
+
+                <!-- SERVICE IMAGE -->
+                <div class="sd-card sd-image-card">
+                    {% if service.image %}
+                        <img
+                            src="{{ service.image.url }}"
+                            alt="{{ service.title }}"
+                            class="sd-service-image"
+                        >
+                    {% else %}
+                        <div class="sd-image-placeholder">
+                            <i class="fa-solid fa-layer-group"></i>
+                            <p>{{ service.title }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- SIDEBAR CARDS -->
+                <aside class="sd-sidebar">
+
+                    <!-- LET'S TALK -->
+                    <div class="sd-card sd-contact-card">
+                        <h2>Let's Talk About Your Needs</h2>
+
+                        <p>
+                            Need the right solution for your business?
+                            Let's discuss your goals and requirements.
+                        </p>
+
+                        <div class="sd-contact-details">
+                            <div class="sd-contact-item">
+                                <i class="fa-solid fa-phone"></i>
+                                <a href="tel:+12143770443">
+                                    +1 (214) 377-0443
+                                </a>
+                            </div>
+
+                            <div class="sd-contact-item">
+                                <i class="fa-regular fa-envelope"></i>
+                                <a href="mailto:info@intelagroupllc.com">
+                                    info@intelagroupllc.com
+                                </a>
+                            </div>
+                        </div>
+
+                        <a
+                            href="{% url 'website:contact' %}"
+                            class="sd-button sd-button-primary"
+                        >
+                            Let's Talk
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <!-- WHY INTELA -->
+                    <div class="sd-card sd-why-card">
+                        <h2>Why Intela?</h2>
+
+                        <p>
+                            Technology solutions focused on quality
+                            and business outcomes.
+                        </p>
+
+                        <ul class="sd-benefits">
+                            <li>
+                                <i class="fa-solid fa-circle-check"></i>
+                                <span>Business-focused solutions</span>
+                            </li>
+
+                            <li>
+                                <i class="fa-solid fa-circle-check"></i>
+                                <span>Quality delivery</span>
+                            </li>
+
+                            <li>
+                                <i class="fa-solid fa-circle-check"></i>
+                                <span>Collaborative approach</span>
+                            </li>
+
+                            <li>
+                                <i class="fa-solid fa-circle-check"></i>
+                                <span>Long-term value</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                </aside>
+            </section>
+
+            <!-- FULL-WIDTH SHORT DESCRIPTION -->
+            {% if service.short_description %}
+            <section class="sd-card sd-content-card sd-intro-card">
+
+                <div class="sd-section-heading">
+                    <div class="sd-heading-icon">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+
+                    <div>
+                        <h2 class="sd-section-title">Overview</h2>
+                        <p class="sd-section-subtitle">
+                            An introduction to our {{ service.title }} services.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="sd-description-text">
+                    {{ service.short_description|linebreaks }}
+                </div>
+
+            </section>
+            {% endif %}
+
+            <!-- FULL-WIDTH FULL DESCRIPTION -->
+            {% if service.description %}
+            <section class="sd-card sd-content-card sd-description-card">
+
+                <div class="sd-section-heading">
+                    <div class="sd-heading-icon">
+                        <i class="fa-solid fa-list-check"></i>
+                    </div>
+
+                    <div>
+                        <h2 class="sd-section-title">About This Service</h2>
+                        <p class="sd-section-subtitle">
+                            Explore how our {{ service.title }} capabilities
+                            can support your business.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="sd-description-text">
+                    {{ service.description|linebreaks }}
+                </div>
+
+            </section>
+            {% endif %}
+
+            <!-- BOTTOM CTA -->
+            <section class="sd-bottom-cta">
+
+                <div>
+                    <h2>Ready to Get Started?</h2>
+                    <p>
+                        Connect with Intela Group to discuss your requirements
+                        and explore the right solution for your organization.
+                    </p>
+                </div>
+
+                <a
+                    href="{% url 'website:contact' %}"
+                    class="sd-button sd-button-primary"
+                >
+                    Contact Our Team
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
+
+            </section>
+
+        </div>
+    </main>
+
+</div>
+{% endblock %}
