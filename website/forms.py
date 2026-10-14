@@ -446,19 +446,19 @@ class CompanyDetailsForm(forms.ModelForm):
 
             "phone": forms.TextInput(
                 attrs={
-                    "placeholder": "+91 XXXXX XXXXX"
+                    "placeholder": "Enter your phone number (with country code)"
                 }
             ),
 
             "alternate_phone": forms.TextInput(
                 attrs={
-                    "placeholder": "+91 XXXXX XXXXX"
+                    "placeholder": "Enter your phone number (with country code)"
                 }
             ),
 
             "whatsapp_number": forms.TextInput(
                 attrs={
-                    "placeholder": "+91 XXXXX XXXXX"
+                    "placeholder": "Enter your phone number (with country code)"
                 }
             ),
 
@@ -773,7 +773,7 @@ class CareerApplicantForm(forms.ModelForm):
 
             "phone": forms.TextInput(attrs={
                 "class": "form-control",
-                "placeholder": "+91 XXXXX XXXXX",
+                "placeholder": "Enter your phone number (with country code)",
             }),
 
             "current_location": forms.TextInput(attrs={
@@ -833,7 +833,7 @@ class CandidateSubmissionForm(forms.ModelForm):
 
             "phone": forms.TextInput(attrs={
                 "class": "form-control",
-                "placeholder": "+91 XXXXX XXXXX",
+                "placeholder": "Enter your phone number (with country code)",
             }),
 
             "current_location": forms.TextInput(attrs={

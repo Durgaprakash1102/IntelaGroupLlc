@@ -867,54 +867,57 @@
         </div>
     </section>
 
-    <!-- DYNAMIC TEAM -->
-    <section class="about-people">
-        <div class="about-container">
-            <div class="about-people-heading">
-                <div>
-                    <span class="about-eyebrow">OUR PEOPLE</span>
-                    <h2>Meet the people behind <span>Intela</span></h2>
-                    <p>Meet the individuals who help shape our organization and culture.</p>
-                </div>
-                <p class="about-people-side-note">
-                    People are at the center of every successful collaboration.
-                </p>
+   {% if team_members %}
+<!-- DYNAMIC TEAM -->
+<section class="about-people">
+    <div class="about-container">
+        <div class="about-people-heading">
+            <div>
+                <span class="about-eyebrow">OUR PEOPLE</span>
+                <h2>Meet the people behind <span>Intela</span></h2>
+                <p>Meet the individuals who help shape our organization and culture.</p>
             </div>
+            <p class="about-people-side-note">
+                People are at the center of every successful collaboration.
+            </p>
+        </div>
 
-            <div class="about-team-scroll">
-                <div class="about-team-track">
-                    {% for member in team_members %}
-                    <article class="about-card about-team-card">
-                        <div class="about-team-image">
-                            {% if member.photo %}
-                                <img src="{{ member.photo.url }}"
-                                     alt="{{ member.name }}"
-                                     loading="lazy">
-                            {% else %}
-                                <div class="about-team-placeholder">
-                                    <i class="fas fa-user-tie"></i>
-                                    <span>Photo not added</span>
-                                </div>
-                            {% endif %}
-                            <span class="about-team-index">{{ forloop.counter|stringformat:"02d" }}</span>
-                        </div>
-                        <div class="about-team-details">
-                            <h3>{{ member.name }}</h3>
-                            <p class="designation">{{ member.designation }}</p>
-                            {% if member.bio %}
-                                <p class="bio">{{ member.bio }}</p>
-                            {% endif %}
-                        </div>
-                    </article>
-                    {% empty %}
-                    <div class="about-team-empty">
-                        Team profiles will appear here once added through Django Admin.
+        <div class="about-team-scroll">
+            <div class="about-team-track">
+                {% for member in team_members %}
+                <article class="about-card about-team-card">
+                    <div class="about-team-image">
+                        {% if member.photo %}
+                            <img src="{{ member.photo.url }}"
+                                 alt="{{ member.name }}"
+                                 loading="lazy">
+                        {% else %}
+                            <div class="about-team-placeholder">
+                                <i class="fas fa-user-tie"></i>
+                                <span>Photo not added</span>
+                            </div>
+                        {% endif %}
+
+                        <span class="about-team-index">
+                            {{ forloop.counter|stringformat:"02d" }}
+                        </span>
                     </div>
-                    {% endfor %}
-                </div>
+
+                    <div class="about-team-details">
+                        <h3>{{ member.name }}</h3>
+                        <p class="designation">{{ member.designation }}</p>
+
+                        {% if member.bio %}
+                            <p class="bio">{{ member.bio }}</p>
+                        {% endif %}
+                    </div>
+                </article>
+                {% endfor %}
             </div>
         </div>
-    </section>
+    </div>
+</section>
+{% endif %}
 
     <!-- LIFE AT INTELA -->
     <section class="about-culture">
