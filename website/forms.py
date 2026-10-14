@@ -524,7 +524,7 @@ class CompanyLocationForm(forms.ModelForm):
         widgets = {
             "name": forms.TextInput(
                 attrs={
-                    "placeholder": "Hyderabad Office"
+                    "placeholder": "Office Location"
                 }
             ),
 
@@ -537,19 +537,19 @@ class CompanyLocationForm(forms.ModelForm):
 
             "city": forms.TextInput(
                 attrs={
-                    "placeholder": "Hyderabad"
+                    "placeholder": "City Name"
                 }
             ),
 
             "state": forms.TextInput(
                 attrs={
-                    "placeholder": "Telangana"
+                    "placeholder": "State Name"
                 }
             ),
 
             "country": forms.TextInput(
                 attrs={
-                    "placeholder": "India"
+                    "placeholder": "Country Name"
                 }
             ),
 
@@ -694,7 +694,7 @@ class JobPostingForm(forms.ModelForm):
 
             "location": forms.TextInput(attrs={
                 "class": "form-control",
-                "placeholder": "Hyderabad",
+                "placeholder": "Your Location",
             }),
 
             "employment_type": forms.Select(attrs={
@@ -708,7 +708,7 @@ class JobPostingForm(forms.ModelForm):
 
             "salary": forms.TextInput(attrs={
                 "class": "form-control",
-                "placeholder": "₹5 LPA - ₹8 LPA",
+                "placeholder": "Enter Your Salary",
             }),
 
             "short_description": forms.TextInput(attrs={
@@ -778,7 +778,7 @@ class CareerApplicantForm(forms.ModelForm):
 
             "current_location": forms.TextInput(attrs={
                 "class": "form-control",
-                "placeholder": "Hyderabad",
+                "placeholder": "Your Location",
             }),
 
             "experience": forms.TextInput(attrs={
@@ -838,7 +838,7 @@ class CandidateSubmissionForm(forms.ModelForm):
 
             "current_location": forms.TextInput(attrs={
                 "class": "form-control",
-                "placeholder": "Hyderabad",
+                "placeholder": "Your Location",
             }),
 
             "experience": forms.TextInput(attrs={
